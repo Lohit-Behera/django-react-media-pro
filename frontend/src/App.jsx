@@ -1,10 +1,21 @@
+import React from 'react'
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
+import Layout from './Layout'
+
+import HomeScreen from './screens/HomeScreen'
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/' element={<Layout />}>
+      <Route path='' element={<HomeScreen />} />
+    </Route>
+  )
+)
 
 function App() {
 
   return (
-    <div>
-      <h1 className='text-3xl font-bold text-purple-800 text-center'>Hello Vite!</h1>
-    </div>
+    <RouterProvider router={router} />
   )
 }
 
