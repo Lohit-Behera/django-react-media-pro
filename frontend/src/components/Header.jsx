@@ -31,7 +31,7 @@ function Header() {
         navigate('/')
     }
     return (
-        <nav className="z-20 w-full sticky top-0 mb-1 shadow ">
+        <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur shadow ">
             <div className="justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-4 md:font-semibold">
                 <div className="flex justify-between w-full py-3 md:py-3">
                     <div className='hidden md:block'>
