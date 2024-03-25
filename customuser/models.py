@@ -41,6 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     join_date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
@@ -67,5 +68,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             img = Image.open(self.profile_image.path)
             max_size = (170, 170)
             img.thumbnail(max_size)
-            
+
             img.save(self.profile_image.path)
+
+class EmailVerificationToken(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    token = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
