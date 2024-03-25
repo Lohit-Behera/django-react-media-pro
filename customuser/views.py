@@ -2,7 +2,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse
-from django.template.loader import render_to_string
 from django.contrib.auth.tokens import default_token_generator
 from djangomediapro.settings import EMAIL_HOST_USER
 
@@ -29,7 +28,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
+    
 @api_view(['POST'])
 def register_user(request):
     data = request.data
@@ -89,6 +88,9 @@ def generate_verification_token(user):
 @api_view(['GET'])
 def verify_email(request, token):
     try:
+        if not EmailVerificationToken.objects.filter(token=token).exists():
+            return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+        
         email_verification_token = EmailVerificationToken.objects.get(token=token)
         user = email_verification_token.user
         user.is_verified = True
