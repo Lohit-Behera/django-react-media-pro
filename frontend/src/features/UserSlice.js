@@ -56,6 +56,61 @@ export const fetchRegister = createAsyncThunk('user/register', async (user, { re
     }
 });
 
+
+export const fetchUserDetails = createAsyncThunk('user/details', async (id, { rejectWithValue, getState }) => {
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+        const { data } = await axios.get(
+            `/api/user/details/${id}/`,
+            config
+        );
+
+        return data;
+
+    } catch (error) {
+
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+});
+
+export const fetchUserUpdate = createAsyncThunk('user/update', async (user, { rejectWithValue, getState }) => {
+    console.log(user);
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+        const { data } = await axios.put(
+            `/api/user/update/${user.id}/`,
+            user,
+            config
+        );
+
+        return data;
+
+    } catch (error) {
+
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+});
+
 const userSlice = createSlice({
     name: "user",
     initialState: {
@@ -64,9 +119,18 @@ const userSlice = createSlice({
         : null,
         userInfoStatus: "idle",
         userInfoError: null,
+
         register: null,
         regisrerStatus: "idle",
         registerError: null,
+
+        userdetails: null,
+        userdetailsStatus: "idle",
+        userdetailsError: null,
+
+        userUpdate: null,
+        userUpdateStatus: "idle",
+        userUpdateError: null,
     },
     reducers: {
         logout: (state) => {
@@ -89,6 +153,7 @@ const userSlice = createSlice({
                 state.userInfoStatus = "failed";
                 state.userInfoError = action.payload;
             })
+
             .addCase(fetchRegister.pending, (state) => {
                 state.regisrerStatus = "loading";
             })
@@ -99,6 +164,30 @@ const userSlice = createSlice({
             .addCase(fetchRegister.rejected, (state, action) => {
                 state.regisrerStatus = "failed";
                 state.registerError = action.payload;
+            })
+
+            .addCase(fetchUserDetails.pending, (state) => {
+                state.userdetailsStatus = "loading";
+            })
+            .addCase(fetchUserDetails.fulfilled, (state, action) => {
+                state.userdetailsStatus = "succeeded";
+                state.userdetails = action.payload;
+            })
+            .addCase(fetchUserDetails.rejected, (state, action) => {
+                state.userdetailsStatus = "failed";
+                state.userdetailsError = action.payload;
+            })
+
+            .addCase(fetchUserUpdate.pending, (state) => {
+                state.userUpdateStatus = "loading";
+            })
+            .addCase(fetchUserUpdate.fulfilled, (state, action) => {
+                state.userUpdateStatus = "succeeded";
+                state.userUpdate = action.payload;
+            })
+            .addCase(fetchUserUpdate.rejected, (state, action) => {
+                state.userUpdateStatus = "failed";
+                state.userUpdateError = action.payload;
             });
     },
 });

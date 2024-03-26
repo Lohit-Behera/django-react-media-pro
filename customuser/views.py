@@ -6,12 +6,13 @@ from django.contrib.auth.tokens import default_token_generator
 from djangomediapro.settings import EMAIL_HOST_USER
 
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import UserSerializerWithToken
+from .serializers import UserSerializerWithToken, UserSerializer
 
 from .models import CustomUser, EmailVerificationToken
 
@@ -99,3 +100,32 @@ def verify_email(request, token):
         return Response({'detail': 'Email verified successfully'})
     except EmailVerificationToken.DoesNotExist:
         return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_details(request,pk):
+    user = CustomUser.objects.get(id=pk)
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_user(request, pk):
+
+    data = request.data
+    user = CustomUser.objects.get(id=pk)
+
+    user.email = data['email']
+    user.first_name = data['first_name']
+    user.last_name = data['last_name']
+
+    profile_image = request.FILES.get('profile_image')
+    if profile_image:
+        user.profile_image = profile_image
+
+    password = data.get('password')
+    if password:
+        user.make_password(password)
+
+    user.save()
+    return Response({'detail': 'User updated successfully'})

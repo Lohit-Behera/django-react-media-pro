@@ -25,6 +25,7 @@ function Header() {
 
 
     const userInfo = useSelector((state) => state.user.userInfo)
+    const userdetails = useSelector((state) => state.user.userdetails) || {}
 
     const logoutHandler = () => {
         dispatch(logout())
@@ -98,7 +99,7 @@ function Header() {
                                 <li className='mr-3'>
                                     <Link to="/profile">
                                         <Avatar>
-                                            <AvatarImage src={userInfo.profile_image} />
+                                            <AvatarImage src={userdetails.profile_image} />
                                             <AvatarFallback>P</AvatarFallback>
                                         </Avatar>
                                     </Link>

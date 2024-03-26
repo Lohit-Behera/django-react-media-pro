@@ -52,23 +52,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
     
     def save(self, *args, **kwargs):
-        try:
-            existing_instance = CustomUser.objects.get(pk=self.pk)
-        except CustomUser.DoesNotExist:
-            existing_instance = None
-
-        if existing_instance and existing_instance.profile_image != self.profile_image:
-            if existing_instance.profile_image:
-                existing_instance.profile_image.delete(save=False)
-
         super().save(*args, **kwargs)
 
         if self.profile_image:
-
             img = Image.open(self.profile_image.path)
-            max_size = (170, 170)
-            img.thumbnail(max_size)
 
+            max_size = (170, 170)
+
+            img.thumbnail(max_size)
             img.save(self.profile_image.path)
 
 class EmailVerificationToken(models.Model):
