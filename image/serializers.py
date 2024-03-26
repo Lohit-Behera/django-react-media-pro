@@ -1,7 +1,13 @@
 from rest_framework import serializers
-from .models import Image
+from .models import UploadImage, RemovedBg
 
-class ImageSerializer(serializers.ModelSerializer):
+class UploadImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Image
+        model = UploadImage
+        fields = '__all__'
+
+
+class RemovedBgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RemovedBg
         fields = '__all__'

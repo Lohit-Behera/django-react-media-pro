@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from .models import Image
+from .models import UploadImage, RemovedBg
 # Register your models here.
 
 
-admin.site.register(Image)
+admin.site.register(UploadImage)
+admin.site.register(RemovedBg)

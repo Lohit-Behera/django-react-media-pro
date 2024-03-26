@@ -1,7 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchImageUpload = createAsyncThunk('image/upload', async (image, { rejectWithValue, getState }) => {
+export const fetchRemoveBg = createAsyncThunk('remove/bg', async (image, { rejectWithValue, getState }) => {
     try {
         const { user: { userInfo } = {} } = getState();
         const config = {
@@ -12,7 +12,7 @@ export const fetchImageUpload = createAsyncThunk('image/upload', async (image, {
         };
 
         const { data } = await axios.post(
-            '/api/image/upload/',
+            '/api/image/removebg/',
             image,
             config
         );
@@ -29,28 +29,28 @@ export const fetchImageUpload = createAsyncThunk('image/upload', async (image, {
     }
 });
 
-const imageUploadSlice = createSlice({
-    name: "image",
+const removeBgSlice = createSlice({
+    name: "removeBg",
     initialState: {
-        imageUpload: null,
-        imageUploadStatus: "idle",
-        imageUploadError: null,
+        removeBg: null,
+        removeBgStatus: "idle",
+        removeBgError: null,
     },
     reducers:{},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchImageUpload.pending, (state) => {
-                state.imageUploadStatus = "loading";
+            .addCase(fetchRemoveBg.pending, (state) => {
+                state.removeBgStatus = "loading";
             })
-            .addCase(fetchImageUpload.fulfilled, (state, action) => {
-                state.imageUpload = action.payload;
-                state.imageUploadStatus = "succeeded";
+            .addCase(fetchRemoveBg.fulfilled, (state, action) => {
+                state.removeBgStatus = "succeeded";
+                state.removeBg = action.payload;
             })
-            .addCase(fetchImageUpload.rejected, (state, action) => {
-                state.imageUploadError = action.error.message;
-                state.imageUploadStatus = "failed";
+            .addCase(fetchRemoveBg.rejected, (state, action) => {
+                state.removeBgStatus = "failed";
+                state.removeBgError = action.error.message;
             })
     }
 });
 
-export default imageUploadSlice.reducer
+export default removeBgSlice.reducer
