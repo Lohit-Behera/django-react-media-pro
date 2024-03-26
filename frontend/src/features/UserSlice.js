@@ -84,7 +84,6 @@ export const fetchUserDetails = createAsyncThunk('user/details', async (id, { re
 });
 
 export const fetchUserUpdate = createAsyncThunk('user/update', async (user, { rejectWithValue, getState }) => {
-    console.log(user);
     try {
         const { user: { userInfo } = {} } = getState();
         const config = {

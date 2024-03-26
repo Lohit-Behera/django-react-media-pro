@@ -7,4 +7,3 @@ class Image(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/')
-    created_at = models.DateTimeField(auto_now_add=True)

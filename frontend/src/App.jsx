@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen'
 import RegisterScreen from './screens/RegisterScreen'
 import VarificationScreen from './screens/VarificationScreen'
 import ProfileScreen from './screens/ProfileScreen'
+import UpscaleScreen from './screens/UpscaleScreen'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
       <Route path='register' element={<RegisterScreen />} />
       <Route path='varification' element={<VarificationScreen />} />
       <Route path='profile' element={<ProfileScreen />} />
+      <Route path='upscale' element={<UpscaleScreen />} />
     </Route>
   )
 )
