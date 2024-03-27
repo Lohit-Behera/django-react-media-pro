@@ -15,3 +15,9 @@ class Upscale(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     original = models.ImageField(upload_to='images/')
     result = models.ImageField(upload_to='upscale/')
+
+class BlurBg(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    original = models.ImageField(upload_to='images/')
+    result = models.ImageField(upload_to='blurbg/')

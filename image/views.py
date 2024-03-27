@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
 import cv2
 from cv2 import dnn_superres
@@ -14,8 +14,8 @@ import uuid
 import os
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from .serializers import RemovedBgSerializer, UpscaleSerializer
-from .models import RemovedBg, Upscale
+from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer
+from .models import RemovedBg, Upscale, BlurBg
 
 
 @api_view(['POST'])
@@ -102,4 +102,45 @@ def upscale_image(request):
 def get_upscale(request,pk):
     upscale = Upscale.objects.get(id=pk)
     serializer = UpscaleSerializer(upscale, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def blur_bg(request):
+    user = request.user
+    data = request.data
+    model = data['model']
+    image = request.FILES['image']
+
+    if model == 'anime':
+        session = new_session('isnet-anime')
+    elif model == 'general':
+        session = new_session('isnet-general-use')
+    else:
+        session = new_session('')
+
+    raw_image = Image.open(image)
+    blur_image = raw_image.filter(ImageFilter.GaussianBlur(radius = 5))
+    result_image = Image.new('RGBA', (raw_image.width, raw_image.height))
+    removedbg = remove(raw_image, session=session)
+    result_image.paste(blur_image)
+    result_image.paste(removedbg, mask=removedbg)
+
+    unique_filename = str(uuid.uuid4()) + '.png'
+    processed_image_path = os.path.join(settings.MEDIA_ROOT, 'blurbg', unique_filename)
+    result_image.save(processed_image_path, format='PNG')
+
+
+    upscale_instance = BlurBg.objects.create(user=user, original=image, result=os.path.join('blurbg', unique_filename))
+    serializer = BlurBgSerializer(upscale_instance, many=False)
+
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_blur_bg(request,pk):
+    upscale = BlurBg.objects.get(id=pk)
+    serializer = BlurBgSerializer(upscale, many=False)
     return Response(serializer.data)

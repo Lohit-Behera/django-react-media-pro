@@ -10,6 +10,7 @@ import VarificationScreen from './screens/VarificationScreen'
 import ProfileScreen from './screens/ProfileScreen'
 import UpscaleScreen from './screens/UpscaleScreen'
 import RemoveBgScreen from './screens/RemoveBgScreen'
+import BlurBgScreen from './screens/BlurBgScreen'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
       <Route path='profile' element={<ProfileScreen />} />
       <Route path='upscale' element={<UpscaleScreen />} />
       <Route path='removebg' element={<RemoveBgScreen />} />
+      <Route path='blurbg' element={<BlurBgScreen />} />
     </Route>
   )
 )

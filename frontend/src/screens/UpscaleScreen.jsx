@@ -27,8 +27,6 @@ function UpscaleScreen() {
 
     const [scale, setScale] = useState(2)
     const [hide, setHide] = useState(false)
-    console.log(scale);
-    console.log(hide);
 
     const userInfo = useSelector(state => state.user.userInfo)
     const upscale = useSelector(state => state.upscale.upscale)
