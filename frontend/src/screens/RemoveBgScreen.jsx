@@ -31,7 +31,9 @@ function RemoveBgScreen() {
 
     const removeBgImage = getRemoveBg ? getRemoveBg.result : ''
     const original = getRemoveBg ? getRemoveBg.original : ''
-    console.log(removeBgImage, original)
+
+    const [hide, setHide] = useState(false)
+    const [model, setModel] = useState('')
 
     useEffect(() => {
         if (!userInfo && !userInfo.is_varified) {
@@ -48,10 +50,25 @@ function RemoveBgScreen() {
     const uploadHndler = (e) => {
         console.log(e.target.files[0])
         dispatch(fetchRemoveBg({
+            model: model,
             image: e.target.files[0]
         }))
     }
 
+    const animeHandler = () => {
+        setModel('anime')
+        setHide(true)
+    }
+
+    const generalHandler = () => {
+        setModel('general')
+        setHide(true)
+    }
+
+    const lastHandler = () => {
+        setModel('last')
+        setHide(true)
+    }
     return (
         <div className='w-full mx-auto flex justify-center items-center'>
             <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10'>
@@ -61,6 +78,16 @@ function RemoveBgScreen() {
                 <CardContent>
                     {removeBgStatus === 'idle' ? (
                         <div className="flex flex-col space-y-4 my-2 items-center">
+                            {!hide && (
+                                <div className="flex flex-col items-center space-y-2">
+                                    <p>Before uploading the image choose image type if both not work use last</p>
+                                    <div className='flex space-x-2' >
+                                        <Button variant="outline" onClick={animeHandler}>Anime</Button>
+                                        <Button variant="outline" onClick={generalHandler}>General</Button>
+                                        <Button variant="outline" onClick={lastHandler}>Last</Button>
+                                    </div>
+                                </div>
+                            )}
                             <Label className="text-lg" htmlFor="image">Upload Image</Label>
                             <Input
                                 name="image"

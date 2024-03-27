@@ -8,7 +8,7 @@ from PIL import Image
 import numpy as np
 import cv2
 from cv2 import dnn_superres
-from rembg import remove
+from rembg import remove, new_session
 from django.conf import settings
 import uuid
 import os
@@ -22,10 +22,19 @@ from .models import RemovedBg, Upscale
 @permission_classes([IsAuthenticated])
 def remove_bg(request):
     user = request.user
+    data = request.data
+    model = data['model']
     image = request.FILES['image']
 
+    if model == 'anime':
+        session = new_session('isnet-anime')
+    elif model == 'general':
+        session = new_session('isnet-general-use')
+    else:
+        session = new_session('')
+
     raw_image = Image.open(image)
-    removedbg = remove(raw_image)
+    removedbg = remove(raw_image, session=session)
 
     unique_filename = str(uuid.uuid4()) + '.png'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'removedbg', unique_filename)
