@@ -1,13 +1,13 @@
 from rest_framework import serializers
-from .models import UploadImage, RemovedBg
-
-class UploadImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UploadImage
-        fields = '__all__'
+from .models import RemovedBg, Upscale
 
 
 class RemovedBgSerializer(serializers.ModelSerializer):
     class Meta:
         model = RemovedBg
+        fields = '__all__'
+
+class UpscaleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Upscale
         fields = '__all__'

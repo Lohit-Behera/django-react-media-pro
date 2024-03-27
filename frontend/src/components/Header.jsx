@@ -1,7 +1,8 @@
 import React from 'react'
+import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '@/features/UserSlice';
+import { logout, fetchUserDetails } from '@/features/UserSlice';
 
 import DarkModeToggle from './DarkModeToggle'
 import { Button } from './ui/button'
@@ -25,7 +26,14 @@ function Header() {
 
 
     const userInfo = useSelector((state) => state.user.userInfo)
-    const userdetails = useSelector((state) => state.user.userdetails) || {}
+    const userdetails = useSelector((state) => state.user.userdetails)
+
+    const profileImage = userdetails ? userdetails.profile_image : ''
+
+
+    useEffect(() => {
+        dispatch(fetchUserDetails(userInfo.id))
+    }, [userInfo, dispatch])
 
     const logoutHandler = () => {
         dispatch(logout())
@@ -99,7 +107,7 @@ function Header() {
                                 <li className='mr-3'>
                                     <Link to="/profile">
                                         <Avatar>
-                                            <AvatarImage src={userdetails.profile_image} />
+                                            <AvatarImage src={profileImage} />
                                             <AvatarFallback>P</AvatarFallback>
                                         </Avatar>
                                     </Link>

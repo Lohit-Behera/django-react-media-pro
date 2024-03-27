@@ -29,12 +29,42 @@ export const fetchRemoveBg = createAsyncThunk('remove/bg', async (image, { rejec
     }
 });
 
+export const fetchGetRemoveBg = createAsyncThunk('get/removebg', async (id, { rejectWithValue, getState }) => {
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+        const { data } = await axios.get(
+            `/api/image/removebg/${id}/`,
+            config
+        );
+
+        return data;
+
+    } catch (error) {
+
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+});
+
 const removeBgSlice = createSlice({
     name: "removeBg",
     initialState: {
         removeBg: null,
         removeBgStatus: "idle",
         removeBgError: null,
+
+        getRemoveBg: null,
+        getRemoveBgStatus: "idle",
+        getRemoveBgError: null,
     },
     reducers:{},
     extraReducers: (builder) => {
@@ -50,6 +80,17 @@ const removeBgSlice = createSlice({
                 state.removeBgStatus = "failed";
                 state.removeBgError = action.error.message;
             })
+            .addCase(fetchGetRemoveBg.pending, (state) => {
+                state.getRemoveBgStatus = "loading";
+            })
+            .addCase(fetchGetRemoveBg.fulfilled, (state, action) => {
+                state.getRemoveBgStatus = "succeeded";
+                state.getRemoveBg = action.payload;
+            })
+            .addCase(fetchGetRemoveBg.rejected, (state, action) => {
+                state.getRemoveBgStatus = "failed";
+                state.getRemoveBgError = action.error.message;
+            });
     }
 });
 

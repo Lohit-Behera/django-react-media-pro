@@ -22,7 +22,7 @@ function ProfileScreen() {
     const dispatch = useDispatch()
 
     const userInfo = useSelector((state) => state.user.userInfo)
-    const userdetails = useSelector((state) => state.user.userdetails) || {}
+    const userdetails = useSelector((state) => state.user.userdetails)
     const userUpdateStatus = useSelector((state) => state.user.userUpdateStatus)
 
     useEffect(() => {
@@ -35,10 +35,15 @@ function ProfileScreen() {
         dispatch(fetchUserDetails(userInfo.id))
     }, [dispatch, userUpdateStatus])
 
+    const profile_image = userdetails ? userdetails.profile_image : ''
+    const first_name = userdetails ? userdetails.first_name : ''
+    const last_name = userdetails ? userdetails.last_name : ''
+    const userEmail = userdetails ? userdetails.email : ''
+    const is_varified = userdetails ? userdetails.is_varified : false
 
-    const [firstName, setFirstName] = useState(userdetails.first_name)
-    const [lastName, setLastName] = useState(userdetails.last_name)
-    const [email, setEmail] = useState(userdetails.email)
+    const [firstName, setFirstName] = useState(first_name)
+    const [lastName, setLastName] = useState(last_name)
+    const [email, setEmail] = useState(userEmail)
     const [image, setImage] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -66,7 +71,7 @@ function ProfileScreen() {
                     <CardTitle className="text-3xl">Profile</CardTitle>
                     <CardDescription>
                         <Avatar className="w-24 h-24 mt-4">
-                            <AvatarImage src={userdetails.profile_image} />
+                            <AvatarImage src={profile_image} />
                             <AvatarFallback>Profile</AvatarFallback>
                         </Avatar>
                     </CardDescription>
@@ -74,13 +79,13 @@ function ProfileScreen() {
                 <CardContent className='text-center'>
                     <ul>
                         <li>
-                            <p>Name: {userdetails.first_name} {userdetails.last_name}</p>
+                            <p>Name: {first_name} {last_name}</p>
                         </li>
                         <li>
-                            <p>Email: {userdetails.email}</p>
+                            <p>Email: {email}</p>
                         </li>
                         <li>
-                            <p>Account Varified: {userdetails.is_verified ? 'Yes' : "No"}</p>
+                            <p>Account Varified: {is_varified ? 'Yes' : "No"}</p>
                         </li>
                     </ul>
                 </CardContent>

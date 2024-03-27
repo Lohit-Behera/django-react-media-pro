@@ -1,7 +1,35 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchUpscale = createAsyncThunk('upscale/image', async (id, { rejectWithValue, getState }) => {
+export const fetchUpscale = createAsyncThunk('upscale/image', async (image, { rejectWithValue, getState }) => {
+    try {
+        const { user: { userInfo } = {} } = getState();
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${userInfo.token}`,
+            },
+        };
+
+        const { data } = await axios.post(
+            '/api/image/upscale/',
+            image,
+            config
+        );
+
+        return data;
+
+    } catch (error) {
+
+        return rejectWithValue(
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
+        );
+    }
+});
+
+export const fetchGetUpscale = createAsyncThunk('getupscale/image', async (id, { rejectWithValue, getState }) => {
     try {
         const { user: { userInfo } = {} } = getState();
         const config = {
@@ -34,6 +62,10 @@ const upscaleSlice = createSlice({
         upscale: null,
         upscaleStatus: "idle",
         upscaleError: null,
+
+        getUpscale: null,
+        getUpscaleStatus: "idle",
+        getUpscaleError: null,
     },
     reducers:{},
     extraReducers: (builder) => {
@@ -48,6 +80,18 @@ const upscaleSlice = createSlice({
             .addCase(fetchUpscale.rejected, (state, action) => {
                 state.upscaleStatus = "failed";
                 state.upscaleError = action.error.message;
+            })
+
+            .addCase(fetchGetUpscale.pending, (state) => {
+                state.getUpscaleStatus = "loading";
+            })
+            .addCase(fetchGetUpscale.fulfilled, (state, action) => {
+                state.getUpscaleStatus = "succeeded";
+                state.getUpscale = action.payload;
+            })
+            .addCase(fetchGetUpscale.rejected, (state, action) => {
+                state.getUpscaleStatus = "failed";
+                state.getUpscaleError = action.error.message;
             })
     }
 });
