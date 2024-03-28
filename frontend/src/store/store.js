@@ -5,6 +5,7 @@ import ImageUploadSlice from "@/features/ImageUploadSlice";
 import upscaleSlice from "@/features/UpscaleSlice";
 import removeBgSlice from "@/features/RemoveBgSlice";
 import BlurBgSlice from "@/features/BlurBgSlice";
+import FilterSlice from "@/features/FilterSlice";
 
 const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
         upscale: upscaleSlice,
         removeBg: removeBgSlice,
         blurBg: BlurBgSlice,
+        filter: FilterSlice,
     },
 });
 

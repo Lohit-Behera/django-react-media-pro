@@ -30,9 +30,11 @@ function Header() {
 
     const profileImage = userdetails ? userdetails.profile_image : ''
 
+    const id = userInfo ? userInfo.id : ''
+
 
     useEffect(() => {
-        dispatch(fetchUserDetails(userInfo.id))
+        dispatch(fetchUserDetails(id))
     }, [userInfo, dispatch])
 
     const logoutHandler = () => {

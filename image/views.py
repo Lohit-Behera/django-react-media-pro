@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageEnhance
 import numpy as np
 import cv2
 from cv2 import dnn_superres
@@ -14,8 +14,8 @@ import uuid
 import os
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer
-from .models import RemovedBg, Upscale, BlurBg
+from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer
+from .models import RemovedBg, Upscale, BlurBg, FilteredImage
 
 
 @api_view(['POST'])
@@ -143,4 +143,48 @@ def blur_bg(request):
 def get_blur_bg(request,pk):
     upscale = BlurBg.objects.get(id=pk)
     serializer = BlurBgSerializer(upscale, many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def filtered_image(request):
+    user = request.user
+    data = request.data
+    filter_name = data['filter_name']
+    image = request.FILES['image']
+
+    raw_image = Image.open(image)
+
+    if filter_name == 'grayscale':
+        filter = ImageEnhance.Color(raw_image)
+        result_image = filter.enhance(0)
+
+    elif filter_name == 'color':
+        filter = ImageEnhance.Color(raw_image)
+        result_image = filter.enhance(2)
+    elif filter_name == 'detail':
+        detailed_image = raw_image.filter(ImageFilter.DETAIL)
+        result_image = detailed_image.filter(ImageFilter.UnsharpMask(radius=20, percent=50, threshold=3))
+    else:
+        filter = ImageEnhance.Color(raw_image)
+        colored = filter.enhance(1.8)
+        detailed_image = colored.filter(ImageFilter.DETAIL)
+        result_image = detailed_image.filter(ImageFilter.UnsharpMask(radius=20, percent=50, threshold=3))
+
+    unique_filename = str(uuid.uuid4()) + '.png'
+    processed_image_path = os.path.join(settings.MEDIA_ROOT, 'filtered', unique_filename)
+    result_image.save(processed_image_path, format='PNG')
+
+
+    upscale_instance = FilteredImage.objects.create(user=user, original=image, result=os.path.join('filtered', unique_filename))
+    serializer = FilteredImageSerializer(upscale_instance, many=False)
+
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_filtered_image(request,pk):
+    filtered_image = FilteredImage.objects.get(id=pk)
+    serializer = FilteredImageSerializer(filtered_image, many=False)
     return Response(serializer.data)

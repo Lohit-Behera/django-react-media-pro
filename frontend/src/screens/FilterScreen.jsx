@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchBlurBg, fetchGetBlurBg } from '@/features/BlurBgSlice'
+import { fetchFilter, fetchGetFilter } from '@/features/FilterSlice'
 
 import ReactCompareImage from 'react-compare-image'
 import { Loader2 } from "lucide-react"
@@ -19,19 +19,18 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from "../components/ui/label"
 
-function BlurBgScreen() {
+function FilterScreen() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const userInfo = useSelector((state) => state.user.userInfo)
-    const blurBg = useSelector((state) => state.blurBg.blurBg)
-    const getBlurBg = useSelector((state) => state.blurBg.getBlurBg)
-    const blurBgStatus = useSelector((state) => state.blurBg.blurBgStatus)
-    const getBlurBgStatus = useSelector((state) => state.blurBg.getBlurBgStatus)
-    console.log(blurBgStatus, blurBgStatus);
+    const filter = useSelector((state) => state.filter.filter)
+    const getfilter = useSelector((state) => state.filter.getfilter)
+    const filterStatus = useSelector((state) => state.filter.filterStatus)
+    const getfilterStatus = useSelector((state) => state.filter.getfilterStatus)
 
-    const blurBgImage = getBlurBg ? getBlurBg.result : ''
-    const original = getBlurBg ? getBlurBg.original : ''
+    const filteredImage = getfilter ? getfilter.result : ''
+    const original = getfilter ? getfilter.original : ''
 
     useEffect(() => {
         if (!userInfo && !userInfo.is_varified) {
@@ -40,20 +39,20 @@ function BlurBgScreen() {
     }, [userInfo, navigate])
 
     useEffect(() => {
-        if (blurBgStatus === 'succeeded') {
-            dispatch(fetchGetBlurBg(blurBg.id))
+        if (filterStatus === 'succeeded') {
+            dispatch(fetchGetFilter(filter.id))
         }
-    }, [blurBgStatus, dispatch, blurBg])
+    }, [filterStatus, dispatch, filter])
 
     const [hide, setHide] = useState(false)
-    const [model, setModel] = useState('')
+    const [filterName, setFilterName] = useState('')
 
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
         if (file.type.startsWith('image/')) {
-            dispatch(fetchBlurBg({
-                model: model,
+            dispatch(fetchFilter({
+                filter_name: filterName,
                 image: e.target.files[0]
             }))
         } else {
@@ -66,26 +65,31 @@ function BlurBgScreen() {
 
     const uploadHndler = (e) => {
         e.preventDefault();
-        dispatch(fetchBlurBg({
-            model: model,
+        dispatch(fetchFilter({
+            filter_name: filterName,
             image: e.target.files[0]
         }))
     }
 
-    const animeHandler = () => {
-        setModel('anime')
+    const grayscaleHandler = () => {
+        setFilterName('grayscale')
         setHide(true)
     }
 
-    const generalHandler = () => {
-        setModel('general')
+    const colorlHandler = () => {
+        setFilterName('color')
         setHide(true)
     }
 
-    const lastHandler = () => {
-        setModel('last')
+    const enhanceHandler = () => {
+        setFilterName('detail')
         setHide(true)
     }
+    const mixHander = () => {
+        setFilterName('mix')
+        setHide(true)
+    }
+
 
     return (
         <div className='w-full mx-auto flex justify-center'>
@@ -94,15 +98,16 @@ function BlurBgScreen() {
                     <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {blurBgStatus === 'idle' ? (
+                    {filterStatus === 'idle' ? (
                         <div className="h-full flex flex-col space-y-4 my-2 items-center">
                             {!hide && (
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                    <p>Before uploading the image choose image type if both not work use last</p>
+                                    <p>Before uploading the image choose filter</p>
                                     <div className='flex space-x-2' >
-                                        <Button variant="outline" onClick={animeHandler}>Anime</Button>
-                                        <Button variant="outline" onClick={generalHandler}>General</Button>
-                                        <Button variant="outline" onClick={lastHandler}>Last</Button>
+                                        <Button variant="outline" onClick={grayscaleHandler}>GrayScale</Button>
+                                        <Button variant="outline" onClick={colorlHandler}>Color vibrance</Button>
+                                        <Button variant="outline" onClick={enhanceHandler}>Enhance</Button>
+                                        <Button variant="outline" onClick={mixHander}>Mixed</Button>
                                     </div>
                                 </div>
                             )}
@@ -122,24 +127,23 @@ function BlurBgScreen() {
                                 Drag and drop image here
                             </div>
                         </div>
-                    ) : blurBgStatus === 'loading' ? (
+                    ) : filterStatus === 'loading' ? (
                         <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                    ) : blurBgStatus === 'succeeded' ? (
+                    ) : filterStatus === 'succeeded' ? (
                         <p className='text-center text-lg' >Image Uploaded</p>
-                    ) : blurBgStatus === 'failed' ? (
+                    ) : filterStatus === 'failed' ? (
                         <p className='text-center text-lg'>Something went wrong</p>
                     ) : null}
                 </CardContent>
-                {getBlurBgStatus === 'succeeded' && (
+                {getfilterStatus === 'succeeded' && (
                     <CardFooter>
                         <div className='flex flex-col w-full space-y-4'>
                             <p className='text-center'>Compare</p>
                             <div className='w-full h-auto'>
-                                <img src="{original}" className="w-full" alt="" />
-                                <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={blurBgImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
+                                <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={filteredImage} rightImageLabel='Filtered' sliderLineColor='#6d28d9' />
 
                             </div>
-                            <Button className="w-full"><a href={blurBgImage} download="removeBg.png">Download</a></Button>
+                            <Button className="w-full"><a href={filteredImage} download="filtered.png">Download</a></Button>
                         </div>
                     </CardFooter>
                 )}
@@ -148,4 +152,4 @@ function BlurBgScreen() {
     )
 }
 
-export default BlurBgScreen
+export default FilterScreen
