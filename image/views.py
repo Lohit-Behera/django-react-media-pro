@@ -14,8 +14,9 @@ import uuid
 import os
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer
-from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert
+from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer,DownScaleSerializer
+
+from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert, DownScale
 
 
 @api_view(['POST'])
@@ -216,4 +217,47 @@ def convert(request):
 def get_convert(request,pk):
     convert = Convert.objects.get(id=pk)
     serializer = ConvertSerializer(convert, many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def down_scale(request):
+    user = request.user
+    data = request.data
+    scale = data['scale']
+
+    image = request.FILES['image']
+
+    raw_image = Image.open(image)
+
+    if scale == '2':
+        original_width, original_height = raw_image.size
+
+        new_width = int(original_width * 0.5)
+        new_height = int(original_height * 0.5)
+
+        result_image = raw_image.resize((new_width, new_height), Image.Resampling.LANCZOS)
+    else:
+        original_width, original_height = raw_image.size
+
+        new_width = int(original_width * 0.25)
+        new_height = int(original_height * 0.25)
+
+        result_image = raw_image.resize((new_width, new_height), Image.Resampling.LANCZOS)
+
+    unique_filename = str(uuid.uuid4()) + f'.jpeg'
+    processed_image_path = os.path.join(settings.MEDIA_ROOT, 'downscale', unique_filename)
+    result_image.save(processed_image_path, format='JPEG')
+
+
+    upscale_instance = DownScale.objects.create(user=user, result=os.path.join('downscale', unique_filename))
+    serializer = DownScaleSerializer(upscale_instance, many=False)
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_down_scale(request,pk):
+    convert = DownScale.objects.get(id=pk)
+    serializer = DownScaleSerializer(convert, many=False)
     return Response(serializer.data)

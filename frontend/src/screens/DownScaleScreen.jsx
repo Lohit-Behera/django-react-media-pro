@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchConvert, fetchGetConvert } from '@/features/ConvertSlice'
+import { fetchDownScale, fetchGetDownScale } from '@/features/DownScaleSlice'
 
 import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
@@ -18,17 +18,17 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from "../components/ui/label"
 
-function ConvertScreen() {
+function DownScaleScreen() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const userInfo = useSelector((state) => state.user.userInfo)
-    const convert = useSelector((state) => state.convert.convert)
-    const getConvert = useSelector((state) => state.convert.getConvert)
-    const convertStatus = useSelector((state) => state.convert.convertStatus)
-    const getConvertStatus = useSelector((state) => state.convert.getConvertStatus)
+    const downScale = useSelector((state) => state.downScale.downScale)
+    const getDownScale = useSelector((state) => state.downScale.getDownScale)
+    const downScaleStatus = useSelector((state) => state.downScale.downScaleStatus)
+    const getDownScaleStatus = useSelector((state) => state.downScale.getDownScaleStatus)
 
-    const formatedImage = getConvert ? getConvert.result : ''
+    const downScaleImage = getDownScale ? getDownScale.result : ''
 
     useEffect(() => {
         if (!userInfo && !userInfo.is_varified) {
@@ -37,22 +37,21 @@ function ConvertScreen() {
     }, [userInfo, navigate])
 
     useEffect(() => {
-        if (convertStatus === 'succeeded') {
-            dispatch(fetchGetConvert(convert.id))
+        if (downScaleStatus === 'succeeded') {
+            dispatch(fetchGetDownScale(downScale.id))
         }
-    }, [convertStatus, dispatch, convert])
+    }, [downScaleStatus, dispatch, downScale])
 
     const [hide, setHide] = useState(false)
-    const [format, setFormat] = useState('png')
-    console.log(format);
+    const [scale, setScale] = useState('2')
 
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
         console.log(file);
         if (file.type.startsWith('image/')) {
-            dispatch(fetchConvert({
-                format: format,
+            dispatch(fetchDownScale({
+                scale: scale,
                 image: file
             }))
         } else {
@@ -65,52 +64,21 @@ function ConvertScreen() {
 
     const uploadHndler = (e) => {
         e.preventDefault();
-        dispatch(fetchConvert({
-            format: format,
+        dispatch(fetchDownScale({
+            scale: scale,
             image: e.target.files[0]
         }))
     }
 
-    const jpegHandler = () => {
-        setFormat('jpeg')
+    const downScale2x = () => {
+        setScale('2')
         setHide(true)
     }
 
-
-    const pngHandler = () => {
-        setFormat('png')
+    const downScale4x = () => {
+        setScale('4')
         setHide(true)
     }
-
-    const pdfHandler = () => {
-        setFormat('pdf')
-        setHide(true)
-    }
-
-    const tiffHandler = () => {
-        setFormat('tiff')
-        setHide(true)
-    }
-    const icoHandler = () => {
-        setFormat('ico')
-        setHide(true)
-    }
-
-    const webpHandler = () => {
-        setFormat('webp')
-        setHide(true)
-    }
-
-    const bmpHandler = () => {
-        setFormat('bmp')
-        setHide(true)
-    }
-
-    const handleDownload = () => {
-        const anchor = document.createElement('a');
-        anchor.href = formatedImage;
-        anchor.download = 'download';
-    };
 
 
     return (
@@ -120,19 +88,14 @@ function ConvertScreen() {
                     <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {convertStatus === 'idle' ? (
+                    {downScaleStatus === 'idle' ? (
                         <div className="h-full flex flex-col space-y-4 my-2 items-center">
                             {!hide && (
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                    <p>Before uploading the image choose format</p>
+                                    <p>Before uploading the image choose scale</p>
                                     <div className='flex space-x-2' >
-                                        <Button variant="outline" onClick={jpegHandler}>jpeg</Button>
-                                        <Button variant="outline" onClick={pngHandler}>png</Button>
-                                        <Button variant="outline" onClick={pdfHandler}>pdf</Button>
-                                        <Button variant="outline" onClick={tiffHandler}>tiff</Button>
-                                        <Button variant="outline" onClick={icoHandler}>ico</Button>
-                                        <Button variant="outline" onClick={webpHandler}>webp</Button>
-                                        <Button variant="outline" onClick={bmpHandler}>bmp</Button>
+                                        <Button variant="outline" onClick={downScale2x}>DownScale 2X</Button>
+                                        <Button variant="outline" onClick={downScale4x}>DownScale 4X</Button>
                                     </div>
                                 </div>
                             )}
@@ -152,26 +115,22 @@ function ConvertScreen() {
                                 Drag and drop image here
                             </div>
                         </div>
-                    ) : convertStatus === 'loading' ? (
+                    ) : downScaleStatus === 'loading' ? (
                         <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                    ) : convertStatus === 'succeeded' ? (
+                    ) : downScaleStatus === 'succeeded' ? (
                         <p className='text-center text-lg' >Image Uploaded</p>
-                    ) : convertStatus === 'failed' ? (
+                    ) : downScaleStatus === 'failed' ? (
                         <p className='text-center text-lg'>Something went wrong</p>
                     ) : null}
                 </CardContent>
-                {getConvertStatus === 'succeeded' && (
+                {getDownScaleStatus === 'succeeded' && (
                     <CardFooter>
                         <div className='flex flex-col w-full space-y-4'>
-                            <p className='text-center'>Converted Image</p>
-                            {format === 'pdf' || format === 'tiff' ? (
-                                <h2 className='text-center'>pdf and tiff format not supported to show the image</h2>
-                            ) : (
-                                <div className='w-full h-auto'>
-                                    <img src={formatedImage} alt="formatedImage" />
-                                </div>
-                            )}
-                            <Button className="w-full" onClick={handleDownload}>Download</Button>
+                            <p className='text-center'>DownScale Image</p>
+                            <div className='w-full h-auto'>
+                                <img src={downScaleImage} alt="downScaleImage" />
+                            </div>
+                            <Button className="w-full"><a href={downScaleImage} download="filtered.png">Download</a></Button>
                         </div>
                     </CardFooter>
                 )}
@@ -180,4 +139,4 @@ function ConvertScreen() {
     )
 }
 
-export default ConvertScreen
+export default DownScaleScreen
