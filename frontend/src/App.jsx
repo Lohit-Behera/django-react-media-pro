@@ -12,6 +12,7 @@ import UpscaleScreen from './screens/UpscaleScreen'
 import RemoveBgScreen from './screens/RemoveBgScreen'
 import BlurBgScreen from './screens/BlurBgScreen'
 import FilterScreen from './screens/FilterScreen'
+import ConvertScreen from './screens/ConvertScreen'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path='removebg' element={<RemoveBgScreen />} />
       <Route path='blurbg' element={<BlurBgScreen />} />
       <Route path='filter' element={<FilterScreen />} />
+      <Route path='convert' element={<ConvertScreen />} />
     </Route>
   )
 )

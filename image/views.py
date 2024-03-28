@@ -14,8 +14,8 @@ import uuid
 import os
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer
-from .models import RemovedBg, Upscale, BlurBg, FilteredImage
+from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer
+from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert
 
 
 @api_view(['POST'])
@@ -187,4 +187,33 @@ def filtered_image(request):
 def get_filtered_image(request,pk):
     filtered_image = FilteredImage.objects.get(id=pk)
     serializer = FilteredImageSerializer(filtered_image, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def convert(request):
+    user = request.user
+    data = request.data
+    format = data['format']
+
+    image = request.FILES['image']
+
+    result_image = Image.open(image)
+
+    unique_filename = str(uuid.uuid4()) + f'.{format}'
+    processed_image_path = os.path.join(settings.MEDIA_ROOT, 'converted', unique_filename)
+    result_image.save(processed_image_path, format=format.upper())
+
+
+    upscale_instance = Convert.objects.create(user=user, result=os.path.join('converted', unique_filename))
+    serializer = ConvertSerializer(upscale_instance, many=False)
+
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_convert(request,pk):
+    convert = Convert.objects.get(id=pk)
+    serializer = ConvertSerializer(convert, many=False)
     return Response(serializer.data)

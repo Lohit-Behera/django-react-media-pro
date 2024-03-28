@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchFilter, fetchGetFilter } from '@/features/FilterSlice'
+import { fetchConvert, fetchGetConvert } from '@/features/ConvertSlice'
 
-import ReactCompareImage from 'react-compare-image'
 import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
@@ -19,18 +18,17 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from "../components/ui/label"
 
-function FilterScreen() {
+function ConvertScreen() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const userInfo = useSelector((state) => state.user.userInfo)
-    const filter = useSelector((state) => state.filter.filter)
-    const getfilter = useSelector((state) => state.filter.getfilter)
-    const filterStatus = useSelector((state) => state.filter.filterStatus)
-    const getfilterStatus = useSelector((state) => state.filter.getfilterStatus)
+    const convert = useSelector((state) => state.convert.convert)
+    const getConvert = useSelector((state) => state.convert.getConvert)
+    const convertStatus = useSelector((state) => state.convert.convertStatus)
+    const getConvertStatus = useSelector((state) => state.convert.getConvertStatus)
 
-    const filteredImage = getfilter ? getfilter.result : ''
-    const original = getfilter ? getfilter.original : ''
+    const formatedImage = getConvert ? getConvert.result : ''
 
     useEffect(() => {
         if (!userInfo && !userInfo.is_varified) {
@@ -39,21 +37,23 @@ function FilterScreen() {
     }, [userInfo, navigate])
 
     useEffect(() => {
-        if (filterStatus === 'succeeded') {
-            dispatch(fetchGetFilter(filter.id))
+        if (convertStatus === 'succeeded') {
+            dispatch(fetchGetConvert(convert.id))
         }
-    }, [filterStatus, dispatch, filter])
+    }, [convertStatus, dispatch, convert])
 
     const [hide, setHide] = useState(false)
-    const [filterName, setFilterName] = useState('')
+    const [format, setFormat] = useState('png')
+    console.log(format);
 
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
+        console.log(file);
         if (file.type.startsWith('image/')) {
-            dispatch(fetchFilter({
-                filter_name: filterName,
-                image: e.target.files[0]
+            dispatch(fetchConvert({
+                format: format,
+                image: file
             }))
         } else {
             alert('Please drop an image file.');
@@ -65,28 +65,44 @@ function FilterScreen() {
 
     const uploadHndler = (e) => {
         e.preventDefault();
-        dispatch(fetchFilter({
-            filter_name: filterName,
+        dispatch(fetchConvert({
+            format: format,
             image: e.target.files[0]
         }))
     }
 
-    const grayscaleHandler = () => {
-        setFilterName('grayscale')
+    const jpegHandler = () => {
+        setFormat('jpeg')
         setHide(true)
     }
 
-    const colorlHandler = () => {
-        setFilterName('color')
+
+    const pngHandler = () => {
+        setFormat('png')
         setHide(true)
     }
 
-    const enhanceHandler = () => {
-        setFilterName('detail')
+    const pdfHandler = () => {
+        setFormat('pdf')
         setHide(true)
     }
-    const mixHandler = () => {
-        setFilterName('mix')
+
+    const tiffHandler = () => {
+        setFormat('tiff')
+        setHide(true)
+    }
+    const icoHandler = () => {
+        setFormat('ico')
+        setHide(true)
+    }
+
+    const webpHandler = () => {
+        setFormat('webp')
+        setHide(true)
+    }
+
+    const bmpHandler = () => {
+        setFormat('bmp')
         setHide(true)
     }
 
@@ -98,16 +114,19 @@ function FilterScreen() {
                     <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    {filterStatus === 'idle' ? (
+                    {convertStatus === 'idle' ? (
                         <div className="h-full flex flex-col space-y-4 my-2 items-center">
                             {!hide && (
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                    <p>Before uploading the image choose filter</p>
+                                    <p>Before uploading the image choose format</p>
                                     <div className='flex space-x-2' >
-                                        <Button variant="outline" onClick={grayscaleHandler}>GrayScale</Button>
-                                        <Button variant="outline" onClick={colorlHandler}>Color vibrance</Button>
-                                        <Button variant="outline" onClick={enhanceHandler}>Enhance</Button>
-                                        <Button variant="outline" onClick={mixHandler}>Mixed</Button>
+                                        <Button variant="outline" onClick={jpegHandler}>jpeg</Button>
+                                        <Button variant="outline" onClick={pngHandler}>png</Button>
+                                        <Button variant="outline" onClick={pdfHandler}>pdf</Button>
+                                        <Button variant="outline" onClick={tiffHandler}>tiff</Button>
+                                        <Button variant="outline" onClick={icoHandler}>ico</Button>
+                                        <Button variant="outline" onClick={webpHandler}>webp</Button>
+                                        <Button variant="outline" onClick={bmpHandler}>bmp</Button>
                                     </div>
                                 </div>
                             )}
@@ -127,23 +146,26 @@ function FilterScreen() {
                                 Drag and drop image here
                             </div>
                         </div>
-                    ) : filterStatus === 'loading' ? (
+                    ) : convertStatus === 'loading' ? (
                         <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                    ) : filterStatus === 'succeeded' ? (
+                    ) : convertStatus === 'succeeded' ? (
                         <p className='text-center text-lg' >Image Uploaded</p>
-                    ) : filterStatus === 'failed' ? (
+                    ) : convertStatus === 'failed' ? (
                         <p className='text-center text-lg'>Something went wrong</p>
                     ) : null}
                 </CardContent>
-                {getfilterStatus === 'succeeded' && (
+                {getConvertStatus === 'succeeded' && (
                     <CardFooter>
                         <div className='flex flex-col w-full space-y-4'>
-                            <p className='text-center'>Compare</p>
-                            <div className='w-full h-auto'>
-                                <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={filteredImage} rightImageLabel='Filtered' sliderLineColor='#6d28d9' />
-
-                            </div>
-                            <Button className="w-full"><a href={filteredImage} download="filtered.png">Download</a></Button>
+                            <p className='text-center'>Converted Image</p>
+                            {format === 'pdf' || format === 'tiff' ? (
+                                <h2 className='text-center'>pdf and tiff format not supported to show the image</h2>
+                            ) : (
+                                <div className='w-full h-auto'>
+                                    <img src={formatedImage} alt="formatedImage" />
+                                </div>
+                            )}
+                            <Button className="w-full"><a href={formatedImage} download="filtered.png">Download</a></Button>
                         </div>
                     </CardFooter>
                 )}
@@ -152,4 +174,4 @@ function FilterScreen() {
     )
 }
 
-export default FilterScreen
+export default ConvertScreen

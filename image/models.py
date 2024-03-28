@@ -28,3 +28,8 @@ class FilteredImage(models.Model):
     original = models.ImageField(upload_to='images/')
     result = models.ImageField(upload_to='filtered/')
     
+class Convert(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    result = models.ImageField(upload_to='converted/')
+    

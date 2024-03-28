@@ -22,3 +22,7 @@ class FilteredImageSerializer(serializers.ModelSerializer):
         model = FilteredImage
         fields = '__all__'
 
+class ConvertSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Convert
+        fields = '__all__'
