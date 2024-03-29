@@ -85,7 +85,7 @@ function DownScaleScreen() {
         <div className='w-full mx-auto flex justify-center'>
             <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
                 <CardHeader>
-                    <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
+                    <CardTitle className="text-lg md:text-2xl text-center">DownScale Image</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {downScaleStatus === 'idle' ? (
@@ -93,7 +93,7 @@ function DownScaleScreen() {
                             {!hide && (
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
                                     <p>Before uploading the image choose scale</p>
-                                    <div className='flex space-x-2' >
+                                    <div className='grid grid-cols-2 gap-2' >
                                         <Button variant="outline" onClick={downScale2x}>DownScale 2X</Button>
                                         <Button variant="outline" onClick={downScale4x}>DownScale 4X</Button>
                                     </div>
@@ -127,7 +127,7 @@ function DownScaleScreen() {
                     <CardFooter>
                         <div className='flex flex-col w-full space-y-4'>
                             <p className='text-center'>DownScale Image</p>
-                            <div className='w-full h-auto'>
+                            <div className='w-full h-auto flex justify-center '>
                                 <img src={downScaleImage} alt="downScaleImage" />
                             </div>
                             <Button className="w-full"><a href={downScaleImage} download="filtered.png">Download</a></Button>

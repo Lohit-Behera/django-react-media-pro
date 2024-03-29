@@ -50,10 +50,11 @@ function FilterScreen() {
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
+        console.log(file);
         if (file.type.startsWith('image/')) {
             dispatch(fetchFilter({
                 filter_name: filterName,
-                image: e.target.files[0]
+                image: file
             }))
         } else {
             alert('Please drop an image file.');
@@ -95,15 +96,15 @@ function FilterScreen() {
         <div className='w-full mx-auto flex justify-center'>
             <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
                 <CardHeader>
-                    <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
+                    <CardTitle className="text-lg md:text-2xl text-center">Add Filters</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {filterStatus === 'idle' ? (
                         <div className="h-full flex flex-col space-y-4 my-2 items-center">
                             {!hide && (
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                    <p>Before uploading the image choose filter</p>
-                                    <div className='flex space-x-2' >
+                                    <p className='text-center'>Before uploading the image choose filter</p>
+                                    <div className='grid grid-cols-2 md:grid-cols-4 gap-2' >
                                         <Button variant="outline" onClick={grayscaleHandler}>GrayScale</Button>
                                         <Button variant="outline" onClick={colorlHandler}>Color vibrance</Button>
                                         <Button variant="outline" onClick={enhanceHandler}>Enhance</Button>

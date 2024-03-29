@@ -22,7 +22,7 @@ import { Label } from "../components/ui/label"
 
 function UpscaleScreen() {
 
-    const disparch = useDispatch()
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const [scale, setScale] = useState(2)
@@ -45,13 +45,30 @@ function UpscaleScreen() {
 
     useEffect(() => {
         if (upscaleStatus === 'succeeded') {
-            disparch(fetchGetUpscale(upscale.id))
+            dispatch(fetchGetUpscale(upscale.id))
         }
-    }, [upscaleStatus, disparch, upscale])
+    }, [upscaleStatus, dispatch, upscale])
 
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        console.log(file);
+        if (file.type.startsWith('image/')) {
+            dispatch(fetchUpscale({
+                scaling: scale,
+                image: file
+            }))
+        } else {
+            alert('Please drop an image file.');
+        }
+    };
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
 
     const uploadHndler = (e) => {
-        disparch(fetchUpscale({
+        dispatch(fetchUpscale({
             scaling: scale,
             image: e.target.files[0]
         }))
@@ -77,40 +94,47 @@ function UpscaleScreen() {
                         <div className="flex flex-col space-y-2 my-2 items-center">
                             {!hide && (
                                 <div className="flex flex-col items-center space-y-2">
-                                    <p>Before uploading the image choose scaling</p>
-                                    <div className={`${hide ? 'hidden' : 'block'}} flex space-x-2`} >
+                                    <p className='text-center'>Before uploading the image choose scaling</p>
+                                    <div className='grid grid-cols-2 gap-2' >
                                         <Button variant="outline" onClick={scale2xHandler}>2X Scale</Button>
                                         <Button variant="outline" onClick={scale4xHandler}>4X Scale</Button>
                                     </div>
                                 </div>
                             )}
-                            <Label className="text-lg" htmlFor="image">Upload Image</Label>
+                            <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
                             <Input
                                 name="image"
                                 type="file"
-                                id="image-upload"
                                 accept="image/*"
-                                className='w-full h-40 cursor-pointer'
+                                className='w-full dark:file:text-white cursor-pointer'
                                 onChange={(e) => { uploadHndler(e) }}
                             />
+                            <div
+                                onDrop={handleDrop}
+                                onDragOver={handleDragOver}
+                                className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                            >
+                                Drag and drop image here
+                            </div>
                         </div>
                     ) : upscaleStatus === 'loading' ? (
-                        <Loader2 className="w-6 h-6 animate-spin items-center" />
+                        <Loader2 className="w-14 h-14 animate-spin mx-auto" />
                     ) : upscaleStatus === 'succeeded' ? (
-                        <p>Image Uploaded</p>
+                        <p className='text-center text-lg' >Image Uploaded</p>
                     ) : upscaleStatus === 'failed' ? (
-                        <p>Something went wrong</p>
+                        <p className='text-center text-lg'>Something went wrong</p>
                     ) : null}
                 </CardContent>
                 <CardFooter>
-                    <div className='flex flex-col w-full space-y-4'>
-                        <p>Compare</p>
-                        <div className='w-full h-auto'>
-                            <img src="{original}" className="w-full" alt="" />
-                            <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={upscaleImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
+                    {getUpscaleStatus === 'succeeded' && (
+                        <div className='flex flex-col w-full space-y-4'>
+                            <p className='text-center'>Compare</p>
+                            <div className='w-full h-auto'>
+                                <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={upscaleImage} rightImageLabel='Upscaled' sliderLineColor='#6d28d9' />
+                            </div>
+                            <Button className="w-full"><a href={upscaleImage} download="removeBg.png">Download</a></Button>
                         </div>
-                        <Button className="w-full"><a href={upscaleImage} download="removeBg.png">Download</a></Button>
-                    </div>
+                    )}
                 </CardFooter>
             </Card>
         </div>

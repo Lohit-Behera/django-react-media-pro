@@ -47,8 +47,24 @@ function RemoveBgScreen() {
         }
     }, [removeBgStatus, dispatch, removeBg])
 
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        console.log(file);
+        if (file.type.startsWith('image/')) {
+            dispatch(fetchRemoveBg({
+                model: model,
+                image: file
+            }))
+        } else {
+            alert('Please drop an image file.');
+        }
+    };
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
     const uploadHndler = (e) => {
-        console.log(e.target.files[0])
         dispatch(fetchRemoveBg({
             model: model,
             image: e.target.files[0]
@@ -65,38 +81,46 @@ function RemoveBgScreen() {
         setHide(true)
     }
 
-    const lastHandler = () => {
+    const otherHandler = () => {
         setModel('last')
         setHide(true)
     }
+
     return (
         <div className='w-full mx-auto flex justify-center items-center'>
             <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10'>
                 <CardHeader>
-                    <CardTitle className="text-2xl text-center">Upscale Image</CardTitle>
+                    <CardTitle className="text-lg md:text-2xl text-center">Remove Background</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {removeBgStatus === 'idle' ? (
-                        <div className="flex flex-col space-y-4 my-2 items-center">
+                        <div className="flex flex-col space-y-4 my-2 items-center ">
                             {!hide && (
-                                <div className="flex flex-col items-center space-y-2">
-                                    <p>Before uploading the image choose image type if both not work use last</p>
-                                    <div className='flex space-x-2' >
+                                <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                    <p>Before uploading the image choose the image type if both are not working use other</p>
+                                    <div className='grid grid-cols-2 md:grid-cols-3 gap-2' >
                                         <Button variant="outline" onClick={animeHandler}>Anime</Button>
                                         <Button variant="outline" onClick={generalHandler}>General</Button>
-                                        <Button variant="outline" onClick={lastHandler}>Last</Button>
+                                        <Button variant="outline" onClick={otherHandler}>Other</Button>
+
                                     </div>
                                 </div>
                             )}
-                            <Label className="text-lg" htmlFor="image">Upload Image</Label>
+                            <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
                             <Input
                                 name="image"
                                 type="file"
-                                id="image-upload"
                                 accept="image/*"
-                                className='w-full h-40 cursor-pointer'
+                                className='w-full dark:file:text-white cursor-pointer'
                                 onChange={(e) => { uploadHndler(e) }}
                             />
+                            <div
+                                onDrop={handleDrop}
+                                onDragOver={handleDragOver}
+                                className="w-full h-44 md:h-96 border-2 flex justify-center items-center rounded-md text-sm md:text-lg"
+                            >
+                                Drag and drop the image here
+                            </div>
                         </div>
                     ) : removeBgStatus === 'loading' ? (
                         <Loader2 className="w-14 h-14 animate-spin mx-auto" />
@@ -111,7 +135,6 @@ function RemoveBgScreen() {
                         <div className='flex flex-col w-full space-y-4'>
                             <p className='text-center'>Compare</p>
                             <div className='w-full h-auto'>
-                                <img src="{original}" className="w-full" alt="" />
                                 <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={removeBgImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
 
                             </div>

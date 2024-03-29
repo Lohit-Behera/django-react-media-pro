@@ -44,12 +44,9 @@ function ConvertScreen() {
 
     const [hide, setHide] = useState(false)
     const [format, setFormat] = useState('png')
-    console.log(format);
-
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
-        console.log(file);
         if (file.type.startsWith('image/')) {
             dispatch(fetchConvert({
                 format: format,
@@ -117,7 +114,7 @@ function ConvertScreen() {
         <div className='w-full mx-auto flex justify-center'>
             <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
                 <CardHeader>
-                    <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
+                    <CardTitle className="text-lg md:text-2xl text-center">Change Format</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {convertStatus === 'idle' ? (
@@ -125,7 +122,7 @@ function ConvertScreen() {
                             {!hide && (
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
                                     <p>Before uploading the image choose format</p>
-                                    <div className='flex space-x-2' >
+                                    <div className='grid grid-cols-3 md:grid-cols-7 gap-2' >
                                         <Button variant="outline" onClick={jpegHandler}>jpeg</Button>
                                         <Button variant="outline" onClick={pngHandler}>png</Button>
                                         <Button variant="outline" onClick={pdfHandler}>pdf</Button>
@@ -171,7 +168,7 @@ function ConvertScreen() {
                                     <img src={formatedImage} alt="formatedImage" />
                                 </div>
                             )}
-                            <Button className="w-full" onClick={handleDownload}>Download</Button>
+                            <Button className="w-full" onClick={handleDownload}><a href={formatedImage} download>Download</a></Button>
                         </div>
                     </CardFooter>
                 )}

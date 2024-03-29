@@ -28,7 +28,6 @@ function BlurBgScreen() {
     const getBlurBg = useSelector((state) => state.blurBg.getBlurBg)
     const blurBgStatus = useSelector((state) => state.blurBg.blurBgStatus)
     const getBlurBgStatus = useSelector((state) => state.blurBg.getBlurBgStatus)
-    console.log(blurBgStatus, blurBgStatus);
 
     const blurBgImage = getBlurBg ? getBlurBg.result : ''
     const original = getBlurBg ? getBlurBg.original : ''
@@ -46,7 +45,10 @@ function BlurBgScreen() {
     }, [blurBgStatus, dispatch, blurBg])
 
     const [hide, setHide] = useState(false)
+    const [hideBlur, setHideBlur] = useState(false)
+    console.log(`hide: ${!hide}, hideBlur: ${hideBlur}`);
     const [model, setModel] = useState('')
+    const [blur, setBlur] = useState('')
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -54,7 +56,8 @@ function BlurBgScreen() {
         if (file.type.startsWith('image/')) {
             dispatch(fetchBlurBg({
                 model: model,
-                image: e.target.files[0]
+                blur: blur,
+                image: file
             }))
         } else {
             alert('Please drop an image file.');
@@ -68,6 +71,7 @@ function BlurBgScreen() {
         e.preventDefault();
         dispatch(fetchBlurBg({
             model: model,
+            blur: blur,
             image: e.target.files[0]
         }))
     }
@@ -87,6 +91,21 @@ function BlurBgScreen() {
         setHide(true)
     }
 
+    const lowHandler = () => {
+        setBlur('low')
+        setHideBlur(true)
+    }
+
+    const mediumlHandler = () => {
+        setBlur('medium')
+        setHideBlur(true)
+    }
+
+    const highHandler = () => {
+        setBlur('high')
+        setHideBlur(true)
+    }
+
     return (
         <div className='w-full mx-auto flex justify-center'>
             <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
@@ -96,16 +115,21 @@ function BlurBgScreen() {
                 <CardContent>
                     {blurBgStatus === 'idle' ? (
                         <div className="h-full flex flex-col space-y-4 my-2 items-center">
-                            {!hide && (
+
+                            {(!hide || !hideBlur) && (
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                    <p>Before uploading the image choose image type if both not work use last</p>
-                                    <div className='flex space-x-2' >
+                                    <p className='text-center'>Before uploading the image choose image type if both not work use other and select blur amount</p>
+                                    <div className='grid grid-cols-3 gap-2' >
                                         <Button variant="outline" onClick={animeHandler}>Anime</Button>
                                         <Button variant="outline" onClick={generalHandler}>General</Button>
                                         <Button variant="outline" onClick={lastHandler}>Last</Button>
+                                        <Button variant="outline" onClick={lowHandler}>Low Blur</Button>
+                                        <Button variant="outline" onClick={mediumlHandler}>Medium Blur</Button>
+                                        <Button variant="outline" onClick={highHandler}>High Blur</Button>
                                     </div>
                                 </div>
                             )}
+
                             <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
                             <Input
                                 name="image"
@@ -135,7 +159,6 @@ function BlurBgScreen() {
                         <div className='flex flex-col w-full space-y-4'>
                             <p className='text-center'>Compare</p>
                             <div className='w-full h-auto'>
-                                <img src="{original}" className="w-full" alt="" />
                                 <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={blurBgImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
 
                             </div>

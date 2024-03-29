@@ -112,6 +112,7 @@ def blur_bg(request):
     user = request.user
     data = request.data
     model = data['model']
+    blur = data['blur']
     image = request.FILES['image']
 
     if model == 'anime':
@@ -122,7 +123,13 @@ def blur_bg(request):
         session = new_session('')
 
     raw_image = Image.open(image)
-    blur_image = raw_image.filter(ImageFilter.GaussianBlur(radius = 5))
+    if blur == 'low':
+        blur_image = raw_image.filter(ImageFilter.GaussianBlur(radius = 3))
+    elif blur == 'medium':
+        blur_image = raw_image.filter(ImageFilter.GaussianBlur(radius = 6))
+    else:
+        blur_image = raw_image.filter(ImageFilter.GaussianBlur(radius = 10))
+
     result_image = Image.new('RGBA', (raw_image.width, raw_image.height))
     removedbg = remove(raw_image, session=session)
     result_image.paste(blur_image)
@@ -165,13 +172,13 @@ def filtered_image(request):
         result_image = filter.enhance(2)
     elif filter_name == 'detail':
         detailed_image = raw_image.filter(ImageFilter.DETAIL)
-        result_image = detailed_image.filter(ImageFilter.UnsharpMask(radius=20, percent=50, threshold=3))
+        result_image = detailed_image.filter(ImageFilter.UnsharpMask(radius=25, percent=50, threshold=3))
     else:
         filter = ImageEnhance.Color(raw_image)
-        colored = filter.enhance(1.8)
+        colored = filter.enhance(2)
         detailed_image = colored.filter(ImageFilter.DETAIL)
-        result_image = detailed_image.filter(ImageFilter.UnsharpMask(radius=20, percent=50, threshold=3))
-
+        result_image = detailed_image.filter(ImageFilter.UnsharpMask(radius=25, percent=40, threshold=3))
+    
     unique_filename = str(uuid.uuid4()) + '.png'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'filtered', unique_filename)
     result_image.save(processed_image_path, format='PNG')
