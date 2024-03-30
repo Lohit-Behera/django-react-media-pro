@@ -67,6 +67,16 @@ function Header() {
                                 <li>
                                     <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
                                 </li>
+                                {is_staff && (
+                                    <>
+                                        <li>
+                                            <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
+                                        </li>
+                                        <li>
+                                            <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
+                                        </li>
+                                    </>
+                                )}
                                 {userInfo ? (
                                     <li>
                                         <Button variant="ghost" onClick={logoutHandler}>Log Out</Button>
@@ -74,11 +84,6 @@ function Header() {
                                 ) : (
                                     <li>
                                         <Button variant="ghost" onClick={() => navigate("/login")}>Login</Button>
-                                    </li>
-                                )}
-                                {is_staff && (
-                                    <li>
-                                        <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
                                     </li>
                                 )}
                             </ul>
@@ -100,6 +105,16 @@ function Header() {
                                             <li>
                                                 <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
                                             </li>
+                                            {is_staff && (
+                                                <>
+                                                    <li>
+                                                        <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
+                                                    </li>
+                                                    <li>
+                                                        <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
+                                                    </li>
+                                                </>
+                                            )}
                                             {userInfo ? (
                                                 <li>
                                                     <Button variant="ghost" onClick={logoutHandler}>Log Out</Button>

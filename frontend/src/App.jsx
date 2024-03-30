@@ -14,6 +14,7 @@ import BlurBgScreen from './screens/BlurBgScreen'
 import FilterScreen from './screens/FilterScreen'
 import ConvertScreen from './screens/ConvertScreen'
 import DownScaleScreen from './screens/DownScaleScreen'
+import AdminUsers from './screens/AdminUsers'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
       <Route path='filter' element={<FilterScreen />} />
       <Route path='convert' element={<ConvertScreen />} />
       <Route path='downscale' element={<DownScaleScreen />} />
+      <Route path='users' element={<AdminUsers />} />
     </Route>
   )
 )

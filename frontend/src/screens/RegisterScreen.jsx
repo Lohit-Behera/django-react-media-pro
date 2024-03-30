@@ -35,7 +35,8 @@ function RegisterScreen() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    const submitHandler = () => {
+    const submitHandler = (e) => {
+        e.preventDefault();
         if (password !== confirmPassword) {
             alert('Passwords do not match')
         } else {
@@ -58,7 +59,7 @@ function RegisterScreen() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={submitHandler}>
+                    <form onSubmit={(e) => submitHandler(e)}>
                         <div className="grid gap-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="grid gap-2">

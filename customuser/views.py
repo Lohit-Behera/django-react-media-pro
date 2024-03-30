@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.tokens import default_token_generator
 from djangomediapro.settings import EMAIL_HOST_USER, MEDIA_ROOT, RAW_IMAGES
 
@@ -133,8 +134,6 @@ def update_user(request, pk):
     return Response({'detail': 'User updated successfully'})
 
 
-import logging
-
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])
 def delete_all_images(request):
@@ -159,9 +158,8 @@ def delete_all_images(request):
                     logging.info(f"Deleted file: {os.path.join(root, file)}")
                         
         return Response({'detail': 'All images deleted successfully'}, status=200)
-    except Exception as e:
-        logging.error(f"An error occurred: {str(e)}")
-        return Response({'error': str(e)}, status=500)
+    except:
+        return Response({'detail': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])
@@ -175,4 +173,39 @@ def delete_raw_images(request):
         return Response({'detail': 'All images deleted successfully'}, status=200)
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}")
-        return Response({'error': str(e)}, status=500)
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def edit_user(request, pk):
+    user = CustomUser.objects.get(id=pk)
+    data = request.data
+
+    user.is_staff = data['is_staff']
+    user.save()
+
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_users(request):
+    users = CustomUser.objects.all()
+
+    page = request.query_params.get('page')
+    paginator = Paginator(users, 1)
+
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        users = paginator.page(1)
+    except EmptyPage:
+        users = paginator.page(paginator.num_pages)
+
+    if page == None:
+        page = 1
+    
+    page = int(page)
+
+    serializer = UserSerializer(users, many=True)
+    return Response({'users': serializer.data, 'page': page, 'pages': paginator.num_pages})
