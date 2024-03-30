@@ -187,13 +187,26 @@ def edit_user(request, pk):
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
 
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def remove_admin(request, pk):
+    user = CustomUser.objects.get(id=pk)
+    data = request.data
+
+    user.is_staff = data['is_staff']
+    user.save()
+
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_users(request):
     users = CustomUser.objects.all()
 
     page = request.query_params.get('page')
-    paginator = Paginator(users, 1)
+    paginator = Paginator(users, 10)
 
     try:
         users = paginator.page(page)
@@ -209,3 +222,11 @@ def get_users(request):
 
     serializer = UserSerializer(users, many=True)
     return Response({'users': serializer.data, 'page': page, 'pages': paginator.num_pages})
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, pk):
+    user = CustomUser.objects.get(id=pk)
+    user.delete()
+    return Response({'detail': 'User deleted successfully'})

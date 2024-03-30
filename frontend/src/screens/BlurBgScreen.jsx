@@ -32,8 +32,10 @@ function BlurBgScreen() {
     const blurBgImage = getBlurBg ? getBlurBg.result : ''
     const original = getBlurBg ? getBlurBg.original : ''
 
+    const is_varified = userInfo ? userInfo.is_varified : false
+
     useEffect(() => {
-        if (!userInfo && !userInfo.is_varified) {
+        if (!userInfo || !is_varified) {
             navigate('/login')
         }
     }, [userInfo, navigate])

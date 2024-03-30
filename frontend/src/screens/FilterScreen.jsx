@@ -39,8 +39,10 @@ function FilterScreen() {
     const filteredImage = getfilter ? getfilter.result : ''
     const original = getfilter ? getfilter.original : ''
 
+    const is_varified = userInfo ? userInfo.is_varified : false
+
     useEffect(() => {
-        if (!userInfo && !userInfo.is_varified) {
+        if (!userInfo || !is_varified) {
             navigate('/login')
         }
     }, [userInfo, navigate])

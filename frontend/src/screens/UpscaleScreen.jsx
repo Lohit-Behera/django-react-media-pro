@@ -37,8 +37,10 @@ function UpscaleScreen() {
     const original = getUpscale ? getUpscale.original : ''
     const upscaleImage = getUpscale ? getUpscale.result : ''
 
+    const is_varified = userInfo ? userInfo.is_varified : false
+
     useEffect(() => {
-        if (!userInfo && !userInfo.is_varified) {
+        if (!userInfo || !is_varified) {
             navigate('/login')
         }
     }, [userInfo, navigate])

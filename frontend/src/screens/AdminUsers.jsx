@@ -1,7 +1,7 @@
-import React, { useState } from 'react'; // Import useState hook
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchGetAllUsers, fetchGiveAdmin } from '@/features/AdminUsers';
+import { fetchGetAllUsers, fetchGiveAdmin, fetchRemoveAdmin, fetchDeleteUser } from '@/features/AdminUsers';
 
 import { Check, X } from 'lucide-react';
 
@@ -31,14 +31,16 @@ function AdminUsers() {
 
     const allUsers = useSelector((state) => state.adminUsers.allUsers);
     const adminStatus = useSelector((state) => state.adminUsers.adminStatus);
+    const removeAdminStatus = useSelector((state) => state.adminUsers.removeAdminStatus);
+    const deleteUserStatus = useSelector((state) => state.adminUsers.deleteUserStatus);
 
     const users = allUsers ? allUsers.users : [];
     const pages = allUsers ? allUsers.pages : 1;
-    const currentPage = allUsers ? allUsers.page : 1;
+    const [currentPage, setCurrentPage] = useState(allUsers ? allUsers.page : 1);
 
     useEffect(() => {
         dispatch(fetchGetAllUsers(currentPage));
-    }, [dispatch, adminStatus, currentPage]);
+    }, [dispatch, adminStatus, currentPage, deleteUserStatus, removeAdminStatus]);
 
     const adminHandler = (id) => {
         dispatch(fetchGiveAdmin({
@@ -47,10 +49,34 @@ function AdminUsers() {
         }));
     };
 
+    const removeAdminHandler = (id) => {
+        dispatch(fetchRemoveAdmin({
+            id: id,
+            is_staff: false
+        }));
+    };
+
+    const deleteUserHadler = (id) => {
+        dispatch(fetchDeleteUser(id));
+    };
+
     const handlePageChange = (page) => {
         dispatch(fetchGetAllUsers(page));
     };
 
+    const previousHandler = (page) => {
+        if (page > 1) {
+            dispatch(fetchGetAllUsers(page - 1));
+            setCurrentPage(page - 1);
+        }
+    };
+
+    const nextHandler = (page) => {
+        if (page < pages) {
+            dispatch(fetchGetAllUsers(page + 1));
+            setCurrentPage(page + 1);
+        }
+    };
     return (
         <div className='w-[98%] mx-auto border-2 rounded-lg mt-8'>
             <Table>
@@ -58,11 +84,17 @@ function AdminUsers() {
                     <Pagination>
                         <PaginationContent>
                             <PaginationItem>
-                                <PaginationPrevious to="#" onClick={() => handlePageChange(currentPage - 1)} />
+                                <Button
+                                    onClick={() => previousHandler(currentPage - 1)}
+                                    variant="ghost"
+                                    disabled={currentPage === 1}
+                                >
+                                    Previous
+                                </Button>
                             </PaginationItem>
                             {[...Array(pages)].map((_, index) => (
                                 <PaginationItem key={index}>
-                                    <PaginationLink to="#" onClick={() => handlePageChange(index + 1)}>
+                                    <PaginationLink onClick={() => handlePageChange(index + 1)}>
                                         {index + 1}
                                     </PaginationLink>
                                 </PaginationItem>
@@ -71,7 +103,13 @@ function AdminUsers() {
                                 <PaginationEllipsis />
                             </PaginationItem>
                             <PaginationItem>
-                                <PaginationNext to="#" onClick={() => handlePageChange(currentPage + 1)} />
+                                <Button
+                                    disabled={currentPage === pages}
+                                    onClick={() => nextHandler(currentPage + 1)}
+                                    variant="ghost"
+                                >
+                                    Next
+                                </Button>
                             </PaginationItem>
                         </PaginationContent>
                     </Pagination>
@@ -83,6 +121,8 @@ function AdminUsers() {
                         <TableHead>Verified</TableHead>
                         <TableHead>Admin</TableHead>
                         <TableHead>Change to Admin</TableHead>
+                        <TableHead>Remove Admin</TableHead>
+                        <TableHead>Delete</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -93,6 +133,8 @@ function AdminUsers() {
                             <TableCell>{user.is_verified ? <Check color="#6d28d9" /> : <X color="#6d28d9" />}</TableCell>
                             <TableCell>{user.is_staff ? <Check color="#6d28d9" /> : <X color="#6d28d9" />}</TableCell>
                             <TableCell><Button onClick={() => adminHandler(user.id)} disabled={user.is_staff}>Admin</Button></TableCell>
+                            <TableCell><Button onClick={() => removeAdminHandler(user.id)} disabled={!user.is_staff}>Remove Admin</Button></TableCell>
+                            <TableCell><Button onClick={() => deleteUserHadler(user.id)}>Delete</Button></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
