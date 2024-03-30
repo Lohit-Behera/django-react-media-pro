@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { logout, fetchUserDetails } from '@/features/UserSlice';
+import { fetchDeleteImages, fetchDeleteRawImages } from '@/features/DeleteImagesSlice';
 
 import DarkModeToggle from './DarkModeToggle'
 import { Button } from './ui/button'
@@ -31,6 +32,7 @@ function Header() {
     const profileImage = userdetails ? userdetails.profile_image : ''
 
     const id = userInfo ? userInfo.id : ''
+    const is_staff = userInfo ? userInfo.is_staff : false
 
 
     useEffect(() => {
@@ -41,6 +43,12 @@ function Header() {
         dispatch(logout())
         navigate('/')
     }
+
+    const deleteImageHandler = () => {
+        dispatch(fetchDeleteImages())
+        dispatch(fetchDeleteRawImages())
+    }
+
     return (
         <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
             <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
@@ -66,6 +74,11 @@ function Header() {
                                 ) : (
                                     <li>
                                         <Button variant="ghost" onClick={() => navigate("/login")}>Login</Button>
+                                    </li>
+                                )}
+                                {is_staff && (
+                                    <li>
+                                        <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
                                     </li>
                                 )}
                             </ul>

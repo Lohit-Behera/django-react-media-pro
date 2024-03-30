@@ -3,7 +3,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.contrib.auth.tokens import default_token_generator
-from djangomediapro.settings import EMAIL_HOST_USER
+from djangomediapro.settings import EMAIL_HOST_USER, MEDIA_ROOT, RAW_IMAGES
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -11,6 +11,8 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+import os
 
 from .serializers import UserSerializerWithToken, UserSerializer
 
@@ -129,3 +131,48 @@ def update_user(request, pk):
 
     user.save()
     return Response({'detail': 'User updated successfully'})
+
+
+import logging
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_all_images(request):
+    try:
+        users = CustomUser.objects.all()
+        profile_images = [user.profile_image for user in users if user.profile_image]
+
+        file_list = []
+        for i in profile_images:
+            file_list.append(i)
+        filenames = [file.name for file in file_list]
+
+        profiles = []
+        for i in filenames:
+            split = i.split('/')
+            profiles.append(split[1])
+
+        for root, dirs, files in os.walk(MEDIA_ROOT):
+            for file in files:
+                if file not in profiles:
+                    os.remove(os.path.join(root, file))
+                    logging.info(f"Deleted file: {os.path.join(root, file)}")
+                        
+        return Response({'detail': 'All images deleted successfully'}, status=200)
+    except Exception as e:
+        logging.error(f"An error occurred: {str(e)}")
+        return Response({'error': str(e)}, status=500)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_raw_images(request):
+    try:
+        for root, dirs, files in os.walk(RAW_IMAGES):
+            for file in files:
+                os.remove(os.path.join(root, file))
+                logging.info(f"Deleted file: {os.path.join(root, file)}")
+        return Response({'detail': 'All images deleted successfully'}, status=200)
+    except Exception as e:
+        logging.error(f"An error occurred: {str(e)}")
+        return Response({'error': str(e)}, status=500)

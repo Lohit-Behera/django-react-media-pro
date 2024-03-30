@@ -148,6 +148,8 @@ MEDIA_URL = '/images/'
 
 MEDIA_ROOT = 'static/images'
 
+RAW_IMAGES = 'static/images/images'
+
 STATIC_ROOT = 'staticfiles'
 
 # Default primary key field type

@@ -149,7 +149,7 @@ function FilterScreen() {
                             <div className='flex flex-col w-full space-y-4'>
                                 <p className='text-center'>Compare</p>
                                 <div className='w-full h-auto'>
-                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={filteredImage} rightImageLabel='Filtered' sliderLineColor='#6d28d9' />
+                                    <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={filteredImage} rightImageLabel='Filtered' sliderLineColor='#6d28d9' />
 
                                 </div>
                                 <Button className="w-full"><a href={filteredImage} download="filtered.png">Download</a></Button>

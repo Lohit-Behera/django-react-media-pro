@@ -8,6 +8,7 @@ import BlurBgSlice from "@/features/BlurBgSlice";
 import FilterSlice from "@/features/FilterSlice";
 import ConvertSlice from "@/features/ConvertSlice";
 import DownScaleSlice from "@/features/DownScaleSlice";
+import DeleteImagesSlice from "@/features/DeleteImagesSlice";
 
 const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
         filter: FilterSlice,
         convert: ConvertSlice,
         downScale: DownScaleSlice,
+        deleteImages: DeleteImagesSlice,
     },
 });
 
