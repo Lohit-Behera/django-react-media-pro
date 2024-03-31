@@ -27,6 +27,19 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
+
 function AdminUsers() {
     const dispatch = useDispatch();
 
@@ -97,17 +110,24 @@ function AdminUsers() {
         }
     };
     return (
-        <>  {adminStatus === 'succeeded' && <CustomAlert variant='success' title='Success' description={`${adminEmail} is Admin now`} setOpenProp />}
+        <>
+            {adminStatus === 'succeeded' &&
+                <CustomAlert variant='success' title='Success' description={`${adminEmail} is Admin now`} setOpenProp />}
 
-            {adminStatus === 'failed' && <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
+            {adminStatus === 'failed' &&
+                <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
 
-            {removeAdminStatus === 'succeeded' && <CustomAlert variant='success' title='Success' description={`${removeAdminEmail} is not Admin now`} setOpenProp />}
+            {removeAdminStatus === 'succeeded' &&
+                <CustomAlert variant='success' title='Success' description={`${removeAdminEmail} is not Admin now`} setOpenProp />}
 
-            {removeAdminStatus === 'failed' && <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
+            {removeAdminStatus === 'failed' &&
+                <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
 
-            {deleteUserStatus === 'succeeded' && <CustomAlert variant='success' title='Success' description={`${deleteUserEmail} deleted successfully`} setOpenProp />}
+            {deleteUserStatus === 'succeeded' &&
+                <CustomAlert variant='success' title='Success' description={`User deleted successfully`} setOpenProp />}
 
-            {deleteUserStatus === 'failed' && <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
+            {deleteUserStatus === 'failed' &&
+                <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
 
             <div className='w-[98%] mx-auto border-2 rounded-lg mt-8'>
                 <Table>
@@ -163,9 +183,65 @@ function AdminUsers() {
                                 <TableCell>{user.first_name + " " + user.last_name}</TableCell>
                                 <TableCell>{user.is_verified ? <Check color="#6d28d9" /> : <X color="#6d28d9" />}</TableCell>
                                 <TableCell>{user.is_staff ? <Check color="#6d28d9" /> : <X color="#6d28d9" />}</TableCell>
-                                <TableCell><Button onClick={() => adminHandler(user.id)} disabled={user.is_staff}>Admin</Button></TableCell>
-                                <TableCell><Button onClick={() => removeAdminHandler(user.id)} disabled={!user.is_staff}>Remove Admin</Button></TableCell>
-                                <TableCell><Button onClick={() => deleteUserHadler(user.id)}>Delete</Button></TableCell>
+                                <TableCell>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button disabled={user.is_staff}>Admin</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Are you want to make {user.email} him admin?
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => adminHandler(user.id)} >Continue</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+
+                                </TableCell>
+                                <TableCell>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button disabled={!user.is_staff}>Remove Admin</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Are you want to remove {user.email} him from admin?
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => removeAdminHandler(user.id)}>Continue</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+
+                                </TableCell>
+                                <TableCell>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button>Delete</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    This action cannot be undone. This will permanently delete {user.email} account and remove your data from our servers.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => deleteUserHadler(user.id)}>Continue</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

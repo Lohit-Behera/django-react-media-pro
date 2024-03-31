@@ -19,13 +19,24 @@ import {
     SheetTrigger,
 } from "./ui/sheet"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 
 
 function Header() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
 
     const userInfo = useSelector((state) => state.user.userInfo)
     const userdetails = useSelector((state) => state.user.userdetails)
@@ -90,7 +101,23 @@ function Header() {
                                                 <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
                                             </li>
                                             <li>
-                                                <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button variant="ghost">Delete Unuse Images</Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                This action cannot be undone. This will permanently delete unuse Images.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                            <AlertDialogAction onClick={deleteImageHandler}>Continue</AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
                                             </li>
                                         </>
                                     )}
