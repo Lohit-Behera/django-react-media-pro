@@ -155,7 +155,6 @@ def delete_all_images(request):
             for file in files:
                 if file not in profiles:
                     os.remove(os.path.join(root, file))
-                    logging.info(f"Deleted file: {os.path.join(root, file)}")
                         
         return Response({'detail': 'All images deleted successfully'}, status=200)
     except:
@@ -169,10 +168,8 @@ def delete_raw_images(request):
         for root, dirs, files in os.walk(RAW_IMAGES):
             for file in files:
                 os.remove(os.path.join(root, file))
-                logging.info(f"Deleted file: {os.path.join(root, file)}")
         return Response({'detail': 'All images deleted successfully'}, status=200)
     except Exception as e:
-        logging.error(f"An error occurred: {str(e)}")
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])

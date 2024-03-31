@@ -67,7 +67,17 @@ const upscaleSlice = createSlice({
         getUpscaleStatus: "idle",
         getUpscaleError: null,
     },
-    reducers:{},
+    reducers:{
+        resetUpscale: (state) => {
+            state.upscale = null;
+            state.upscaleStatus = "idle";
+            state.upscaleError = null;
+
+            state.getUpscale = null;
+            state.getUpscaleStatus = "idle";
+            state.getUpscaleError = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchUpscale.pending, (state) => {
@@ -96,4 +106,5 @@ const upscaleSlice = createSlice({
     }
 });
 
+export const { resetUpscale } = upscaleSlice.actions
 export default upscaleSlice.reducer

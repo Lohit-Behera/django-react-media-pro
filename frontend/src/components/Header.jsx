@@ -1,10 +1,11 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { logout, fetchUserDetails } from '@/features/UserSlice';
 import { fetchDeleteImages, fetchDeleteRawImages } from '@/features/DeleteImagesSlice';
 
+import CustomAlert from '@/components/CustomAlert';
 import DarkModeToggle from './DarkModeToggle'
 import { Button } from './ui/button'
 import { Menu } from 'lucide-react'
@@ -28,12 +29,14 @@ function Header() {
 
     const userInfo = useSelector((state) => state.user.userInfo)
     const userdetails = useSelector((state) => state.user.userdetails)
+    const deleteStatus = useSelector((state) => state.deleteImages.deleteStatus)
+    const deleteRawStatus = useSelector((state) => state.deleteImages.deleteRawStatus)
 
     const profileImage = userdetails ? userdetails.profile_image : ''
-
     const id = userInfo ? userInfo.id : ''
     const is_staff = userInfo ? userInfo.is_staff : false
 
+    const [alert, setAlert] = useState(false)
 
     useEffect(() => {
         dispatch(fetchUserDetails(id))
@@ -42,6 +45,7 @@ function Header() {
     const logoutHandler = () => {
         dispatch(logout())
         navigate('/')
+        setAlert(true)
     }
 
     const deleteImageHandler = () => {
@@ -50,107 +54,119 @@ function Header() {
     }
 
     return (
-        <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
-            <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
-                <div className="flex justify-between w-full py-3 md:py-3">
-                    <div className='hidden md:block'>
+        <>
+            {(deleteStatus === 'succeeded' && deleteRawStatus === 'succeeded') && (
+                <CustomAlert titel="Success" description="Images are deleted" variant="success" setOpenProp />
+            )}
+
+            {(deleteStatus === 'failed' || deleteRawStatus === 'failed') && (
+                <CustomAlert titel="Error" description="Something went wrong" variant="distructive" setOpenProp />
+            )}
+
+            {alert && <CustomAlert titel="Success" description="Logged out successfully" variant="success" setOpenProp />}
+
+            <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
+                <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
+                    <div className="flex justify-between w-full py-3 md:py-3">
+                        <div className='hidden md:block'>
+                            <div>
+                                <ul className="flex space-x-3">
+                                    <li>
+                                        <Link to="/">
+                                            <Avatar>
+                                                <AvatarImage src={Logo} />
+                                                <AvatarFallback>MP</AvatarFallback>
+                                            </Avatar>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
+                                    </li>
+                                    {is_staff && (
+                                        <>
+                                            <li>
+                                                <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
+                                            </li>
+                                            <li>
+                                                <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
+                                            </li>
+                                        </>
+                                    )}
+                                    {userInfo ? (
+                                        <li>
+                                            <Button variant="ghost" onClick={logoutHandler}>Log Out</Button>
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <Button variant="ghost" onClick={() => navigate("/login")}>Login</Button>
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
+                        <div className='block md:hidden mt-1'>
+                            <Sheet>
+                                <SheetTrigger><Menu color="#6d28d9" /></SheetTrigger>
+                                <SheetContent side='left'>
+                                    <SheetHeader className="items-center">
+                                        <SheetTitle>
+                                            <Avatar>
+                                                <AvatarImage src={Logo} />
+                                                <AvatarFallback>MP</AvatarFallback>
+                                            </Avatar>
+                                        </SheetTitle>
+                                        <SheetDescription>
+                                            <ul className="space-y-4">
+                                                <li>
+                                                    <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
+                                                </li>
+                                                {is_staff && (
+                                                    <>
+                                                        <li>
+                                                            <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
+                                                        </li>
+                                                        <li>
+                                                            <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
+                                                        </li>
+                                                    </>
+                                                )}
+                                                {userInfo ? (
+                                                    <li>
+                                                        <Button variant="ghost" onClick={logoutHandler}>Log Out</Button>
+                                                    </li>
+                                                ) : (
+                                                    <li>
+                                                        <Button variant="ghost" onClick={() => navigate("/login")}>Login</Button>
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        </SheetDescription>
+                                    </SheetHeader>
+                                </SheetContent>
+                            </Sheet>
+                        </div>
+
                         <div>
-                            <ul className="flex space-x-3">
-                                <li>
-                                    <Link to="/">
-                                        <Avatar>
-                                            <AvatarImage src={Logo} />
-                                            <AvatarFallback>MP</AvatarFallback>
-                                        </Avatar>
-                                    </Link>
+                            <ul className='flex'>
+                                {userInfo &&
+                                    <li className='mr-3'>
+                                        <Link to="/profile">
+                                            <Avatar>
+                                                <AvatarImage src={profileImage} />
+                                                <AvatarFallback>P</AvatarFallback>
+                                            </Avatar>
+                                        </Link>
+                                    </li>}
+                                <li className='mt-0.5'>
+                                    <DarkModeToggle />
                                 </li>
-                                <li>
-                                    <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
-                                </li>
-                                {is_staff && (
-                                    <>
-                                        <li>
-                                            <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
-                                        </li>
-                                        <li>
-                                            <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
-                                        </li>
-                                    </>
-                                )}
-                                {userInfo ? (
-                                    <li>
-                                        <Button variant="ghost" onClick={logoutHandler}>Log Out</Button>
-                                    </li>
-                                ) : (
-                                    <li>
-                                        <Button variant="ghost" onClick={() => navigate("/login")}>Login</Button>
-                                    </li>
-                                )}
                             </ul>
+
                         </div>
                     </div>
-                    <div className='block md:hidden mt-1'>
-                        <Sheet>
-                            <SheetTrigger><Menu color="#6d28d9" /></SheetTrigger>
-                            <SheetContent side='left'>
-                                <SheetHeader className="items-center">
-                                    <SheetTitle>
-                                        <Avatar>
-                                            <AvatarImage src={Logo} />
-                                            <AvatarFallback>MP</AvatarFallback>
-                                        </Avatar>
-                                    </SheetTitle>
-                                    <SheetDescription>
-                                        <ul className="space-y-4">
-                                            <li>
-                                                <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
-                                            </li>
-                                            {is_staff && (
-                                                <>
-                                                    <li>
-                                                        <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
-                                                    </li>
-                                                    <li>
-                                                        <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
-                                                    </li>
-                                                </>
-                                            )}
-                                            {userInfo ? (
-                                                <li>
-                                                    <Button variant="ghost" onClick={logoutHandler}>Log Out</Button>
-                                                </li>
-                                            ) : (
-                                                <li>
-                                                    <Button variant="ghost" onClick={() => navigate("/login")}>Login</Button>
-                                                </li>
-                                            )}
-                                        </ul>
-                                    </SheetDescription>
-                                </SheetHeader>
-                            </SheetContent>
-                        </Sheet>
-                    </div>
-
-                    <div>
-                        <ul className='flex'>
-                            {userInfo &&
-                                <li className='mr-3'>
-                                    <Link to="/profile">
-                                        <Avatar>
-                                            <AvatarImage src={profileImage} />
-                                            <AvatarFallback>P</AvatarFallback>
-                                        </Avatar>
-                                    </Link>
-                                </li>}
-                            <li className='mt-0.5'>
-                                <DarkModeToggle />
-                            </li>
-                        </ul>
-
-                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </>
     )
 }
 

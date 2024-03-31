@@ -57,10 +57,12 @@ const deleteImagesSlice = createSlice({
         delete: null,
         deleteStatus: 'idle',
         deleteError: null,
+
         deleteRaw: null,
         deleteRawStatus: 'idle',
         deleteRawError: null,
     },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(fetchDeleteImages.pending, (state) => {
@@ -74,6 +76,7 @@ const deleteImagesSlice = createSlice({
                 state.deleteStatus = 'failed';
                 state.deleteError = action.payload;
             })
+
             .addCase(fetchDeleteRawImages.pending, (state) => {
                 state.deleteRawStatus = 'loading';
             })

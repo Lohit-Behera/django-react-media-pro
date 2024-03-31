@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { fetchDownScale, fetchGetDownScale } from '@/features/DownScaleSlice'
+import { fetchDownScale, fetchGetDownScale, resetDownScale } from '@/features/DownScaleSlice'
 
+import CustomAlert from '@/components/CustomAlert'
 import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
@@ -30,11 +31,12 @@ function DownScaleScreen() {
 
     const downScaleImage = getDownScale ? getDownScale.result : ''
 
-    const is_varified = userInfo ? userInfo.is_varified : false
+    const is_verified = userInfo ? userInfo.is_verified : false
 
     useEffect(() => {
-        if (!userInfo || !is_varified) {
+        if (!is_verified) {
             navigate('/login')
+            console.log(userInfo);
         }
     }, [userInfo, navigate])
 
@@ -46,30 +48,44 @@ function DownScaleScreen() {
 
     const [hide, setHide] = useState(false)
     const [scale, setScale] = useState('2')
+    const [isDragOver, setIsDragOver] = useState(false);
 
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
-        console.log(file);
         if (file.type.startsWith('image/')) {
             dispatch(fetchDownScale({
                 scale: scale,
                 image: file
             }))
         } else {
-            alert('Please drop an image file.');
+            setIsDragOver(true);
+            const timer = setTimeout(() => {
+                setIsDragOver(false);
+            }, 3700);
+            return () => clearTimeout(timer);
         }
     };
+
     const handleDragOver = (e) => {
         e.preventDefault();
     };
 
     const uploadHndler = (e) => {
         e.preventDefault();
-        dispatch(fetchDownScale({
-            scale: scale,
-            image: e.target.files[0]
-        }))
+        const file = e.target.files[0];
+        if (file.type.startsWith('image/')) {
+            dispatch(fetchDownScale({
+                scale: scale,
+                image: file
+            }))
+        } else {
+            setIsDragOver(true);
+            const timer = setTimeout(() => {
+                setIsDragOver(false);
+            }, 3700);
+            return () => clearTimeout(timer);
+        }
     }
 
     const downScale2x = () => {
@@ -82,62 +98,74 @@ function DownScaleScreen() {
         setHide(true)
     }
 
+    const resetHandler = () => {
+        dispatch(resetDownScale())
+        setHide(false)
+        setScale('')
+    }
 
     return (
-        <div className='w-full mx-auto flex justify-center'>
-            <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
-                <CardHeader>
-                    <CardTitle className="text-lg md:text-2xl text-center">DownScale Image</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {downScaleStatus === 'idle' ? (
-                        <div className="h-full flex flex-col space-y-4 my-2 items-center">
-                            {!hide && (
-                                <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                    <p>Before uploading the image choose scale</p>
-                                    <div className='grid grid-cols-2 gap-2' >
-                                        <Button variant="outline" onClick={downScale2x}>DownScale 2X</Button>
-                                        <Button variant="outline" onClick={downScale4x}>DownScale 4X</Button>
+        <>
+            {downScaleStatus === 'succeeded' && <CustomAlert titel="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
+            {downScaleStatus === 'failed' && <CustomAlert titel="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
+            {isDragOver && <CustomAlert titel="Failed" description="Please select an image" variant="destructive" setOpenProp />}
+
+            <div className='w-full mx-auto flex justify-center'>
+                <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
+                    <CardHeader>
+                        <CardTitle className="text-lg md:text-2xl text-center">DownScale Image</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {downScaleStatus === 'idle' ? (
+                            <div className="h-full flex flex-col space-y-4 my-2 items-center">
+                                {!hide && (
+                                    <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                        <p>Before uploading the image choose scale</p>
+                                        <div className='grid grid-cols-2 gap-2' >
+                                            <Button variant="outline" onClick={downScale2x}>DownScale 2X</Button>
+                                            <Button variant="outline" onClick={downScale4x}>DownScale 4X</Button>
+                                        </div>
                                     </div>
+                                )}
+                                <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                <Input
+                                    name="image"
+                                    type="file"
+                                    accept="image/*"
+                                    className='w-full dark:file:text-white cursor-pointer'
+                                    onChange={(e) => { uploadHndler(e) }}
+                                />
+                                <div
+                                    onDrop={handleDrop}
+                                    onDragOver={handleDragOver}
+                                    className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                >
+                                    Drag and drop image here
                                 </div>
-                            )}
-                            <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                            <Input
-                                name="image"
-                                type="file"
-                                accept="image/*"
-                                className='w-full dark:file:text-white cursor-pointer'
-                                onChange={(e) => { uploadHndler(e) }}
-                            />
-                            <div
-                                onDrop={handleDrop}
-                                onDragOver={handleDragOver}
-                                className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                            >
-                                Drag and drop image here
                             </div>
-                        </div>
-                    ) : downScaleStatus === 'loading' ? (
-                        <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                    ) : downScaleStatus === 'succeeded' ? (
-                        <p className='text-center text-lg' >Image Uploaded</p>
-                    ) : downScaleStatus === 'failed' ? (
-                        <p className='text-center text-lg'>Something went wrong</p>
-                    ) : null}
-                </CardContent>
-                {getDownScaleStatus === 'succeeded' && (
-                    <CardFooter>
-                        <div className='flex flex-col w-full space-y-4'>
-                            <p className='text-center'>DownScale Image</p>
-                            <div className='w-full h-auto flex justify-center '>
-                                <img src={downScaleImage} alt="downScaleImage" />
+                        ) : downScaleStatus === 'loading' ? (
+                            <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                        ) : downScaleStatus === 'succeeded' ? (
+                            <p className='text-center text-lg' >Image Uploaded</p>
+                        ) : downScaleStatus === 'failed' ? (
+                            <p className='text-center text-lg'>Something went wrong</p>
+                        ) : null}
+                    </CardContent>
+                    {getDownScaleStatus === 'succeeded' && (
+                        <CardFooter>
+                            <div className='flex flex-col w-full space-y-4'>
+                                <p className='text-center'>DownScale Image</p>
+                                <div className='w-full h-auto flex justify-center '>
+                                    <img src={downScaleImage} alt="downScaleImage" />
+                                </div>
+                                <Button className="w-full"><a href={downScaleImage} download="filtered.png">Download</a></Button>
+                                <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                             </div>
-                            <Button className="w-full"><a href={downScaleImage} download="filtered.png">Download</a></Button>
-                        </div>
-                    </CardFooter>
-                )}
-            </Card>
-        </div>
+                        </CardFooter>
+                    )}
+                </Card>
+            </div>
+        </>
     )
 }
 

@@ -66,7 +66,17 @@ const convertSlice = createSlice({
         getConvertStatus: "idle",
         getConvertError: null,
     },
-    reducers:{},
+    reducers:{
+        resetConvert: (state) => {
+            state.convert = null;
+            state.convertStatus = 'idle';
+            state.convertError = null;
+            
+            state.getConvert = null;
+            state.getConvertStatus = 'idle';
+            state.getConvertError = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchConvert.pending, (state) => {
@@ -94,4 +104,5 @@ const convertSlice = createSlice({
     }
 });
 
+export const {resetConvert} = convertSlice.actions
 export default convertSlice.reducer

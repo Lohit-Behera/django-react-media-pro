@@ -66,7 +66,17 @@ const downScaleSlice = createSlice({
         getDownScaleStatus: "idle",
         getDownScaleError: null,
     },
-    reducers:{},
+    reducers:{
+        resetDownScale: (state) => {
+            state.downScale = null;
+            state.downScaleStatus = "idle";
+            state.downScaleError = null;
+            
+            state.getDownScale = null;
+            state.getDownScaleStatus = "idle";
+            state.getDownScaleError = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchDownScale.pending, (state) => {
@@ -94,4 +104,5 @@ const downScaleSlice = createSlice({
     }
 });
 
+export const { resetDownScale } = downScaleSlice.actions
 export default downScaleSlice.reducer
