@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchBlurBg, fetchGetBlurBg, reset } from '@/features/BlurBgSlice'
 
+import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert';
 import ReactCompareImage from 'react-compare-image'
 import { Loader2 } from "lucide-react"
@@ -135,72 +136,73 @@ function BlurBgScreen() {
     return (
         <>
 
-            {blurBgStatus === 'succeeded' && <CustomAlert titel="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
-            {blurBgStatus === 'failed' && <CustomAlert titel="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
-            {isDragOver && <CustomAlert titel="Failed" description="Please select an image" variant="destructive" setOpenProp />}
+            {blurBgStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
+            {blurBgStatus === 'failed' && <CustomAlert title="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
+            {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
+            {blurBgStatus === 'failed' ? (
+                <ServerError />
+            ) : (
+                <div className='w-full mx-auto flex justify-center'>
+                    <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
+                        <CardHeader>
+                            <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {blurBgStatus === 'idle' ? (
+                                <div className="h-full flex flex-col space-y-4 my-2 items-center">
 
-            <div className='w-full mx-auto flex justify-center'>
-                <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
-                    <CardHeader>
-                        <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {blurBgStatus === 'idle' ? (
-                            <div className="h-full flex flex-col space-y-4 my-2 items-center">
-
-                                {(!hide || !hideBlur) && (
-                                    <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                        <p className='text-center'>Before uploading the image choose image type if both not work use other and select blur amount</p>
-                                        <div className='grid grid-cols-3 gap-2' >
-                                            <Button variant="outline" onClick={animeHandler}>Anime</Button>
-                                            <Button variant="outline" onClick={generalHandler}>General</Button>
-                                            <Button variant="outline" onClick={lastHandler}>Last</Button>
-                                            <Button variant="outline" onClick={lowHandler}>Low Blur</Button>
-                                            <Button variant="outline" onClick={mediumlHandler}>Medium Blur</Button>
-                                            <Button variant="outline" onClick={highHandler}>High Blur</Button>
+                                    {(!hide || !hideBlur) && (
+                                        <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                            <p className='text-center'>Before uploading the image choose image type if both not work use other and select blur amount</p>
+                                            <div className='grid grid-cols-3 gap-2' >
+                                                <Button variant="outline" onClick={animeHandler}>Anime</Button>
+                                                <Button variant="outline" onClick={generalHandler}>General</Button>
+                                                <Button variant="outline" onClick={lastHandler}>Last</Button>
+                                                <Button variant="outline" onClick={lowHandler}>Low Blur</Button>
+                                                <Button variant="outline" onClick={mediumlHandler}>Medium Blur</Button>
+                                                <Button variant="outline" onClick={highHandler}>High Blur</Button>
+                                            </div>
                                         </div>
+                                    )}
+
+                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                    <Input
+                                        name="image"
+                                        type="file"
+                                        accept="image/*"
+                                        className='w-full dark:file:text-white cursor-pointer'
+                                        onChange={(e) => { uploadHndler(e) }}
+                                    />
+                                    <div
+                                        onDrop={handleDrop}
+                                        onDragOver={handleDragOver}
+                                        className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                    >
+                                        Drag and drop image here
                                     </div>
-                                )}
-
-                                <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                <Input
-                                    name="image"
-                                    type="file"
-                                    accept="image/*"
-                                    className='w-full dark:file:text-white cursor-pointer'
-                                    onChange={(e) => { uploadHndler(e) }}
-                                />
-                                <div
-                                    onDrop={handleDrop}
-                                    onDragOver={handleDragOver}
-                                    className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                >
-                                    Drag and drop image here
                                 </div>
-                            </div>
-                        ) : blurBgStatus === 'loading' ? (
-                            <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                        ) : blurBgStatus === 'succeeded' ? (
-                            <p className='text-center text-lg' >Image Uploaded</p>
-                        ) : blurBgStatus === 'failed' ? (
-                            <p className='text-center text-lg'>Something went wrong</p>
-                        ) : null}
-                    </CardContent>
-                    {getBlurBgStatus === 'succeeded' && (
-                        <CardFooter>
-                            <div className='flex flex-col w-full space-y-4'>
-                                <p className='text-center'>Compare</p>
-                                <div className='w-full h-auto'>
-                                    <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={blurBgImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
+                            ) : blurBgStatus === 'loading' ? (
+                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                            ) : (
+                                null
+                            )}
+                        </CardContent>
+                        {getBlurBgStatus === 'succeeded' && (
+                            <CardFooter>
+                                <div className='flex flex-col w-full space-y-4'>
+                                    <p className='text-center'>Compare</p>
+                                    <div className='w-full h-auto'>
+                                        <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={blurBgImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
 
+                                    </div>
+                                    <Button className="w-full"><a href={blurBgImage} download="removeBg.png">Download</a></Button>
+                                    <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
-                                <Button className="w-full"><a href={blurBgImage} download="removeBg.png">Download</a></Button>
-                                <Button className="w-full" onClick={resetHandler}>Another Image</Button>
-                            </div>
-                        </CardFooter>
-                    )}
-                </Card>
-            </div>
+                            </CardFooter>
+                        )}
+                    </Card>
+                </div>
+            )}
         </>
     )
 }

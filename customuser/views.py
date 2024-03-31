@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.tokens import default_token_generator
 from djangomediapro.settings import EMAIL_HOST_USER, MEDIA_ROOT, RAW_IMAGES
@@ -100,7 +101,7 @@ def verify_email(request, token):
         user.is_verified = True
         user.save()
         email_verification_token.delete()
-        return Response({'detail': 'Email verified successfully'})
+        return redirect('api/user/login')
     except EmailVerificationToken.DoesNotExist:
         return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -200,7 +201,7 @@ def remove_admin(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_users(request):
-    users = CustomUser.objects.all()
+    users = CustomUser.objects.all().order_by('email')
 
     page = request.query_params.get('page')
     paginator = Paginator(users, 10)

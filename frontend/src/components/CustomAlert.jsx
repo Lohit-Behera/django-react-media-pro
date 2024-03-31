@@ -5,7 +5,7 @@ import { TriangleAlert, CircleCheckBig } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 
-function CustomAlert({ titel = '', description = '', variant = 'success', setOpenProp = false }) {
+function CustomAlert({ title = '', description = '', variant = 'success', setOpenProp = false }) {
     const [open, setOpen] = useState(false)
     const [out, setOut] = useState(false)
     const [hide, setHide] = useState(false)
@@ -40,7 +40,7 @@ function CustomAlert({ titel = '', description = '', variant = 'success', setOpe
                 {variant === 'destructive' && <TriangleAlert className='mt-1' color="#ef4444" />}
                 {variant === 'success' && <CircleCheckBig className='mt-1' color="#22c55e" />}
                 <TriangleAlert color="#ef4444" />
-                <AlertTitle>{titel}</AlertTitle>
+                <AlertTitle>{title}</AlertTitle>
                 <AlertDescription>
                     {description}
                 </AlertDescription>

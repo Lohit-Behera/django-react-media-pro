@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchUpscale, fetchGetUpscale, resetUpscale } from '@/features/UpscaleSlice'
 
+import ServerError from '@/components/ServerError'
+
 import CustomAlert from '@/components/CustomAlert'
 import ReactCompareImage from 'react-compare-image'
 import { Loader2 } from "lucide-react"
@@ -109,65 +111,69 @@ function UpscaleScreen() {
 
     return (
         <>
-            {upscaleStatus === 'succeeded' && <CustomAlert titel="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
-            {upscaleStatus === 'failed' && <CustomAlert titel="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
-            {isDragOver && <CustomAlert titel="Failed" description="Please select an image" variant="destructive" setOpenProp />}
-
-            <div className='w-full mx-auto flex justify-center items-center'>
-                <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10'>
-                    <CardHeader>
-                        <CardTitle className="text-2xl text-center">Upscale Image</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {upscaleStatus === 'idle' ? (
-                            <div className="flex flex-col space-y-2 my-2 items-center">
-                                {!hide && (
-                                    <div className="flex flex-col items-center space-y-2">
-                                        <p className='text-center'>Before uploading the image choose scaling</p>
-                                        <div className='grid grid-cols-2 gap-2' >
-                                            <Button variant="outline" onClick={scale2xHandler}>2X Scale</Button>
-                                            <Button variant="outline" onClick={scale4xHandler}>4X Scale</Button>
+            {upscaleStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
+            {upscaleStatus === 'failed' && <CustomAlert title="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
+            {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
+            {upscaleStatus === 'failed' ? (
+                <ServerError />
+            ) : (
+                <div className='w-full mx-auto flex justify-center items-center'>
+                    <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10'>
+                        <CardHeader>
+                            <CardTitle className="text-2xl text-center">Upscale Image</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {upscaleStatus === 'idle' ? (
+                                <div className="flex flex-col space-y-2 my-2 items-center">
+                                    {!hide && (
+                                        <div className="flex flex-col items-center space-y-2">
+                                            <p className='text-center'>Before uploading the image choose scaling</p>
+                                            <div className='grid grid-cols-2 gap-2' >
+                                                <Button variant="outline" onClick={scale2xHandler}>2X Scale</Button>
+                                                <Button variant="outline" onClick={scale4xHandler}>4X Scale</Button>
+                                            </div>
                                         </div>
+                                    )}
+                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                    <Input
+                                        name="image"
+                                        type="file"
+                                        accept="image/*"
+                                        className='w-full dark:file:text-white cursor-pointer'
+                                        onChange={(e) => { uploadHndler(e) }}
+                                    />
+                                    <div
+                                        onDrop={handleDrop}
+                                        onDragOver={handleDragOver}
+                                        className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                    >
+                                        Drag and drop image here
                                     </div>
-                                )}
-                                <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                <Input
-                                    name="image"
-                                    type="file"
-                                    accept="image/*"
-                                    className='w-full dark:file:text-white cursor-pointer'
-                                    onChange={(e) => { uploadHndler(e) }}
-                                />
-                                <div
-                                    onDrop={handleDrop}
-                                    onDragOver={handleDragOver}
-                                    className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                >
-                                    Drag and drop image here
                                 </div>
-                            </div>
-                        ) : upscaleStatus === 'loading' ? (
-                            <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                        ) : upscaleStatus === 'succeeded' ? (
-                            <p className='text-center text-lg' >Image Uploaded</p>
-                        ) : upscaleStatus === 'failed' ? (
-                            <p className='text-center text-lg'>Something went wrong</p>
-                        ) : null}
-                    </CardContent>
-                    <CardFooter>
-                        {getUpscaleStatus === 'succeeded' && (
-                            <div className='flex flex-col w-full space-y-4'>
-                                <p className='text-center'>Compare</p>
-                                <div className='w-full h-auto'>
-                                    <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={upscaleImage} rightImageLabel='Upscaled' sliderLineColor='#6d28d9' />
+                            ) : upscaleStatus === 'loading' ? (
+                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                            ) : upscaleStatus === 'succeeded' ? (
+                                <p className='text-center text-lg' >Image Uploaded</p>
+                            ) : upscaleStatus === 'failed' ? (
+                                <p className='text-center text-lg'>Something went wrong</p>
+                            ) : null}
+                        </CardContent>
+                        <CardFooter>
+                            {getUpscaleStatus === 'succeeded' && (
+                                <div className='flex flex-col w-full space-y-4'>
+                                    <p className='text-center'>Compare</p>
+                                    <div className='w-full h-auto'>
+                                        <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={upscaleImage} rightImageLabel='Upscaled' sliderLineColor='#6d28d9' />
+                                    </div>
+                                    <Button className="w-full"><a href={upscaleImage} download="removeBg.png">Download</a></Button>
+                                    <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
-                                <Button className="w-full"><a href={upscaleImage} download="removeBg.png">Download</a></Button>
-                                <Button className="w-full" onClick={resetHandler}>Another Image</Button>
-                            </div>
-                        )}
-                    </CardFooter>
-                </Card>
-            </div>
+                            )}
+                        </CardFooter>
+                    </Card>
+                </div>
+            )}
+
         </>
     )
 }

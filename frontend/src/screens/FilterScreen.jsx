@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchFilter, fetchGetFilter, resetFilter } from '@/features/FilterSlice'
 import CustomAlert from '@/components/CustomAlert'
+import ServerError from '@/components/ServerError'
 
 import car from '../assets/car.jpg'
 import GrayScaleCar from '../assets/GrayScaleCar.png'
@@ -125,150 +126,154 @@ function FilterScreen() {
 
     return (
         <>
-            {filterStatus === 'succeeded' && <CustomAlert titel="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
-            {filterStatus === 'failed' && <CustomAlert titel="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
-            {isDragOver && <CustomAlert titel="Failed" description="Please select an image" variant="destructive" setOpenProp />}
+            {filterStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
+            {filterStatus === 'failed' && <CustomAlert title="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
+            {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
 
-            <div className='w-full space-y-10'>
-                <div className='w-full mx-auto flex justify-center'>
-                    <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
-                        <CardHeader>
-                            <CardTitle className="text-lg md:text-2xl text-center">Add Filters</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            {filterStatus === 'idle' ? (
-                                <div className="h-full flex flex-col space-y-4 my-2 items-center">
-                                    {!hide && (
-                                        <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                            <p className='text-center'>Before uploading the image choose filter examples are shown below</p>
-                                            <div className='grid grid-cols-2 md:grid-cols-4 gap-2' >
-                                                <Button variant="outline" onClick={grayscaleHandler}>GrayScale</Button>
-                                                <Button variant="outline" onClick={colorlHandler}>Color vibrance</Button>
-                                                <Button variant="outline" onClick={enhanceHandler}>Enhance</Button>
-                                                <Button variant="outline" onClick={mixHandler}>Mixed</Button>
+            {filterStatus === 'failed' ? (
+                <ServerError />
+            ) : (
+                <div className='w-full space-y-10'>
+                    <div className='w-full mx-auto flex justify-center'>
+                        <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
+                            <CardHeader>
+                                <CardTitle className="text-lg md:text-2xl text-center">Add Filters</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                {filterStatus === 'idle' ? (
+                                    <div className="h-full flex flex-col space-y-4 my-2 items-center">
+                                        {!hide && (
+                                            <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                                <p className='text-center'>Before uploading the image choose filter examples are shown below</p>
+                                                <div className='grid grid-cols-2 md:grid-cols-4 gap-2' >
+                                                    <Button variant="outline" onClick={grayscaleHandler}>GrayScale</Button>
+                                                    <Button variant="outline" onClick={colorlHandler}>Color vibrance</Button>
+                                                    <Button variant="outline" onClick={enhanceHandler}>Enhance</Button>
+                                                    <Button variant="outline" onClick={mixHandler}>Mixed</Button>
+                                                </div>
                                             </div>
+                                        )}
+                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                        <Input
+                                            name="image"
+                                            type="file"
+                                            accept="image/*"
+                                            className='w-full dark:file:text-white cursor-pointer'
+                                            onChange={(e) => { uploadHndler(e) }}
+                                        />
+                                        <div
+                                            onDrop={handleDrop}
+                                            onDragOver={handleDragOver}
+                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                        >
+                                            Drag and drop image here
                                         </div>
-                                    )}
-                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                    <Input
-                                        name="image"
-                                        type="file"
-                                        accept="image/*"
-                                        className='w-full dark:file:text-white cursor-pointer'
-                                        onChange={(e) => { uploadHndler(e) }}
-                                    />
-                                    <div
-                                        onDrop={handleDrop}
-                                        onDragOver={handleDragOver}
-                                        className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                    >
-                                        Drag and drop image here
                                     </div>
-                                </div>
-                            ) : filterStatus === 'loading' ? (
-                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                            ) : filterStatus === 'succeeded' ? (
-                                <p className='text-center text-lg' >Image Uploaded</p>
-                            ) : filterStatus === 'failed' ? (
-                                <p className='text-center text-lg'>Something went wrong</p>
-                            ) : null}
-                        </CardContent>
-                        {getfilterStatus === 'succeeded' && (
-                            <CardFooter>
-                                <div className='flex flex-col w-full space-y-4'>
-                                    <p className='text-center'>Compare</p>
-                                    <div className='w-full h-auto'>
-                                        <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={filteredImage} rightImageLabel='Filtered' sliderLineColor='#6d28d9' />
+                                ) : filterStatus === 'loading' ? (
+                                    <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                                ) : filterStatus === 'succeeded' ? (
+                                    <p className='text-center text-lg' >Image Uploaded</p>
+                                ) : filterStatus === 'failed' ? (
+                                    <p className='text-center text-lg'>Something went wrong</p>
+                                ) : null}
+                            </CardContent>
+                            {getfilterStatus === 'succeeded' && (
+                                <CardFooter>
+                                    <div className='flex flex-col w-full space-y-4'>
+                                        <p className='text-center'>Compare</p>
+                                        <div className='w-full h-auto'>
+                                            <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={filteredImage} rightImageLabel='Filtered' sliderLineColor='#6d28d9' />
+
+                                        </div>
+                                        <Button className="w-full"><a href={filteredImage} download="filtered.png">Download</a></Button>
+                                        <Button className="w-full" onClick={resetHandler}>Another Image</Button>
 
                                     </div>
-                                    <Button className="w-full"><a href={filteredImage} download="filtered.png">Download</a></Button>
-                                    <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                                </CardFooter>
+                            )}
+                        </Card>
+                    </div>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-[98%] mx-auto'>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base md:text-lg text-center">GrayScale</CardTitle>
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                    <a
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        Link
+                                    </a>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className='w-full h-auto'>
+                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={GrayScaleCar} rightImageLabel='GrayScale' sliderLineColor='#6d28d9' />
 
                                 </div>
-                            </CardFooter>
-                        )}
-                    </Card>
+                            </CardContent>
+
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base md:text-lg text-center">Color vibrance</CardTitle>
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                    <a
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        Link
+                                    </a>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className='w-full h-auto'>
+                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={ColorVibranceCar} rightImageLabel='Color vibrance' sliderLineColor='#6d28d9' />
+
+                                </div>
+                            </CardContent>
+
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base md:text-lg text-center">Enhance</CardTitle>
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                    <a
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        Link
+                                    </a>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className='w-full h-auto'>
+                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={EnhanceCar} rightImageLabel='Enhance' sliderLineColor='#6d28d9' />
+
+                                </div>
+                            </CardContent>
+
+                        </Card>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base md:text-lg text-center">Mixed</CardTitle>
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                    <a
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        Link
+                                    </a>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className='w-full h-auto'>
+                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={filteredCar} rightImageLabel='Mixed' sliderLineColor='#6d28d9' />
+
+                                </div>
+                            </CardContent>
+
+                        </Card>
+
+                    </div>
                 </div>
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-[98%] mx-auto'>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-base md:text-lg text-center">GrayScale</CardTitle>
-                            <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                <a
-                                    className='hover:underline hover:text-[#6d28d9] duration-200'
-                                    href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                    Link
-                                </a>
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className='w-full h-auto'>
-                                <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={GrayScaleCar} rightImageLabel='GrayScale' sliderLineColor='#6d28d9' />
-
-                            </div>
-                        </CardContent>
-
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-base md:text-lg text-center">Color vibrance</CardTitle>
-                            <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                <a
-                                    className='hover:underline hover:text-[#6d28d9] duration-200'
-                                    href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                    Link
-                                </a>
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className='w-full h-auto'>
-                                <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={ColorVibranceCar} rightImageLabel='Color vibrance' sliderLineColor='#6d28d9' />
-
-                            </div>
-                        </CardContent>
-
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-base md:text-lg text-center">Enhance</CardTitle>
-                            <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                <a
-                                    className='hover:underline hover:text-[#6d28d9] duration-200'
-                                    href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                    Link
-                                </a>
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className='w-full h-auto'>
-                                <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={EnhanceCar} rightImageLabel='Enhance' sliderLineColor='#6d28d9' />
-
-                            </div>
-                        </CardContent>
-
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-base md:text-lg text-center">Mixed</CardTitle>
-                            <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                <a
-                                    className='hover:underline hover:text-[#6d28d9] duration-200'
-                                    href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                    Link
-                                </a>
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className='w-full h-auto'>
-                                <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={filteredCar} rightImageLabel='Mixed' sliderLineColor='#6d28d9' />
-
-                            </div>
-                        </CardContent>
-
-                    </Card>
-
-                </div>
-            </div>
+            )}
         </>
     )
 }

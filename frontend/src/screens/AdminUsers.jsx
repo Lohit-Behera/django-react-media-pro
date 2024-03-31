@@ -97,17 +97,17 @@ function AdminUsers() {
         }
     };
     return (
-        <>  {adminStatus === 'succeeded' && <CustomAlert variant='success' titel='Success' description={`${adminEmail} is Admin now`} setOpenProp />}
+        <>  {adminStatus === 'succeeded' && <CustomAlert variant='success' title='Success' description={`${adminEmail} is Admin now`} setOpenProp />}
 
-            {adminStatus === 'failed' && <CustomAlert variant='destructive' titel='Error' description='Something went wrong' setOpenProp />}
+            {adminStatus === 'failed' && <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
 
-            {removeAdminStatus === 'succeeded' && <CustomAlert variant='success' titel='Success' description={`${removeAdminEmail} is not Admin now`} setOpenProp />}
+            {removeAdminStatus === 'succeeded' && <CustomAlert variant='success' title='Success' description={`${removeAdminEmail} is not Admin now`} setOpenProp />}
 
-            {removeAdminStatus === 'failed' && <CustomAlert variant='destructive' titel='Error' description='Something went wrong' setOpenProp />}
+            {removeAdminStatus === 'failed' && <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
 
-            {deleteUserStatus === 'succeeded' && <CustomAlert variant='success' titel='Success' description={`${deleteUserEmail} deleted successfully`} setOpenProp />}
+            {deleteUserStatus === 'succeeded' && <CustomAlert variant='success' title='Success' description={`${deleteUserEmail} deleted successfully`} setOpenProp />}
 
-            {deleteUserStatus === 'failed' && <CustomAlert variant='destructive' titel='Error' description='Something went wrong' setOpenProp />}
+            {deleteUserStatus === 'failed' && <CustomAlert variant='destructive' title='Error' description='Something went wrong' setOpenProp />}
 
             <div className='w-[98%] mx-auto border-2 rounded-lg mt-8'>
                 <Table>

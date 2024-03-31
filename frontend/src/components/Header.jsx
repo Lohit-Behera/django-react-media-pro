@@ -39,7 +39,9 @@ function Header() {
     const [alert, setAlert] = useState(false)
 
     useEffect(() => {
-        dispatch(fetchUserDetails(id))
+        if (userInfo) {
+            dispatch(fetchUserDetails(id))
+        }
     }, [userInfo, dispatch])
 
     const logoutHandler = () => {
@@ -56,14 +58,14 @@ function Header() {
     return (
         <>
             {(deleteStatus === 'succeeded' && deleteRawStatus === 'succeeded') && (
-                <CustomAlert titel="Success" description="Images are deleted" variant="success" setOpenProp />
+                <CustomAlert title="Success" description="Images are deleted" variant="success" setOpenProp />
             )}
 
             {(deleteStatus === 'failed' || deleteRawStatus === 'failed') && (
-                <CustomAlert titel="Error" description="Something went wrong" variant="distructive" setOpenProp />
+                <CustomAlert title="Error" description="Something went wrong" variant="distructive" setOpenProp />
             )}
 
-            {alert && <CustomAlert titel="Success" description="Logged out successfully" variant="success" setOpenProp />}
+            {alert && <CustomAlert title="Success" description="Logged out successfully" variant="success" setOpenProp />}
 
             <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
                 <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">

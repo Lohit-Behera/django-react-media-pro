@@ -1,5 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserUpdate, fetchUserDetails } from '@/features/UserSlice'
 
@@ -17,11 +18,10 @@ import { Input } from "../components/ui/input"
 import { Label } from "../components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-//TODO : fix form blank
 
 function ProfileScreen() {
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
     const userInfo = useSelector((state) => state.user.userInfo)
     const userdetails = useSelector((state) => state.user.userdetails)
     const userUpdateStatus = useSelector((state) => state.user.userUpdateStatus)
@@ -33,15 +33,17 @@ function ProfileScreen() {
         }
     }, [userInfo])
 
+    const id = userInfo ? userInfo.id : ''
+
     useEffect(() => {
-        dispatch(fetchUserDetails(userInfo.id))
+        dispatch(fetchUserDetails(id))
     }, [dispatch, userUpdateSucceeded])
 
     const profile_image = userdetails ? userdetails.profile_image : ''
-    const first_name = userdetails ? userdetails.first_name : userInfo.first_name
+    const first_name = userdetails ? userdetails.first_name : ''
     const last_name = userdetails ? userdetails.last_name : ''
     const userEmail = userdetails ? userdetails.email : ''
-    const is_varified = userdetails ? userdetails.is_varified : false
+    const is_verified = userdetails ? userdetails.is_verified : false
 
     const [firstName, setFirstName] = useState(first_name)
     const [lastName, setLastName] = useState(last_name)
@@ -87,9 +89,9 @@ function ProfileScreen() {
 
     return (
         <>
-            {isDragOver && <CustomAlert titel="Failed" description="Please select an image" variant="destructive" setOpenProp />}
-            {wrongPassword && <CustomAlert titel="Failed" description="Password does not match" variant="destructive" setOpenProp />}
-            {userUpdateSucceeded && <CustomAlert titel="Success" description="Profile updated successfully" variant="success" setOpenProp />}
+            {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
+            {wrongPassword && <CustomAlert title="Failed" description="Password does not match" variant="destructive" setOpenProp />}
+            {userUpdateSucceeded && <CustomAlert title="Success" description="Profile updated successfully" variant="success" setOpenProp />}
 
             <div className='w-full mx-auto flex justify-center items-center'>
                 <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10'>
@@ -111,7 +113,7 @@ function ProfileScreen() {
                                 <p>Email: {email}</p>
                             </li>
                             <li>
-                                <p>Account Varified: {is_varified ? 'Yes' : "No"}</p>
+                                <p>Account Varified: {is_verified ? 'Yes' : "No"}</p>
                             </li>
                         </ul>
                     </CardContent>

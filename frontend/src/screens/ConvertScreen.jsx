@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchConvert, fetchGetConvert, resetConvert } from '@/features/ConvertSlice'
-import CustomAlert from '@/components/CustomAlert'
 
+import ServerError from '@/components/ServerError'
+import CustomAlert from '@/components/CustomAlert'
 import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
@@ -136,75 +137,78 @@ function ConvertScreen() {
 
     return (
         <>
-            {convertStatus === 'succeeded' && <CustomAlert titel="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
-            {convertStatus === 'failed' && <CustomAlert titel="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
-            {isDragOver && <CustomAlert titel="Failed" description="Please select an image" variant="destructive" setOpenProp />}
+            {convertStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
+            {convertStatus === 'failed' && <CustomAlert title="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
+            {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
 
-
-            <div className='w-full mx-auto flex justify-center'>
-                <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
-                    <CardHeader>
-                        <CardTitle className="text-lg md:text-2xl text-center">Change Format</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        {convertStatus === 'idle' ? (
-                            <div className="h-full flex flex-col space-y-4 my-2 items-center">
-                                {!hide && (
-                                    <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                        <p>Before uploading the image choose format</p>
-                                        <div className='grid grid-cols-3 md:grid-cols-7 gap-2' >
-                                            <Button variant="outline" onClick={jpegHandler}>jpeg</Button>
-                                            <Button variant="outline" onClick={pngHandler}>png</Button>
-                                            <Button variant="outline" onClick={pdfHandler}>pdf</Button>
-                                            <Button variant="outline" onClick={tiffHandler}>tiff</Button>
-                                            <Button variant="outline" onClick={icoHandler}>ico</Button>
-                                            <Button variant="outline" onClick={webpHandler}>webp</Button>
-                                            <Button variant="outline" onClick={bmpHandler}>bmp</Button>
+            {convertStatus === 'failed' ? (
+                <ServerError />
+            ) : (
+                <div className='w-full mx-auto flex justify-center'>
+                    <Card className='w-[95%] md:w-[80%] lg:w-[60%] mt-10 h-auto'>
+                        <CardHeader>
+                            <CardTitle className="text-lg md:text-2xl text-center">Change Format</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            {convertStatus === 'idle' ? (
+                                <div className="h-full flex flex-col space-y-4 my-2 items-center">
+                                    {!hide && (
+                                        <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                            <p>Before uploading the image choose format</p>
+                                            <div className='grid grid-cols-3 md:grid-cols-7 gap-2' >
+                                                <Button variant="outline" onClick={jpegHandler}>jpeg</Button>
+                                                <Button variant="outline" onClick={pngHandler}>png</Button>
+                                                <Button variant="outline" onClick={pdfHandler}>pdf</Button>
+                                                <Button variant="outline" onClick={tiffHandler}>tiff</Button>
+                                                <Button variant="outline" onClick={icoHandler}>ico</Button>
+                                                <Button variant="outline" onClick={webpHandler}>webp</Button>
+                                                <Button variant="outline" onClick={bmpHandler}>bmp</Button>
+                                            </div>
                                         </div>
+                                    )}
+                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                    <Input
+                                        name="image"
+                                        type="file"
+                                        accept="image/*"
+                                        className='w-full dark:file:text-white cursor-pointer'
+                                        onChange={(e) => { uploadHndler(e) }}
+                                    />
+                                    <div
+                                        onDrop={handleDrop}
+                                        onDragOver={handleDragOver}
+                                        className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                    >
+                                        Drag and drop image here
                                     </div>
-                                )}
-                                <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                <Input
-                                    name="image"
-                                    type="file"
-                                    accept="image/*"
-                                    className='w-full dark:file:text-white cursor-pointer'
-                                    onChange={(e) => { uploadHndler(e) }}
-                                />
-                                <div
-                                    onDrop={handleDrop}
-                                    onDragOver={handleDragOver}
-                                    className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                >
-                                    Drag and drop image here
                                 </div>
-                            </div>
-                        ) : convertStatus === 'loading' ? (
-                            <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                        ) : convertStatus === 'succeeded' ? (
-                            <p className='text-center text-lg' >Image Uploaded</p>
-                        ) : convertStatus === 'failed' ? (
-                            <p className='text-center text-lg'>Something went wrong</p>
-                        ) : null}
-                    </CardContent>
-                    {getConvertStatus === 'succeeded' && (
-                        <CardFooter>
-                            <div className='flex flex-col w-full space-y-4'>
-                                <p className='text-center'>Converted Image</p>
-                                {format === 'pdf' || format === 'tiff' ? (
-                                    <h2 className='text-center'>pdf and tiff format not supported to show the image</h2>
-                                ) : (
-                                    <div className='w-full h-auto'>
-                                        <img src={formatedImage} alt="formatedImage" />
-                                    </div>
-                                )}
-                                <Button className="w-full" onClick={handleDownload}><a href={formatedImage} download>Download</a></Button>
-                                <Button className="w-full" onClick={resetHandler}>Another Image</Button>
-                            </div>
-                        </CardFooter>
-                    )}
-                </Card>
-            </div>
+                            ) : convertStatus === 'loading' ? (
+                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                            ) : convertStatus === 'succeeded' ? (
+                                <p className='text-center text-lg' >Image Uploaded</p>
+                            ) : convertStatus === 'failed' ? (
+                                <p className='text-center text-lg'>Something went wrong</p>
+                            ) : null}
+                        </CardContent>
+                        {getConvertStatus === 'succeeded' && (
+                            <CardFooter>
+                                <div className='flex flex-col w-full space-y-4'>
+                                    <p className='text-center'>Converted Image</p>
+                                    {format === 'pdf' || format === 'tiff' ? (
+                                        <h2 className='text-center'>pdf and tiff format not supported to show the image</h2>
+                                    ) : (
+                                        <div className='w-full h-auto'>
+                                            <img src={formatedImage} alt="formatedImage" />
+                                        </div>
+                                    )}
+                                    <Button className="w-full" onClick={handleDownload}><a href={formatedImage} download>Download</a></Button>
+                                    <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                                </div>
+                            </CardFooter>
+                        )}
+                    </Card>
+                </div>
+            )}
         </>
     )
 }
