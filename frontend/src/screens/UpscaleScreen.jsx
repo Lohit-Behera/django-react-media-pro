@@ -112,7 +112,7 @@ function UpscaleScreen() {
     return (
         <>
             {upscaleStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
-            {upscaleStatus === 'failed' && <CustomAlert title="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
+            {upscaleStatus === 'failed' && <CustomAlert title="Failed" description="Image is too large or Something went wrong" variant="destructive" setOpenProp />}
             {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
             {upscaleStatus === 'failed' ? (
                 <ServerError />

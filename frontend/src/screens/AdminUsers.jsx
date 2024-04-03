@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchGetAllUsers, fetchGiveAdmin, fetchRemoveAdmin, fetchDeleteUser, reset } from '@/features/AdminUsers';
 
@@ -42,7 +43,9 @@ import {
 
 function AdminUsers() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+    const userInfo = useSelector((state) => state.user.userInfo);
     const allUsers = useSelector((state) => state.adminUsers.allUsers);
     const admin = useSelector((state) => state.adminUsers.admin);
     const adminStatus = useSelector((state) => state.adminUsers.adminStatus);
@@ -50,7 +53,6 @@ function AdminUsers() {
     const removeAdmin = useSelector((state) => state.adminUsers.removeAdmin);
     const removeAdminStatus = useSelector((state) => state.adminUsers.removeAdminStatus);
     const removeAdminSuccess = removeAdminStatus === 'succeeded'
-    const deleteUser = useSelector((state) => state.adminUsers.deleteUser);
     const deleteUserStatus = useSelector((state) => state.adminUsers.deleteUserStatus);
     const deleteUserSuccess = deleteUserStatus === 'succeeded'
 
@@ -58,10 +60,16 @@ function AdminUsers() {
     const pages = allUsers ? allUsers.pages : 1;
     const adminEmail = admin ? admin.email : '';
     const removeAdminEmail = removeAdmin ? removeAdmin.email : '';
-    const deleteUserEmail = deleteUser ? deleteUser.email : '';
+    const is_staff = userInfo ? userInfo.is_staff : false
 
 
     const [currentPage, setCurrentPage] = useState(allUsers ? allUsers.page : 1);
+
+    useEffect(() => {
+        if (!is_staff) {
+            navigate('/')
+        }
+    }, [is_staff]);
 
     useEffect(() => {
         dispatch(fetchGetAllUsers(currentPage));

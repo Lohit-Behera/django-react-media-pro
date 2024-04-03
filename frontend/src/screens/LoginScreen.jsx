@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { fetchLogin } from '@/features/UserSlice'
 
+import CustomAlert from '@/components/CustomAlert'
 import { Button } from "../components/ui/button"
 import {
     Card,
@@ -20,7 +21,9 @@ function LoginScreen() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
     const userInfo = useSelector((state) => state.user.userInfo)
+    const userInfoStatus = useSelector((state) => state.user.userInfoStatus)
 
     useEffect(() => {
         if (userInfo) {
@@ -39,51 +42,54 @@ function LoginScreen() {
     }
 
     return (
-        <div className="w-full flex justify-center items-center mt-10 md:mt-48">
-            <Card className="mx-auto max-w-sm">
-                <CardHeader>
-                    <CardTitle className="text-2xl">Login</CardTitle>
-                    <CardDescription>
-                        Enter your email below to login to your account
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid gap-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                placeholder="Email"
-                                required
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-                        <div className="grid gap-2">
-                            <div className="flex items-center">
-                                <Label htmlFor="password">Password</Label>
+        <>
+            {userInfoStatus === "failed" && <CustomAlert title="Failed" description="Your email or password is incorrect or you don't have an account" variant="destructive" setOpenProp />}
+            <div className="w-full flex justify-center items-center mt-10 md:mt-48">
+                <Card className="mx-auto max-w-sm">
+                    <CardHeader>
+                        <CardTitle className="text-2xl">Login</CardTitle>
+                        <CardDescription>
+                            Enter your email below to login to your account
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="grid gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="Email"
+                                    required
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
                             </div>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="Password"
-                                required
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <div className="grid gap-2">
+                                <div className="flex items-center">
+                                    <Label htmlFor="password">Password</Label>
+                                </div>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    placeholder="Password"
+                                    required
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+                            <Button onClick={loginHandler} className="w-full">
+                                Login
+                            </Button>
                         </div>
-                        <Button onClick={loginHandler} className="w-full">
-                            Login
-                        </Button>
-                    </div>
-                    <div className="mt-4 text-center text-sm">
-                        Don&apos;t have an account?{" "}
-                        <Link to="/register" className="underline">
-                            Sign up
-                        </Link>
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
+                        <div className="mt-4 text-center text-sm">
+                            Don&apos;t have an account?{" "}
+                            <Link to="/register" className="underline">
+                                Sign up
+                            </Link>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+        </>
     )
 }
 

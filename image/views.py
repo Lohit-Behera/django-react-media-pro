@@ -12,7 +12,6 @@ from rembg import remove, new_session
 from django.conf import settings
 import uuid
 import os
-from django.contrib.staticfiles.storage import staticfiles_storage
 
 from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer,DownScaleSerializer
 
@@ -63,13 +62,18 @@ def upscale_image(request):
     data = request.data
 
     image_pil = Image.open(image)
+    width, height = image_pil.size
+
+    if width > 1440:
+        return Response({"message": "Image is too large"}, status=status.HTTP_400_BAD_REQUEST)
+    
     scaling = data['scaling']
 
     unique_filename = str(uuid.uuid4()) + '.png'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'upscale', unique_filename)
 
     if scaling == '2':
-        path = staticfiles_storage.path('models/ESPCN_x2.pb')
+        path = os.path.join(settings.BASE_DIR, 'static/models/ESPCN_x2.pb')
         if os.path.exists(path):
             sr = dnn_superres.DnnSuperResImpl_create()
             sr.readModel(path)
@@ -81,7 +85,7 @@ def upscale_image(request):
         else:
             return Response({"message": "Model file not found"}, status=status.HTTP_404_NOT_FOUND)
     else:
-        path = staticfiles_storage.path('models/ESPCN_x4.pb')
+        path =  os.path.join(settings.BASE_DIR, 'static/models/ESPCN_x4.pb')
         if os.path.exists(path):
             sr = dnn_superres.DnnSuperResImpl_create()
             sr.readModel(path)
