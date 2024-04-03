@@ -66,7 +66,17 @@ const removeBgSlice = createSlice({
         getRemoveBgStatus: "idle",
         getRemoveBgError: null,
     },
-    reducers:{},
+    reducers:{
+        resetRemoveBg: (state) => {
+            state.removeBg = null
+            state.removeBgStatus = "idle"
+            state.removeBgError = null
+
+            state.getRemoveBg = null
+            state.getRemoveBgStatus = "idle"
+            state.getRemoveBgError = null
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchRemoveBg.pending, (state) => {
@@ -94,4 +104,5 @@ const removeBgSlice = createSlice({
     }
 });
 
+export const { resetRemoveBg } = removeBgSlice.actions
 export default removeBgSlice.reducer

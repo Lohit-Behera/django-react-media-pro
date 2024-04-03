@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const fetchLogin = createAsyncThunk('user/login', async (user, { rejectWithValue }) => {
-    
-    console.log(user);
     try {
         const config = {
             headers: {

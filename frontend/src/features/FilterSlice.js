@@ -66,7 +66,17 @@ const filterSlice = createSlice({
         getfilterStatus: "idle",
         getfilterError: null,
     },
-    reducers:{},
+    reducers:{
+        resetFilter: (state) => {
+            state.filter = null
+            state.filterStatus = "idle";
+            state.filterError = null;
+
+            state.getfilter = null
+            state.getfilterStatus = "idle";
+            state.getfilterError = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchFilter.pending, (state) => {
@@ -94,4 +104,5 @@ const filterSlice = createSlice({
     }
 });
 
+export const { resetFilter } = filterSlice.actions
 export default filterSlice.reducer

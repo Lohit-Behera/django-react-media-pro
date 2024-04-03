@@ -15,10 +15,12 @@ import FilterScreen from './screens/FilterScreen'
 import ConvertScreen from './screens/ConvertScreen'
 import DownScaleScreen from './screens/DownScaleScreen'
 import AdminUsers from './screens/AdminUsers'
+import PageNotFound from './screens/PageNotFound'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
+      <Route path='*' element={<PageNotFound />} />
       <Route path='' element={<HomeScreen />} />
       <Route path='login' element={<LoginScreen />} />
       <Route path='register' element={<RegisterScreen />} />

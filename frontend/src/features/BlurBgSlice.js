@@ -66,7 +66,17 @@ const blurBgSlice = createSlice({
         getBlurBgStatus: "idle",
         getBlurBgError: null,
     },
-    reducers:{},
+    reducers:{
+        reset: (state) => {
+            state.blurBg = null;
+            state.blurBgStatus = 'idle';
+            state.blurBgError = null;
+            
+            state.getBlurBg = null;
+            state.getBlurBgStatus = 'idle';
+            state.getBlurBgError = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchBlurBg.pending, (state) => {
@@ -94,4 +104,6 @@ const blurBgSlice = createSlice({
     }
 });
 
+
+export const {reset} = blurBgSlice.actions
 export default blurBgSlice.reducer

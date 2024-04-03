@@ -133,6 +133,19 @@ const adminUserSlice = createSlice({
         deleteUserError: null,
     },
     reducers: {
+        reset: (state) => {
+            state.admin = null;
+            state.adminStatus = 'idle';
+            state.adminError = null;
+            
+            state.removeAdmin= 'null';
+            state.removeAdminStatus = 'idle';
+            state.removeAdminError = null;
+            
+            state.deleteUser = 'null';
+            state.deleteUserStatus = 'idle';
+            state.deleteUserError = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -186,4 +199,6 @@ const adminUserSlice = createSlice({
     }
 })
 
+
+export const { reset } = adminUserSlice.actions
 export default adminUserSlice.reducer
