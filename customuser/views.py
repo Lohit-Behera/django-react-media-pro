@@ -103,7 +103,7 @@ def verify_email(request, token):
         email_verification_token.delete()
         return redirect('/login')
     except EmailVerificationToken.DoesNotExist:
-        return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+        return redirect('/verify-expired')
     
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

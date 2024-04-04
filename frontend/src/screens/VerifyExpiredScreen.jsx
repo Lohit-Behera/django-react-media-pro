@@ -12,7 +12,7 @@ function VerifyExpiredScreen() {
                         </div>
                     </div>
                     <h1 className="mt-5 text-3xl md:text-5xl font-bold">Varification token expired or does not exist</h1>
-                    <p className="mt-5 lg:text-lg"> please try again</p>
+                    <p className="mt-5 lg:text-lg">&nbsp;</p>
                 </div>
             </div>
         </div>
