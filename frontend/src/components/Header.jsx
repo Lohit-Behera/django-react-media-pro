@@ -40,6 +40,7 @@ function Header() {
 
     const userInfo = useSelector((state) => state.user.userInfo)
     const userdetails = useSelector((state) => state.user.userdetails)
+    const userdetailsStatus = useSelector((state) => state.user.userdetailsStatus)
     const deleteStatus = useSelector((state) => state.deleteImages.deleteStatus)
     const deleteRawStatus = useSelector((state) => state.deleteImages.deleteRawStatus)
 
@@ -48,12 +49,6 @@ function Header() {
     const is_staff = userInfo ? userInfo.is_staff : false
 
     const [alert, setAlert] = useState(false)
-
-    useEffect(() => {
-        if (userInfo) {
-            dispatch(fetchUserDetails(id))
-        }
-    }, [userInfo, dispatch])
 
     const logoutHandler = () => {
         dispatch(logout())

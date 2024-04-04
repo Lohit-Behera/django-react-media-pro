@@ -33,11 +33,6 @@ function ProfileScreen() {
         }
     }, [userInfo])
 
-    const id = userInfo ? userInfo.id : ''
-
-    useEffect(() => {
-        dispatch(fetchUserDetails(id))
-    }, [dispatch, userUpdateSucceeded])
 
     const profile_image = userdetails ? userdetails.profile_image : ''
     const first_name = userdetails ? userdetails.first_name : ''
