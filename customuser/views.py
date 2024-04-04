@@ -94,14 +94,14 @@ def generate_verification_token(user):
 def verify_email(request, token):
     try:
         if not EmailVerificationToken.objects.filter(token=token).exists():
-            return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+            return redirect('/login')
         
         email_verification_token = EmailVerificationToken.objects.get(token=token)
         user = email_verification_token.user
         user.is_verified = True
         user.save()
         email_verification_token.delete()
-        return redirect('api/user/login')
+        return redirect('/login')
     except EmailVerificationToken.DoesNotExist:
         return Response({'detail': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
     

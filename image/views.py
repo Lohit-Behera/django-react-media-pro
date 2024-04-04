@@ -64,7 +64,7 @@ def upscale_image(request):
     image_pil = Image.open(image)
     width, height = image_pil.size
 
-    if width > 2560 and height > 1440:
+    if width > 2560 or height > 1440:
         return Response({"details": "Image is too large"}, status=status.HTTP_400_BAD_REQUEST)
     
     scaling = data['scaling']

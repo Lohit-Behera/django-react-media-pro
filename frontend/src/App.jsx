@@ -16,6 +16,7 @@ import ConvertScreen from './screens/ConvertScreen'
 import DownScaleScreen from './screens/DownScaleScreen'
 import AdminUsers from './screens/AdminUsers'
 import PageNotFound from './screens/PageNotFound'
+import VerifyExpiredScreen from './screens/VerifyExpiredScreen'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,6 +34,7 @@ const router = createBrowserRouter(
       <Route path='convert' element={<ConvertScreen />} />
       <Route path='downscale' element={<DownScaleScreen />} />
       <Route path='users' element={<AdminUsers />} />
+      <Route path='verify-expired' element={<VerifyExpiredScreen />} />
     </Route>
   )
 )
