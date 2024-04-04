@@ -20,11 +20,10 @@ export const fetchUpscale = createAsyncThunk('upscale/image', async (image, { re
         return data;
 
     } catch (error) {
-
         return rejectWithValue(
-            error.response && error.response.data.message
-                ? error.response.data.message
-                : error.message
+            error.response && error.response.data
+            ? error.response.data
+            : error
         );
     }
 });
@@ -89,7 +88,7 @@ const upscaleSlice = createSlice({
             })
             .addCase(fetchUpscale.rejected, (state, action) => {
                 state.upscaleStatus = "failed";
-                state.upscaleError = action.error.message;
+                state.upscaleError = action.payload;
             })
 
             .addCase(fetchGetUpscale.pending, (state) => {
@@ -101,7 +100,7 @@ const upscaleSlice = createSlice({
             })
             .addCase(fetchGetUpscale.rejected, (state, action) => {
                 state.getUpscaleStatus = "failed";
-                state.getUpscaleError = action.error.message;
+                state.getUpscaleError = action.payload;
             })
     }
 });

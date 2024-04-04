@@ -58,17 +58,16 @@ def get_remove_bg(request,pk):
 @permission_classes([IsAuthenticated])
 def upscale_image(request):
     user = request.user
-    image = request.FILES['image']
+    image = request.FILES['image'] 
     data = request.data
 
     image_pil = Image.open(image)
     width, height = image_pil.size
 
-    if width > 1440:
-        return Response({"message": "Image is too large"}, status=status.HTTP_400_BAD_REQUEST)
+    if width > 2560 and height > 1440:
+        return Response({"details": "Image is too large"}, status=status.HTTP_400_BAD_REQUEST)
     
     scaling = data['scaling']
-
     unique_filename = str(uuid.uuid4()) + '.png'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'upscale', unique_filename)
 

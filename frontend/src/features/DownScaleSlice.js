@@ -88,7 +88,7 @@ const downScaleSlice = createSlice({
             })
             .addCase(fetchDownScale.rejected, (state, action) => {
                 state.downScaleStatus = "failed";
-                state.downScaleError = action.error.message;
+                state.downScaleError = action.payload;
             })
             .addCase(fetchGetDownScale.pending, (state) => {
                 state.getDownScaleStatus = "loading";
@@ -99,7 +99,7 @@ const downScaleSlice = createSlice({
             })
             .addCase(fetchGetDownScale.rejected, (state, action) => {
                 state.getDownScaleStatus = "failed";
-                state.getDownScaleError = action.error.message;
+                state.getDownScaleError = action.payload;
             });
     }
 });

@@ -88,7 +88,7 @@ const filterSlice = createSlice({
             })
             .addCase(fetchFilter.rejected, (state, action) => {
                 state.filterStatus = "failed";
-                state.filterError = action.error.message;
+                state.filterError = action.payload;
             })
             .addCase(fetchGetFilter.pending, (state) => {
                 state.getfilterStatus = "loading";
@@ -99,7 +99,7 @@ const filterSlice = createSlice({
             })
             .addCase(fetchGetFilter.rejected, (state, action) => {
                 state.getfilterStatus = "failed";
-                state.getfilterError = action.error.message;
+                state.getfilterError = action.payload;
             });
     }
 });

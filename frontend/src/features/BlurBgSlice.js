@@ -88,7 +88,7 @@ const blurBgSlice = createSlice({
             })
             .addCase(fetchBlurBg.rejected, (state, action) => {
                 state.blurBgStatus = "failed";
-                state.blurBgError = action.error.message;
+                state.blurBgError = action.payload;
             })
             .addCase(fetchGetBlurBg.pending, (state) => {
                 state.getBlurBgStatus = "loading";
@@ -99,7 +99,7 @@ const blurBgSlice = createSlice({
             })
             .addCase(fetchGetBlurBg.rejected, (state, action) => {
                 state.getBlurBgStatus = "failed";
-                state.getBlurBgError = action.error.message;
+                state.getBlurBgError = action.payload;
             });
     }
 });

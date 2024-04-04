@@ -37,6 +37,11 @@ function UpscaleScreen() {
     const getUpscale = useSelector(state => state.upscale.getUpscale)
     const upscaleStatus = useSelector(state => state.upscale.upscaleStatus)
     const getUpscaleStatus = useSelector(state => state.upscale.getUpscaleStatus)
+    const upscaleError = useSelector(state => state.upscale.upscaleError)
+    const detailsError = upscaleError ? upscaleError.details : ''
+    const errorMessage = upscaleError ? upscaleError.message : ''
+
+    console.log(errorMessage);
 
     const original = getUpscale ? getUpscale.original : ''
     const upscaleImage = getUpscale ? getUpscale.result : ''
@@ -112,9 +117,15 @@ function UpscaleScreen() {
     return (
         <>
             {upscaleStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
-            {upscaleStatus === 'failed' && <CustomAlert title="Failed" description="Image is too large or Something went wrong" variant="destructive" setOpenProp />}
+
+            {detailsError === 'Image is too large' ? (
+                <CustomAlert title="Failed" description="Image is too large" variant="destructive" setOpenProp />
+            ) : upscaleStatus === 'failed' ? (
+                <CustomAlert title="Failed" description="Something went wrong" variant="destructive" setOpenProp />
+            ) : null}
+
             {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
-            {upscaleStatus === 'failed' ? (
+            {upscaleStatus === 'failed' && errorMessage === 'Network Error' ? (
                 <ServerError />
             ) : (
                 <div className='w-full mx-auto flex justify-center items-center'>
@@ -127,7 +138,7 @@ function UpscaleScreen() {
                                 <div className="flex flex-col space-y-2 my-2 items-center">
                                     {!hide && (
                                         <div className="flex flex-col items-center space-y-2">
-                                            <p className='text-center'>Before uploading the image choose scaling</p>
+                                            <p className='text-center'>Before uploading the image choose scaling and Image should be less than 2560 x 1440</p>
                                             <div className='grid grid-cols-2 gap-2' >
                                                 <Button variant="outline" onClick={scale2xHandler}>2X Scale</Button>
                                                 <Button variant="outline" onClick={scale4xHandler}>4X Scale</Button>
@@ -154,12 +165,10 @@ function UpscaleScreen() {
                                 <Loader2 className="w-14 h-14 animate-spin mx-auto" />
                             ) : upscaleStatus === 'succeeded' ? (
                                 <p className='text-center text-lg' >Image Uploaded</p>
-                            ) : upscaleStatus === 'failed' ? (
-                                <p className='text-center text-lg'>Something went wrong</p>
                             ) : null}
                         </CardContent>
                         <CardFooter>
-                            {getUpscaleStatus === 'succeeded' && (
+                            {getUpscaleStatus === 'succeeded' ? (
                                 <div className='flex flex-col w-full space-y-4'>
                                     <p className='text-center'>Compare</p>
                                     <div className='w-full h-auto'>
@@ -168,7 +177,12 @@ function UpscaleScreen() {
                                     <Button className="w-full"><a href={upscaleImage} download="removeBg.png">Download</a></Button>
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
-                            )}
+                            ) : detailsError === 'Image is too large' ? (
+                                <div className='flex flex-col w-full space-y-4'>
+                                    <p className='text-center text-xl mb-10'>Image is too large</p>
+                                    <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                                </div>
+                            ) : null}
                         </CardFooter>
                     </Card>
                 </div>

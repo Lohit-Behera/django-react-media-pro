@@ -158,7 +158,7 @@ const adminUserSlice = createSlice({
             })
             .addCase(fetchGetAllUsers.rejected, (state, action) => {
                 state.allUsersStatus = 'failed';
-                state.allUsersError = action.error.message;
+                state.allUsersError = action.payload;
             })
 
             .addCase(fetchGiveAdmin.pending, (state) => {
@@ -170,7 +170,7 @@ const adminUserSlice = createSlice({
             })
             .addCase(fetchGiveAdmin.rejected, (state, action) => {
                 state.adminStatus = 'failed';
-                state.adminError = action.error.message;
+                state.adminError = action.payload;
             })
 
             .addCase(fetchRemoveAdmin.pending, (state) => {
@@ -182,7 +182,7 @@ const adminUserSlice = createSlice({
             })
             .addCase(fetchRemoveAdmin.rejected, (state, action) => {
                 state.removeAdminStatus = 'failed';
-                state.removeAdminError = action.error.message;
+                state.removeAdminError = action.payload;
             })
 
             .addCase(fetchDeleteUser.pending, (state) => {
@@ -194,7 +194,7 @@ const adminUserSlice = createSlice({
             })
             .addCase(fetchDeleteUser.rejected, (state, action) => {
                 state.deleteUserStatus = 'failed';
-                state.deleteUserError = action.error.message;
+                state.deleteUserError = action.payload;
             })
     }
 })

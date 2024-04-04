@@ -88,7 +88,7 @@ const removeBgSlice = createSlice({
             })
             .addCase(fetchRemoveBg.rejected, (state, action) => {
                 state.removeBgStatus = "failed";
-                state.removeBgError = action.error.message;
+                state.removeBgError = action.payload;
             })
             .addCase(fetchGetRemoveBg.pending, (state) => {
                 state.getRemoveBgStatus = "loading";
@@ -99,7 +99,7 @@ const removeBgSlice = createSlice({
             })
             .addCase(fetchGetRemoveBg.rejected, (state, action) => {
                 state.getRemoveBgStatus = "failed";
-                state.getRemoveBgError = action.error.message;
+                state.getRemoveBgError = action.payload;
             });
     }
 });

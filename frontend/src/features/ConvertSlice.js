@@ -88,7 +88,7 @@ const convertSlice = createSlice({
             })
             .addCase(fetchConvert.rejected, (state, action) => {
                 state.convertStatus = "failed";
-                state.convertError = action.error.message;
+                state.convertError = action.payload;
             })
             .addCase(fetchGetConvert.pending, (state) => {
                 state.getConvertStatus = "loading";
@@ -99,7 +99,7 @@ const convertSlice = createSlice({
             })
             .addCase(fetchGetConvert.rejected, (state, action) => {
                 state.getConvertStatus = "failed";
-                state.getConvertError = action.error.message;
+                state.getConvertError = action.payload;
             });
     }
 });
