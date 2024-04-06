@@ -24,7 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/user/', include('customuser.urls')),
     path('api/image/', include('image.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.ASSETS_URL, document_root=settings.ASSETS_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.ASSETS_URL, document_root=settings.ASSETS_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 assets_url_pattern = '|'.join([
     settings.MEDIA_URL.lstrip('/'),
@@ -34,3 +34,8 @@ assets_url_pattern = '|'.join([
 urlpatterns += [
     re_path(rf'^(?!({assets_url_pattern})).*$', TemplateView.as_view(template_name='index.html')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.ASSETS_URL, document_root=settings.ASSETS_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

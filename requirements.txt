@@ -7,7 +7,7 @@ colorama==0.4.6
 coloredlogs==15.0.1
 cryptography==42.0.5
 defusedxml==0.7.1
-Django==4.2.9
+Django==5.0.3
 django-allauth==0.61.1
 django-cors-headers==4.3.1
 django-ipware==6.0.4
@@ -26,7 +26,7 @@ networkx==3.2.1
 numba==0.59.1
 numpy==1.26.4
 oauthlib==3.2.2
-onnxruntime==1.16.3
+onnxruntime==1.17.1
 opencv-contrib-python==4.9.0.80
 opencv-python==4.9.0.80
 opencv-python-headless==4.9.0.80
