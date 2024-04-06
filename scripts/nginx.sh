@@ -2,7 +2,7 @@
 
 PROJECT_MAIN_DIR_NAME="django-react-media-pro"
 
-FOLDER_NAME_WHERE_SETTINGS_FILE_EXISTS="core"
+FOLDER_NAME_WHERE_SETTINGS_FILE_EXISTS="djangomediapro"
 
 sudo systemctl daemon-reload
 
