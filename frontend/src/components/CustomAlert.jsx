@@ -36,7 +36,7 @@ function CustomAlert({ title = '', description = '', variant = 'success', setOpe
 
     return (
         <div>
-            <Alert variant={variant} className={`fixed top-20 right-20 mx-auto p-4 z-50 pointer-events-none max-w-sm md:min-w-fit ${!out && 'animate-slide-in-from-top'} ${out && 'animate-slide-out-to-top'} ${hide && 'hidden'} `}>
+            <Alert variant={variant} className={`fixed top-20 right-3 md:right-20 mx-auto p-4 z-50 pointer-events-none max-w-sm md:min-w-fit ${!out && 'animate-slide-in-from-top'} ${out && 'animate-slide-out-to-top'} ${hide && 'hidden'} `}>
                 {variant === 'destructive' && <TriangleAlert className='mt-1' color="#ef4444" />}
                 {variant === 'success' && <CircleCheckBig className='mt-1' color="#22c55e" />}
                 <TriangleAlert color="#ef4444" />
