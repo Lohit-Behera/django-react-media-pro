@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert, DownScale
+from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert, DownScale, Animal, GrayScaleBg
 
 
 class RemovedBgSerializer(serializers.ModelSerializer):
@@ -30,4 +30,14 @@ class ConvertSerializer(serializers.ModelSerializer):
 class DownScaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = DownScale
+        fields = '__all__'
+
+class GrayScaleBgSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GrayScaleBg
+        fields = '__all__'
+
+class AnimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Animal
         fields = '__all__'

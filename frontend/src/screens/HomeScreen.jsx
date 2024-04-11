@@ -6,6 +6,7 @@ import car from '../assets/car.jpg'
 import upscaleCar from '../assets/upscaleCar.png'
 import bgremovedCar from '../assets/bgremovedCar.png'
 import bgblurCar from '../assets/bgblurCar.png'
+import grayscaleCar from '../assets/GrayScakeBgCar.png'
 import filteredCar from '../assets/filteredCar.png'
 import convertCar from '../assets/convertCar.png'
 import downscaledCar from '../assets/downscaledCar.jpeg'
@@ -78,7 +79,7 @@ function HomeScreen() {
                                 <ReactCompareImage leftImage={car} rightImage={bgremovedCar} sliderLineColor='#6d28d9' />
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
-                                <p>Remove the background from an image, and it will only export in PNG format. There are three models available for removing backgrounds. Anime models use the anime background removal model; general models use the general background removal model; and other model, if both do not work, use this.  </p>
+                                <p>Remove the background from an image, and it will only export in PNG format. There are three models available for removing backgrounds. Anime models use the anime background removal model; general models use the general background removal model; and other model, if both do not work, use other.  </p>
                             </CardFooter>
                         </Card>
                         <Card className=''>
@@ -103,6 +104,30 @@ function HomeScreen() {
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Blur the background of an image, and it will only export in PNG format. It analyzes the image background, like background removal, and there are three parameters for adding blur to the background.</p>
+                            </CardFooter>
+                        </Card>
+                        <Card className=''>
+                            <CardHeader>
+                                <CardTitle className='text-center text-lg md:text-xl lg:text-2xl'>
+                                    <Link
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        to='grayscalebg'>
+                                        Gray Scale Background
+                                    </Link>
+                                </CardTitle>
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                    <a
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        Link
+                                    </a>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ReactCompareImage leftImage={car} rightImage={grayscaleCar} sliderLineColor='#6d28d9' />
+                            </CardContent>
+                            <CardFooter className='text-sm md:text-base'>
+                                <p>Gray Scale the background from an image, and it will only export in PNG format. There are three models available for removing backgrounds. Anime models use the anime background Gray Scale model; general models use the general background Gray Scale model; and other model, if both do not work, use other.  </p>
                             </CardFooter>
                         </Card>
                         <Card className=''>

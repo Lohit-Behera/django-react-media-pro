@@ -3,7 +3,12 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.core.files.base import ContentFile
 
+import torch
+import torchvision.models as models
+from torchvision import transforms
+import torch.nn as nn
 from PIL import Image, ImageFilter, ImageEnhance
 import numpy as np
 import cv2
@@ -13,9 +18,9 @@ from django.conf import settings
 import uuid
 import os
 
-from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer,DownScaleSerializer
+from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer,DownScaleSerializer, GrayScaleBgSerializer, AnimalSerializer
 
-from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert, DownScale
+from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert, DownScale, Animal, GrayScaleBg
 
 
 @api_view(['POST'])
@@ -58,8 +63,9 @@ def get_remove_bg(request,pk):
 @permission_classes([IsAuthenticated])
 def upscale_image(request):
     user = request.user
-    image = request.FILES['image'] 
     data = request.data
+    print(data)
+    image = request.FILES['image'] 
 
     image_pil = Image.open(image)
     width, height = image_pil.size
@@ -270,4 +276,100 @@ def down_scale(request):
 def get_down_scale(request,pk):
     convert = DownScale.objects.get(id=pk)
     serializer = DownScaleSerializer(convert, many=False)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def animal(request):
+    user = request.user
+    try:
+        if 'image' not in request.FILES:
+            return Response({'detail': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
+                             
+        image_file = request.FILES['image']
+        image = Image.open(image_file)
+
+        class_names = ['bear', 'bee', 'butterfly', 'cat', 'cheetah', 'chicken', 'chimpanzee', 'cow', 'crocodile',
+                'deer', 'dog', 'dolphin', 'eagle', 'elephant', 'fox', 'goat', 'goldfish', 'horse', 'jellyfish',
+                'kangaroo', 'koala', 'lion', 'octopus', 'owl', 'panda', 'parrot', 'penguin', 'pig', 'pigeon', 'rabbit',
+                'raccoon', 'rhinoceros', 'sheep', 'spider', 'squirrel', 'starfish', 'swan', 'tiger', 'whale', 'zebra']
+        
+        state_dict_path = os.path.join(settings.BASE_DIR, 'static/models/animal_model.pth')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(device)
+        model = models.resnet18(weights=None)
+        num_classes = len(class_names)
+        model.fc = nn.Linear(model.fc.in_features, num_classes)
+
+        model.load_state_dict(torch.load(state_dict_path))
+        model.eval()
+        model.load_state_dict(torch.load(state_dict_path, map_location=torch.device(device)))
+
+        preprocess = transforms.Compose([
+            transforms.Resize(224),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+
+        input_tensor = preprocess(image)
+        input_batch = input_tensor.unsqueeze(0) 
+        input_batch = input_batch.to(device)
+        model.to(device)
+
+        with torch.no_grad():
+            output = model(input_batch)
+
+        _, predicted_class = output.max(1)
+
+        predicted_label = class_names[predicted_class.item()]
+
+        animal_instance = Animal.objects.create(user=user, original=image_file, prediction=predicted_label)
+        serializer = AnimalSerializer(animal_instance, many=False)
+        return Response(serializer.data)
+
+    except:
+        return Response({'detail': 'something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def gray_scale_bg(request):
+    user = request.user
+    data = request.data
+    model = data['model']
+    image = request.FILES['image']
+
+    if model == 'anime':
+        session = new_session('isnet-anime')
+    elif model == 'general':
+        session = new_session('isnet-general-use')
+    else:
+        session = new_session('')
+
+    raw_image = Image.open(image)
+    filter = ImageEnhance.Color(raw_image)
+    grayscale = filter.enhance(0)
+
+    result_image = Image.new('RGBA', (raw_image.width, raw_image.height))
+    removedbg = remove(raw_image, session=session)
+    result_image.paste(grayscale)
+    result_image.paste(removedbg, mask=removedbg)
+
+    unique_filename = str(uuid.uuid4()) + '.png'
+    processed_image_path = os.path.join(settings.MEDIA_ROOT, 'grayscale', unique_filename)
+    result_image.save(processed_image_path, format='PNG')
+
+
+    grayscale_instance = GrayScaleBg.objects.create(user=user, original=image, result=os.path.join('grayscale', unique_filename))
+    serializer = GrayScaleBgSerializer(grayscale_instance, many=False)
+
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_gray_scale_bg(request,pk):
+    grayscalebg = GrayScaleBg.objects.get(id=pk)
+    serializer = GrayScaleBgSerializer(grayscalebg, many=False)
     return Response(serializer.data)
