@@ -10,6 +10,7 @@ import DownScaleSlice from "@/features/DownScaleSlice";
 import DeleteImagesSlice from "@/features/DeleteImagesSlice";
 import AdminUsers from "@/features/AdminUsers";
 import GrayScaleBgSlice from "@/features/GrayScaleBgSlice";
+import AnimalSlice from "@/features/AnimalSlice";
 
 const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
         removeBg: removeBgSlice,
         blurBg: BlurBgSlice,
         grayScaleBg: GrayScaleBgSlice,
+        animal: AnimalSlice,
         filter: FilterSlice,
         convert: ConvertSlice,
         downScale: DownScaleSlice,

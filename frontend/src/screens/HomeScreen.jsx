@@ -44,7 +44,8 @@ function HomeScreen() {
                                 <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
                                         Link
                                     </a>
                                 </CardDescription>
@@ -70,7 +71,8 @@ function HomeScreen() {
                                 <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
                                         Link
                                     </a>
                                 </CardDescription>
@@ -94,7 +96,8 @@ function HomeScreen() {
                                 <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
                                         Link
                                     </a>
                                 </CardDescription>
@@ -118,7 +121,8 @@ function HomeScreen() {
                                 <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
                                         Link
                                     </a>
                                 </CardDescription>
@@ -127,7 +131,32 @@ function HomeScreen() {
                                 <ReactCompareImage leftImage={car} rightImage={grayscaleCar} sliderLineColor='#6d28d9' />
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
-                                <p>Gray Scale the background from an image, and it will only export in PNG format. There are three models available for removing backgrounds. Anime models use the anime background Gray Scale model; general models use the general background Gray Scale model; and other model, if both do not work, use other.  </p>
+                                <p>Gray Scale the background from an image, and it will only export in PNG format. There are three models available like remove background. </p>
+                            </CardFooter>
+                        </Card>
+                        <Card className=''>
+                            <CardHeader>
+                                <CardTitle className='text-center text-lg md:text-xl lg:text-2xl'>
+                                    <Link
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        to='animal'>
+                                        Predict Image of an Animal
+                                    </Link>
+                                </CardTitle>
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                    <a
+                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
+                                        Link
+                                    </a>
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <ReactCompareImage leftImage={car} rightImage={grayscaleCar} sliderLineColor='#6d28d9' />
+                            </CardContent>
+                            <CardFooter className='text-sm md:text-base'>
+                                <p>Upload the image and it will Predict the image of an animal but it can Predict only 40 animals</p>
                             </CardFooter>
                         </Card>
                         <Card className=''>
@@ -142,7 +171,8 @@ function HomeScreen() {
                                 <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
                                         Link
                                     </a>
                                 </CardDescription>
@@ -166,7 +196,8 @@ function HomeScreen() {
                                 <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
                                         Link
                                     </a>
                                 </CardDescription>
@@ -190,7 +221,8 @@ function HomeScreen() {
                                 <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        target="_blank">
                                         Link
                                     </a>
                                 </CardDescription>

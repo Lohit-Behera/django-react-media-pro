@@ -18,6 +18,7 @@ import AdminUsers from './screens/AdminUsers'
 import PageNotFound from './screens/PageNotFound'
 import VerifyExpiredScreen from './screens/VerifyExpiredScreen'
 import GrayScaleBgScreen from './screens/GrayScaleBgScreen'
+import AnimalScreen from './screens/AnimalScreen'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,7 @@ const router = createBrowserRouter(
       <Route path='removebg' element={<RemoveBgScreen />} />
       <Route path='blurbg' element={<BlurBgScreen />} />
       <Route path='grayscalebg' element={<GrayScaleBgScreen />} />
+      <Route path='animal' element={<AnimalScreen />} />
       <Route path='filter' element={<FilterScreen />} />
       <Route path='convert' element={<ConvertScreen />} />
       <Route path='downscale' element={<DownScaleScreen />} />

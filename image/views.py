@@ -322,7 +322,7 @@ def animal(request):
 
         _, predicted_class = output.max(1)
 
-        predicted_label = class_names[predicted_class.item()]
+        predicted_label = class_names[predicted_class.item()].capitalize()
 
         animal_instance = Animal.objects.create(user=user, original=image_file, prediction=predicted_label)
         serializer = AnimalSerializer(animal_instance, many=False)
