@@ -5,7 +5,9 @@ from django.urls import reverse
 from django.shortcuts import redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.tokens import default_token_generator
-from djangomediapro.settings import EMAIL_HOST_USER, MEDIA_ROOT, RAW_IMAGES
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from djangomediapro.settings import EMAIL_HOST_USER, MEDIA_ROOT, RAW_IMAGES, BASE_DIR
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -71,19 +73,53 @@ def send_verification_email(request, user):
         current_site = get_current_site(request)
         verify_url = reverse('verify_email', args=[token])
         verify_link = f"http://{current_site.domain}{verify_url}"
-        
+        template_name = os.path.join(BASE_DIR, 'customuser/templates/customuser/verification_email.html')
+
+        email_context = {
+            'user': user,
+            'verify_link' : verify_link
+                         }
+        html_message = render_to_string(
+            template_name=template_name,
+            context=email_context
+            )
+        plain_message = strip_tags(html_message)  
         subject = 'Verify Your Email Address'
-        message = (
-            f"Hi {user.first_name},\n\n"
-            f"Please click the following link to verify your email address:\n"
-            f"{verify_link}\n\n"
-            "If you didn't create an account with us, please ignore this email."
-        )
         
-        send_mail(subject, message, EMAIL_HOST_USER, [user.email])
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=EMAIL_HOST_USER,
+            recipient_list=['immortalityyt2020@gmail.com'],
+            html_message=html_message
+            )
     except:
         return Response({'detail': 'An error occurred while sending verification email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(['POST'])
+def send_email(request):
+    try:
+        template_name = os.path.join(BASE_DIR, 'customuser/templates/customuser/verification_email.html')
+        email_context = {'user': 'Lohit'}
+        # Load the HTML template and render it with dynamic content
+        html_message = render_to_string(
+            template_name=template_name,
+            context=email_context
+            )
+        plain_message = strip_tags(html_message)
+
+        # Send the email with HTML content
+        send_mail(subject="Receiver information from a form",
+            message=plain_message,
+            from_email=EMAIL_HOST_USER,
+            recipient_list=['immortalityyt2020@gmail.com'],
+            html_message=html_message)
+        
+        return Response({'detail': 'Email sent successfully'}, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response({'detail': 'An error occurred while sending verification email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def generate_verification_token(user):
     token = default_token_generator.make_token(user)

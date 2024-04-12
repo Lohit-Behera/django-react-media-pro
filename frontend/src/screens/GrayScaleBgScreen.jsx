@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchGrayScaleBg, fetchGetGrayScaleBg, grayScaleBgReset } from '@/features/GrayScaleBgSlice'
 
+import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
 
 import ReactCompareImage from 'react-compare-image'
-import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -156,7 +156,7 @@ function GrayScaleBgScreen() {
                                     </div>
                                 </div>
                             ) : grayScaleBgStatus === 'loading' ? (
-                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                                <GlobalLoader />
                             ) : null}
                         </CardContent>
                         <CardFooter>

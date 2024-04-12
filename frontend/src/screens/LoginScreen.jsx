@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { fetchLogin } from '@/features/UserSlice'
 
+import { Eye, EyeOff } from 'lucide-react';
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from "../components/ui/button"
 import {
@@ -33,6 +34,7 @@ function LoginScreen() {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false);
 
     const loginHandler = () => {
         dispatch(fetchLogin({
@@ -44,18 +46,18 @@ function LoginScreen() {
     return (
         <>
             {userInfoStatus === "failed" && <CustomAlert title="Failed" description="Your email or password is incorrect or you don't have an account" variant="destructive" setOpenProp />}
-            <div className="w-full flex justify-center items-center mt-10 md:mt-48">
+            <div className="w-full flex justify-center items-center mt-10 md:mt-20">
                 <Card className="mx-auto max-w-sm">
                     <CardHeader>
-                        <CardTitle className="text-2xl">Login</CardTitle>
-                        <CardDescription>
-                            Enter your email below to login to your account
+                        <CardTitle className="text-xl md:text-2xl">Login</CardTitle>
+                        <CardDescription className='md:text-base'>
+                            Enter your information to login to your account
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="grid gap-4">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label className='md:text-base' htmlFor="email">Email</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -65,18 +67,24 @@ function LoginScreen() {
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                <Label className='md:text-base' htmlFor="password">Password</Label>
+                                <div className='flex'>
+                                    <Input
+                                        id="password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        placeholder="Password"
+                                        required
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                    <span
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className='mt-1.5 ml-2'
+                                    >
+                                        {showPassword ? <EyeOff /> : <Eye />}
+                                    </span>
                                 </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    required
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
                             </div>
-                            <Button onClick={loginHandler} className="w-full">
+                            <Button onClick={loginHandler} className="w-full md:text-base'">
                                 Login
                             </Button>
                         </div>

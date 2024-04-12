@@ -234,7 +234,7 @@ function AdminUsers() {
                                 <TableCell>
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
-                                            <Button>Delete</Button>
+                                            <Button variant="destructive">Delete</Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>

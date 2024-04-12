@@ -1,5 +1,9 @@
 import React from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { resetRegister } from '@/features/UserSlice'
+
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -11,7 +15,13 @@ import {
 } from "@/components/ui/card"
 
 function VarificationScreen() {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        dispatch(resetRegister())
+    }, [])
+
     return (
         <div className='w-full flex justify-center items-center mt-10 md:mt-48'>
             <Card className="w-[350px]">

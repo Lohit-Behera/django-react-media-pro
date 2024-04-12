@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchRemoveBg, fetchGetRemoveBg, resetRemoveBg } from '@/features/RemoveBgSlice'
+import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
 
 import ReactCompareImage from 'react-compare-image'
-import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -156,11 +156,7 @@ function RemoveBgScreen() {
                                     </div>
                                 </div>
                             ) : removeBgStatus === 'loading' ? (
-                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                            ) : removeBgStatus === 'succeeded' ? (
-                                <p className='text-center text-lg' >Image Uploaded</p>
-                            ) : removeBgStatus === 'failed' ? (
-                                <p className='text-center text-lg'>Something went wrong</p>
+                                <GlobalLoader />
                             ) : null}
                         </CardContent>
                         <CardFooter>

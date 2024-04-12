@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchFilter, fetchGetFilter, resetFilter } from '@/features/FilterSlice'
+
+import GlobalLoader from '@/components/GlobalLoader'
 import CustomAlert from '@/components/CustomAlert'
 import ServerError from '@/components/ServerError'
 
@@ -15,7 +17,6 @@ import filteredCar from '../assets/filteredCar.png'
 
 
 import ReactCompareImage from 'react-compare-image'
-import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -170,11 +171,7 @@ function FilterScreen() {
                                         </div>
                                     </div>
                                 ) : filterStatus === 'loading' ? (
-                                    <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                                ) : filterStatus === 'succeeded' ? (
-                                    <p className='text-center text-lg' >Image Uploaded</p>
-                                ) : filterStatus === 'failed' ? (
-                                    <p className='text-center text-lg'>Something went wrong</p>
+                                    <GlobalLoader />
                                 ) : null}
                             </CardContent>
                             {getfilterStatus === 'succeeded' && (

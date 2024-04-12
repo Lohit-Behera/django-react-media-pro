@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { fetchRegister } from '@/features/UserSlice'
-import { Loader2 } from "lucide-react"
+import GlobalLoader from '@/components/GlobalLoader'
 
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
+import { Eye, EyeOff } from 'lucide-react';
 import { Button } from "../components/ui/button"
 import {
     Card,
@@ -37,8 +38,9 @@ function RegisterScreen() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-
     const [wrongPassword, setWrongPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -63,25 +65,26 @@ function RegisterScreen() {
             {wrongPassword && <CustomAlert title="Failed" description="Password does not match" variant="destructive" setOpenProp />}
 
             {regisrerStatus === 'loading' ? (
-                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                <GlobalLoader />
             ) : regisrerStatus === 'failed' ? (
                 <ServerError />
             ) : (
                 <div className='mt-32'>
                     <Card className="mx-auto max-w-sm">
                         <CardHeader>
-                            <CardTitle className="text-xl">Sign Up</CardTitle>
-                            <CardDescription>
+                            <CardTitle className="text-xl md:text-2xl text-center">Sign Up</CardTitle>
+                            <CardDescription className='md:text-base'>
                                 Enter your information to create an account
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={(e) => submitHandler(e)}>
-                                <div className="grid gap-4">
+                                <div className="grid gap-4 text-xl">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="grid gap-2">
-                                            <Label htmlFor="first-name">First name</Label>
+                                            <Label className='md:text-base' htmlFor="first-name">First name</Label>
                                             <Input
+                                                className='md:text-base'
                                                 id="first-name"
                                                 placeholder="First Name"
                                                 required
@@ -89,8 +92,9 @@ function RegisterScreen() {
                                             />
                                         </div>
                                         <div className="grid gap-2">
-                                            <Label htmlFor="last-name">Last name</Label>
+                                            <Label className='md:text-base' htmlFor="last-name">Last name</Label>
                                             <Input
+                                                className='md:text-base'
                                                 id="last-name"
                                                 placeholder="Last Name"
                                                 required
@@ -98,8 +102,9 @@ function RegisterScreen() {
                                         </div>
                                     </div>
                                     <div className="grid gap-2">
-                                        <Label htmlFor="email">Email</Label>
+                                        <Label className='md:text-base' htmlFor="email">Email</Label>
                                         <Input
+                                            className='md:text-base'
                                             id="email"
                                             type="email"
                                             placeholder="Email"
@@ -108,26 +113,44 @@ function RegisterScreen() {
                                         />
                                     </div>
                                     <div className="grid gap-2">
-                                        <Label htmlFor="password">Password</Label>
-                                        <Input
-                                            id="password"
-                                            type="password"
-                                            placeholder="Password"
-                                            required
-                                            onChange={(e) => setPassword(e.target.value)}
-                                        />
+                                        <Label className='md:text-base' htmlFor="password">Password</Label>
+                                        <div className='flex'>
+                                            <Input
+                                                className='md:text-base'
+                                                id="password"
+                                                type={showPassword ? 'text' : 'password'}
+                                                placeholder="Password"
+                                                required
+                                                onChange={(e) => setPassword(e.target.value)}
+                                            />
+                                            <span
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className='mt-1.5 ml-2'
+                                            >
+                                                {showPassword ? <EyeOff /> : <Eye />}
+                                            </span>
+                                        </div>
                                     </div>
                                     <div className="grid gap-2">
-                                        <Label htmlFor="confirm-password">Confirm Password</Label>
-                                        <Input
-                                            id="confirm-password"
-                                            type="password"
-                                            placeholder="Confirm Password"
-                                            required
-                                            onChange={(e) => setConfirmPassword(e.target.value)}
-                                        />
+                                        <Label className='md:text-base' htmlFor="confirm-password">Confirm Password</Label>
+                                        <div className='flex'>
+                                            <Input
+                                                className='md:text-base'
+                                                id="confirm-password"
+                                                type={showConfirmPassword ? 'text' : 'password'}
+                                                placeholder="Confirm Password"
+                                                required
+                                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                            />
+                                            <span
+                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                className='mt-1.5 ml-2'
+                                            >
+                                                {showConfirmPassword ? <EyeOff /> : <Eye />}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <Button className="w-full">
+                                    <Button className="w-full md:text-base">
                                         Create an account
                                     </Button>
                                 </div>

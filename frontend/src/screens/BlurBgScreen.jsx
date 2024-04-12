@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchBlurBg, fetchGetBlurBg, reset } from '@/features/BlurBgSlice'
 
+import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert';
 import ReactCompareImage from 'react-compare-image'
-import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -182,7 +182,7 @@ function BlurBgScreen() {
                                     </div>
                                 </div>
                             ) : blurBgStatus === 'loading' ? (
-                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
+                                <GlobalLoader />
                             ) : (
                                 null
                             )}

@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchConvert, fetchGetConvert, resetConvert } from '@/features/ConvertSlice'
 
+import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
-import { Loader2 } from "lucide-react"
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -183,11 +183,7 @@ function ConvertScreen() {
                                     </div>
                                 </div>
                             ) : convertStatus === 'loading' ? (
-                                <Loader2 className="w-14 h-14 animate-spin mx-auto" />
-                            ) : convertStatus === 'succeeded' ? (
-                                <p className='text-center text-lg' >Image Uploaded</p>
-                            ) : convertStatus === 'failed' ? (
-                                <p className='text-center text-lg'>Something went wrong</p>
+                                <GlobalLoader />
                             ) : null}
                         </CardContent>
                         {getConvertStatus === 'succeeded' && (
