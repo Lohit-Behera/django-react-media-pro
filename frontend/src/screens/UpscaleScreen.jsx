@@ -8,7 +8,7 @@ import { fetchUpscale, fetchGetUpscale, resetUpscale } from '@/features/UpscaleS
 import ServerError from '@/components/ServerError'
 import GlobalLoader from '@/components/GlobalLoader'
 import CustomAlert from '@/components/CustomAlert'
-import ReactCompareImage from 'react-compare-image'
+import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -40,10 +40,9 @@ function UpscaleScreen() {
     const detailsError = upscaleError ? upscaleError.details : ''
     const errorMessage = upscaleError ? upscaleError.message : ''
 
-    console.log(errorMessage);
-
     const original = getUpscale ? getUpscale.original : ''
     const upscaleImage = getUpscale ? getUpscale.result : ''
+    console.log(`original ${original} upscale ${upscaleImage}`);
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -169,7 +168,13 @@ function UpscaleScreen() {
                                 <div className='flex flex-col w-full space-y-4'>
                                     <p className='text-center'>Compare</p>
                                     <div className='w-full h-auto'>
-                                        <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={upscaleImage} rightImageLabel='Upscaled' sliderLineColor='#6d28d9' />
+                                        <ImageCompare
+                                            leftImg={original}
+                                            rightImg={upscaleImage}
+                                            leftLabel='Original'
+                                            rightLabel='Upscaled'
+                                            disabledLable={false}
+                                        />
                                     </div>
                                     <Button className="w-full"><a href={upscaleImage} download="removeBg.png">Download</a></Button>
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>

@@ -39,7 +39,7 @@ export const fetchGetUpscale = createAsyncThunk('getupscale/image', async (id, {
         };
 
         const { data } = await axios.get(
-            `/api/image/upscale/${id}`,
+            `/api/image/upscale/${id}/`,
             config
         );
 
@@ -56,7 +56,7 @@ export const fetchGetUpscale = createAsyncThunk('getupscale/image', async (id, {
 });
 
 const upscaleSlice = createSlice({
-    name: "image",
+    name: "upscaleimage",
     initialState: {
         upscale: null,
         upscaleStatus: "idle",

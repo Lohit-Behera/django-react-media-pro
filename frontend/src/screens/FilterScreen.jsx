@@ -15,8 +15,7 @@ import ColorVibranceCar from '../assets/ColorVibranceCar.png'
 import EnhanceCar from '../assets/EnhanceCar.png'
 import filteredCar from '../assets/filteredCar.png'
 
-
-import ReactCompareImage from 'react-compare-image'
+import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -179,8 +178,13 @@ function FilterScreen() {
                                     <div className='flex flex-col w-full space-y-4'>
                                         <p className='text-center'>Compare</p>
                                         <div className='w-full h-auto'>
-                                            <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={filteredImage} rightImageLabel='Filtered' sliderLineColor='#6d28d9' />
-
+                                            <ImageCompare
+                                                leftImg={original}
+                                                rightImg={filteredImage}
+                                                leftLabel='Original'
+                                                rightLabel='Filtered'
+                                                disabledLable={false}
+                                            />
                                         </div>
                                         <Button className="w-full"><a href={filteredImage} download="filtered.png">Download</a></Button>
                                         <Button className="w-full" onClick={resetHandler}>Another Image</Button>
@@ -190,7 +194,7 @@ function FilterScreen() {
                             )}
                         </Card>
                     </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-[98%] mx-auto'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-[98%] mx-auto'>
                         <Card>
                             <CardHeader>
                                 <CardTitle className="text-base md:text-lg text-center">GrayScale</CardTitle>
@@ -204,8 +208,13 @@ function FilterScreen() {
                             </CardHeader>
                             <CardContent>
                                 <div className='w-full h-auto'>
-                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={GrayScaleCar} rightImageLabel='GrayScale' sliderLineColor='#6d28d9' />
-
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={GrayScaleCar}
+                                        leftLabel='Original'
+                                        rightLabel='Filtered'
+                                        disabledLable={false}
+                                    />
                                 </div>
                             </CardContent>
 
@@ -223,8 +232,13 @@ function FilterScreen() {
                             </CardHeader>
                             <CardContent>
                                 <div className='w-full h-auto'>
-                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={ColorVibranceCar} rightImageLabel='Color vibrance' sliderLineColor='#6d28d9' />
-
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={ColorVibranceCar}
+                                        leftLabel='Original'
+                                        rightLabel='Color vibrance'
+                                        disabledLable={false}
+                                    />
                                 </div>
                             </CardContent>
 
@@ -242,8 +256,13 @@ function FilterScreen() {
                             </CardHeader>
                             <CardContent>
                                 <div className='w-full h-auto'>
-                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={EnhanceCar} rightImageLabel='Enhance' sliderLineColor='#6d28d9' />
-
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={EnhanceCar}
+                                        leftLabel='Original'
+                                        rightLabel='Enhance'
+                                        disabledLable={false}
+                                    />
                                 </div>
                             </CardContent>
 
@@ -261,8 +280,13 @@ function FilterScreen() {
                             </CardHeader>
                             <CardContent>
                                 <div className='w-full h-auto'>
-                                    <ReactCompareImage leftImage={car} leftImageLabel='Original' rightImage={filteredCar} rightImageLabel='Mixed' sliderLineColor='#6d28d9' />
-
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={filteredCar}
+                                        leftLabel='Original'
+                                        rightLabel='Mixed'
+                                        disabledLable={false}
+                                    />
                                 </div>
                             </CardContent>
 

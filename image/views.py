@@ -64,8 +64,8 @@ def get_remove_bg(request,pk):
 def upscale_image(request):
     user = request.user
     data = request.data
-    print(data)
     image = request.FILES['image'] 
+
 
     image_pil = Image.open(image)
     width, height = image_pil.size
@@ -296,7 +296,6 @@ def animal(request):
         
         state_dict_path = os.path.join(settings.BASE_DIR, 'static/models/animal_model.pth')
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        print(device)
         model = models.resnet18(weights=None)
         num_classes = len(class_names)
         model.fc = nn.Linear(model.fc.in_features, num_classes)

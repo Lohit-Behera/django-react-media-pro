@@ -11,8 +11,7 @@ import filteredCar from '../assets/filteredCar.png'
 import convertCar from '../assets/convertCar.png'
 import downscaledCar from '../assets/downscaledCar.jpeg'
 
-const ReactCompareImage = lazy(() => import('react-compare-image'))
-
+const ImageCompare = lazy(() => import('@/components/ImageCompare'))
 import HomeScreenLoader from '@/components/HomeScreenLoader'
 
 import {
@@ -30,6 +29,7 @@ function HomeScreen() {
         <>
             <Suspense fallback={<HomeScreenLoader />}>
                 <div className='w-[95%] mx-auto'>
+
                     <h1 className='text-3xl font-bold text-center'>Media Pro</h1>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-10'>
                         <Card className=''>
@@ -52,7 +52,13 @@ function HomeScreen() {
                             </CardHeader>
                             <CardContent>
                                 <div className='rounded-lg'>
-                                    <ReactCompareImage leftImage={car} rightImage={upscaleCar} sliderLineColor='#6d28d9' />
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={upscaleCar}
+                                        leftLabel='Before'
+                                        rightLabel='After'
+                                        disabledLable={false}
+                                    />
                                 </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
@@ -78,7 +84,16 @@ function HomeScreen() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ReactCompareImage leftImage={car} rightImage={bgremovedCar} sliderLineColor='#6d28d9' />
+                                <div className='rounded-lg'>
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={bgremovedCar}
+                                        leftLabel='After'
+                                        rightLabel='Before'
+                                        disabledLable={false}
+                                        transparent={true}
+                                    />
+                                </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Remove the background from an image, and it will only export in PNG format. There are three models available for removing backgrounds. Anime models use the anime background removal model; general models use the general background removal model; and other model, if both do not work, use other.  </p>
@@ -103,7 +118,15 @@ function HomeScreen() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ReactCompareImage leftImage={car} rightImage={bgblurCar} sliderLineColor='#6d28d9' />
+                                <div className='rounded-lg'>
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={bgblurCar}
+                                        leftLabel='Before'
+                                        rightLabel='After'
+                                        disabledLable={false}
+                                    />
+                                </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Blur the background of an image, and it will only export in PNG format. It analyzes the image background, like background removal, and there are three parameters for adding blur to the background.</p>
@@ -128,7 +151,15 @@ function HomeScreen() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ReactCompareImage leftImage={car} rightImage={grayscaleCar} sliderLineColor='#6d28d9' />
+                                <div className='rounded-lg'>
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={grayscaleCar}
+                                        leftLabel='Before'
+                                        rightLabel='After'
+                                        disabledLable={false}
+                                    />
+                                </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Gray Scale the background from an image, and it will only export in PNG format. There are three models available like remove background. </p>
@@ -153,7 +184,15 @@ function HomeScreen() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ReactCompareImage leftImage={car} rightImage={grayscaleCar} sliderLineColor='#6d28d9' />
+                                <div className='rounded-lg'>
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={grayscaleCar}
+                                        leftLabel='Before'
+                                        rightLabel='After'
+                                        disabledLable={false}
+                                    />
+                                </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Upload the image and it will Predict the image of an animal but it can Predict only 40 animals</p>
@@ -178,7 +217,15 @@ function HomeScreen() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ReactCompareImage leftImage={car} rightImage={filteredCar} sliderLineColor='#6d28d9' />
+                                <div className='rounded-lg'>
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={filteredCar}
+                                        leftLabel='Before'
+                                        rightLabel='After'
+                                        disabledLable={false}
+                                    />
+                                </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Add filters to an image, and it will only export in PNG format. There are four filters available.</p>
@@ -203,7 +250,15 @@ function HomeScreen() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ReactCompareImage leftImage={car} rightImage={convertCar} sliderLineColor='#6d28d9' />
+                                <div className='rounded-lg'>
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={convertCar}
+                                        leftLabel='Before'
+                                        rightLabel='After'
+                                        disabledLable={false}
+                                    />
+                                </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Change the format of an image to jpeg, png, pdf, tiff, ico, webp, or bmp.</p>
@@ -228,7 +283,15 @@ function HomeScreen() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <ReactCompareImage leftImage={car} rightImage={downscaledCar} sliderLineColor='#6d28d9' />
+                                <div className='rounded-lg'>
+                                    <ImageCompare
+                                        leftImg={car}
+                                        rightImg={downscaledCar}
+                                        leftLabel='Before'
+                                        rightLabel='After'
+                                        disabledLable={false}
+                                    />
+                                </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
                                 <p>Downscale an image up to 4X; it only exports in jpeg format.</p>

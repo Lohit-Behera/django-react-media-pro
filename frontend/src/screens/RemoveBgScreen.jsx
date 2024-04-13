@@ -8,7 +8,7 @@ import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
 
-import ReactCompareImage from 'react-compare-image'
+import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -164,8 +164,14 @@ function RemoveBgScreen() {
                                 <div className='flex flex-col w-full space-y-4'>
                                     <p className='text-center'>Compare</p>
                                     <div className='w-full h-auto'>
-                                        <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={removeBgImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
-
+                                        <ImageCompare
+                                            leftImg={original}
+                                            rightImg={removeBgImage}
+                                            leftLabel='Original'
+                                            rightLabel='Bg Removed'
+                                            disabledLable={false}
+                                            transparent={true}
+                                        />
                                     </div>
                                     <Button className="w-full"><a href={removeBgImage} download="removeBg.png">Download</a></Button>
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>

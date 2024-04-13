@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,7 +8,7 @@ import { fetchBlurBg, fetchGetBlurBg, reset } from '@/features/BlurBgSlice'
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert';
-import ReactCompareImage from 'react-compare-image'
+import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
     Card,
@@ -192,7 +192,13 @@ function BlurBgScreen() {
                                 <div className='flex flex-col w-full space-y-4'>
                                     <p className='text-center'>Compare</p>
                                     <div className='w-full h-auto'>
-                                        <ReactCompareImage leftImage={original} leftImageLabel='Original' rightImage={blurBgImage} rightImageLabel='Bg Removed' sliderLineColor='#6d28d9' />
+                                        <ImageCompare
+                                            leftImg={original}
+                                            rightImg={blurBgImage}
+                                            leftLabel='Original'
+                                            rightLabel='Blur Bg'
+                                            disabledLable={false}
+                                        />
 
                                     </div>
                                     <Button className="w-full"><a href={blurBgImage} download="removeBg.png">Download</a></Button>

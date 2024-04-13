@@ -1,8 +1,8 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
-import { logout, fetchUserDetails } from '@/features/UserSlice';
+import { logout } from '@/features/UserSlice';
 import { fetchDeleteImages, fetchDeleteRawImages } from '@/features/DeleteImagesSlice';
 
 import CustomAlert from '@/components/CustomAlert';
@@ -10,6 +10,7 @@ import DarkModeToggle from './DarkModeToggle'
 import { Button } from './ui/button'
 import { Menu } from 'lucide-react'
 import Logo from '../assets/Logo.svg'
+
 import {
     Sheet,
     SheetContent,
