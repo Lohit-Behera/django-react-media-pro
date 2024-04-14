@@ -149,32 +149,53 @@ function ConvertScreen() {
                                     <div className='grid grid-cols-3 md:grid-cols-7 gap-2' >
                                         <Button
                                             variant={format === 'jpeg' ? 'default' : 'outline'}
+                                            disabled={getConvertStatus === 'succeeded'}
                                             onClick={jpegHandler}
-                                            disabled={getConvertStatus === 'succeeded'}>jpeg</Button>
+                                        >
+                                            jpeg
+                                        </Button>
                                         <Button
                                             variant={format === 'png' ? 'default' : 'outline'}
+                                            disabled={getConvertStatus === 'succeeded'}
                                             onClick={pngHandler}
-                                            disabled={getConvertStatus === 'succeeded'}>png</Button>
+                                        >
+                                            png
+                                        </Button>
                                         <Button
                                             variant={format === 'pdf' ? 'default' : 'outline'}
+                                            disabled={getConvertStatus === 'succeeded'}
                                             onClick={pdfHandler}
-                                            disabled={getConvertStatus === 'succeeded'}>pdf</Button>
+                                        >
+                                            pdf
+                                        </Button>
                                         <Button
                                             variant={format === 'tiff' ? 'default' : 'outline'}
+                                            disabled={getConvertStatus === 'succeeded'}
                                             onClick={tiffHandler}
-                                            disabled={getConvertStatus === 'succeeded'}>tiff</Button>
+                                        >
+                                            tiff
+                                        </Button>
                                         <Button
                                             variant={format === 'ico' ? 'default' : 'outline'}
+                                            disabled={getConvertStatus === 'succeeded'}
                                             onClick={icoHandler}
-                                            disabled={getConvertStatus === 'succeeded'}>ico</Button>
+                                        >
+                                            ico
+                                        </Button>
                                         <Button
                                             variant={format === 'webp' ? 'default' : 'outline'}
+                                            disabled={getConvertStatus === 'succeeded'}
                                             onClick={webpHandler}
-                                            disabled={getConvertStatus === 'succeeded'}>webp</Button>
+                                        >
+                                            webp
+                                        </Button>
                                         <Button
                                             variant={format === 'bmp' ? 'default' : 'outline'}
+                                            disabled={getConvertStatus === 'succeeded'}
                                             onClick={bmpHandler}
-                                            disabled={getConvertStatus === 'succeeded'}>bmp</Button>
+                                        >
+                                            bmp
+                                        </Button>
                                     </div>
                                 </div>
                                 {convertStatus === 'idle' ? (
@@ -221,12 +242,12 @@ function ConvertScreen() {
                                 </div>
                                 {loaded === 1 ? (
                                     <>
-                                        <Button className="w-full"><Link to={formatedImage} download={`converted.${format}`}>Download</Link></Button>
+                                        <Button className="w-full"><a to={formatedImage} download={`converted.${format}`}>Download</a></Button>
                                         <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                     </>
                                 ) : format === 'pdf' || format === 'tiff' ? (
                                     <>
-                                        <Button asChild className="w-full"><Link to={formatedImage} download={`converted.${format}`}>Download</Link></Button>
+                                        <Button asChild className="w-full"><a to={formatedImage} download={`converted.${format}`}>Download</a></Button>
                                         <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                     </>
                                 ) : null}

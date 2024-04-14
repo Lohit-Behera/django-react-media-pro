@@ -47,7 +47,6 @@ function DownScaleScreen() {
         }
     }, [downScaleStatus, dispatch, downScale])
 
-    const [hide, setHide] = useState(false)
     const [scale, setScale] = useState('2')
     const [isDragOver, setIsDragOver] = useState(false);
     const [loaded, setLoaded] = useState(0);
@@ -97,17 +96,14 @@ function DownScaleScreen() {
 
     const downScale2x = () => {
         setScale('2')
-        setHide(true)
     }
 
     const downScale4x = () => {
         setScale('4')
-        setHide(true)
     }
 
     const resetHandler = () => {
         dispatch(resetDownScale())
-        setHide(false)
         setScale('')
         setLoaded(0)
     }
@@ -127,42 +123,61 @@ function DownScaleScreen() {
                             <CardTitle className="text-lg md:text-2xl text-center">DownScale Image</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {downScaleStatus === 'idle' ? (
-                                <div className="h-full flex flex-col space-y-4 my-2 items-center">
-                                    {!hide && (
-                                        <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                            <p>Before uploading the image choose scale</p>
-                                            <div className='grid grid-cols-2 gap-2' >
-                                                <Button variant="outline" onClick={downScale2x}>DownScale 2X</Button>
-                                                <Button variant="outline" onClick={downScale4x}>DownScale 4X</Button>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                    <Input
-                                        name="image"
-                                        type="file"
-                                        accept="image/*"
-                                        className='w-full dark:file:text-white cursor-pointer'
-                                        onChange={(e) => { uploadHndler(e) }}
-                                    />
-                                    <div
-                                        onDrop={handleDrop}
-                                        onDragOver={handleDragOver}
-                                        className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                    >
-                                        Drag and drop image here
+                            <div className="h-full flex flex-col space-y-4 my-2 items-center">
+                                <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                    <p>Before uploading the image choose scale</p>
+                                    <div className='grid grid-cols-2 gap-2' >
+                                        <Button
+                                            variant={scale === '2' ? 'default' : 'outline'}
+                                            disabled={getDownScaleStatus === 'succeeded'}
+                                            onClick={downScale2x}
+                                        >
+                                            DownScale 2X
+                                        </Button>
+                                        <Button
+                                            variant={scale === '4' ? 'default' : 'outline'}
+                                            disabled={getDownScaleStatus === 'succeeded'}
+                                            onClick={downScale4x}
+                                        >
+                                            DownScale 4X
+                                        </Button>
                                     </div>
                                 </div>
-                            ) : downScaleStatus === 'loading' ? (
-                                <GlobalLoader />
-                            ) : null}
+                                {downScaleStatus === 'idle' ? (
+                                    <>
+                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                        <Input
+                                            name="image"
+                                            type="file"
+                                            accept="image/*"
+                                            className='w-full dark:file:text-white cursor-pointer'
+                                            onChange={(e) => { uploadHndler(e) }}
+                                        />
+                                        <div
+                                            onDrop={handleDrop}
+                                            onDragOver={handleDragOver}
+                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                        >
+                                            Drag and drop image here
+                                        </div>
+                                    </>
+                                ) : downScaleStatus === 'loading' ? (
+                                    <GlobalLoader />
+                                ) : null}
+                            </div>
                         </CardContent>
                         {getDownScaleStatus === 'succeeded' && (
                             <CardFooter>
-                                <div className='flex flex-col w-full space-y-4'>
+                                <div
+                                    className='flex flex-col w-full space-y-4'
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '100%',
+                                        background: `${loaded === 1 ? 'none' : 'radial-gradient(circle, rgba(109,40,217,0.90) 0%, rgba(109,40,217,0.50) 40%, rgba(109,40,217,0.10) 85%)'}`,
+                                        animation: `${loaded === 1 ? 'none' : 'pulse 2s infinite'}`
+                                    }}>
                                     {loaded === 1 &&
-                                        <p className='text-center'>Converted Image</p>
+                                        <p className='text-center text-lg mb-4 font-semibold'>Converted Image</p>
                                     }
                                     <div className='w-full h-auto flex justify-center '
                                         style={imagesStyle}>

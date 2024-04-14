@@ -55,7 +55,6 @@ function FilterScreen() {
         }
     }, [filterStatus, dispatch, filter])
 
-    const [hide, setHide] = useState(false)
     const [filterName, setFilterName] = useState('')
     const [isDragOver, setIsDragOver] = useState(false);
 
@@ -99,27 +98,22 @@ function FilterScreen() {
 
     const grayscaleHandler = () => {
         setFilterName('grayscale')
-        setHide(true)
     }
 
     const colorlHandler = () => {
         setFilterName('color')
-        setHide(true)
     }
 
     const enhanceHandler = () => {
         setFilterName('detail')
-        setHide(true)
     }
 
     const mixHandler = () => {
         setFilterName('mix')
-        setHide(true)
     }
 
     const resetHandler = () => {
         dispatch(resetFilter())
-        setHide(false)
         setFilterName('')
     }
 
@@ -140,43 +134,67 @@ function FilterScreen() {
                                 <CardTitle className="text-lg md:text-2xl text-center">Add Filters</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                {filterStatus === 'idle' ? (
-                                    <div className="h-full flex flex-col space-y-4 my-2 items-center">
-                                        {!hide && (
-                                            <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                                <p className='text-center'>Before uploading the image choose filter examples are shown below</p>
-                                                <div className='grid grid-cols-2 md:grid-cols-4 gap-2' >
-                                                    <Button variant="outline" onClick={grayscaleHandler}>GrayScale</Button>
-                                                    <Button variant="outline" onClick={colorlHandler}>Color vibrance</Button>
-                                                    <Button variant="outline" onClick={enhanceHandler}>Enhance</Button>
-                                                    <Button variant="outline" onClick={mixHandler}>Mixed</Button>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                        <Input
-                                            name="image"
-                                            type="file"
-                                            accept="image/*"
-                                            className='w-full dark:file:text-white cursor-pointer'
-                                            onChange={(e) => { uploadHndler(e) }}
-                                        />
-                                        <div
-                                            onDrop={handleDrop}
-                                            onDragOver={handleDragOver}
-                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                        >
-                                            Drag and drop image here
+                                <div className="h-full flex flex-col space-y-4 my-2 items-center">
+                                    <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                        <p className='text-center'>Before uploading the image choose filter examples are shown below</p>
+                                        <div className='grid grid-cols-2 md:grid-cols-4 gap-2' >
+                                            <Button
+                                                variant={filterName === 'grayscale' ? 'default' : 'outline'}
+                                                disabled={getfilterStatus === 'succeeded'}
+                                                onClick={grayscaleHandler}
+                                            >
+                                                GrayScale
+                                            </Button>
+                                            <Button
+                                                variant={filterName === 'color' ? 'default' : 'outline'}
+                                                disabled={getfilterStatus === 'succeeded'}
+                                                onClick={colorlHandler}
+                                            >
+                                                Color vibrance
+                                            </Button>
+                                            <Button
+                                                variant={filterName === 'detail' ? 'default' : 'outline'}
+                                                disabled={getfilterStatus === 'succeeded'}
+                                                onClick={enhanceHandler}
+                                            >
+                                                Enhance
+                                            </Button>
+                                            <Button
+                                                variant={filterName === 'mix' ? 'default' : 'outline'}
+                                                disabled={getfilterStatus === 'succeeded'}
+                                                onClick={mixHandler}
+                                            >
+                                                Mixed
+                                            </Button>
                                         </div>
                                     </div>
-                                ) : filterStatus === 'loading' ? (
-                                    <GlobalLoader />
-                                ) : null}
+                                    {filterStatus === 'idle' ? (
+                                        <>
+                                            <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                            <Input
+                                                name="image"
+                                                type="file"
+                                                accept="image/*"
+                                                className='w-full dark:file:text-white cursor-pointer'
+                                                onChange={(e) => { uploadHndler(e) }}
+                                            />
+                                            <div
+                                                onDrop={handleDrop}
+                                                onDragOver={handleDragOver}
+                                                className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                            >
+                                                Drag and drop image here
+                                            </div>
+                                        </>
+                                    ) : filterStatus === 'loading' ? (
+                                        <GlobalLoader />
+                                    ) : null}
+                                </div>
                             </CardContent>
                             {getfilterStatus === 'succeeded' && (
                                 <CardFooter>
                                     <div className='flex flex-col w-full space-y-4'>
-                                        <p className='text-center'>Compare</p>
+                                        <p className='text-center text-lg mb-4 font-semibold'>Compare</p>
                                         <div className='w-full h-auto'>
                                             <ImageCompare
                                                 leftImg={original}

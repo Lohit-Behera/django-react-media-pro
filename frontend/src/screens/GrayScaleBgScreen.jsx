@@ -34,7 +34,6 @@ function GrayScaleBgScreen() {
     const grayScaleBgImage = getGrayScaleBg ? getGrayScaleBg.result : ''
     const original = getGrayScaleBg ? getGrayScaleBg.original : ''
 
-    const [hide, setHide] = useState(false)
     const [model, setModel] = useState('')
     const [isDragOver, setIsDragOver] = useState(false);
 
@@ -92,22 +91,18 @@ function GrayScaleBgScreen() {
 
     const animeHandler = () => {
         setModel('anime')
-        setHide(true)
     }
 
     const generalHandler = () => {
         setModel('general')
-        setHide(true)
     }
 
     const otherHandler = () => {
         setModel('last')
-        setHide(true)
     }
 
     const resetHandler = () => {
         dispatch(grayScaleBgReset())
-        setHide(false)
         setModel('')
     }
 
@@ -126,43 +121,60 @@ function GrayScaleBgScreen() {
                             <CardTitle className="text-lg md:text-2xl text-center">Gray Scale Background</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {grayScaleBgStatus === 'idle' ? (
-                                <div className="flex flex-col space-y-4 my-2 items-center ">
-                                    {!hide && (
-                                        <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                            <p>Before uploading the image choose the image type if both are not working use other</p>
-                                            <div className='grid grid-cols-2 md:grid-cols-3 gap-2' >
-                                                <Button variant="outline" onClick={animeHandler}>Anime</Button>
-                                                <Button variant="outline" onClick={generalHandler}>General</Button>
-                                                <Button variant="outline" onClick={otherHandler}>Other</Button>
-
-                                            </div>
-                                        </div>
-                                    )}
-                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                    <Input
-                                        name="image"
-                                        type="file"
-                                        accept="image/*"
-                                        className='w-full dark:file:text-white cursor-pointer'
-                                        onChange={(e) => { uploadHndler(e) }}
-                                    />
-                                    <div
-                                        onDrop={handleDrop}
-                                        onDragOver={handleDragOver}
-                                        className="w-full h-44 md:h-96 border-2 flex justify-center items-center rounded-md text-sm md:text-lg"
-                                    >
-                                        Drag and drop the image here
+                            <div className="flex flex-col space-y-4 my-2 items-center ">
+                                <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                    <p>Before uploading the image choose the image type if both are not working use other</p>
+                                    <div className='grid grid-cols-2 md:grid-cols-3 gap-2' >
+                                        <Button
+                                            variant={model === 'anime' ? 'default' : 'outline'}
+                                            disabled={getGrayScaleBgStatus === 'succeeded'}
+                                            onClick={animeHandler}
+                                        >
+                                            Anime
+                                        </Button>
+                                        <Button
+                                            variant={model === 'general' ? 'default' : 'outline'}
+                                            disabled={getGrayScaleBgStatus === 'succeeded'}
+                                            onClick={generalHandler}
+                                        >
+                                            General
+                                        </Button>
+                                        <Button
+                                            variant={model === 'last' ? 'default' : 'outline'}
+                                            disabled={getGrayScaleBgStatus === 'succeeded'}
+                                            onClick={otherHandler}
+                                        >
+                                            Other
+                                        </Button>
                                     </div>
                                 </div>
-                            ) : grayScaleBgStatus === 'loading' ? (
-                                <GlobalLoader />
-                            ) : null}
+                                {grayScaleBgStatus === 'idle' ? (
+                                    <>
+                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                        <Input
+                                            name="image"
+                                            type="file"
+                                            accept="image/*"
+                                            className='w-full dark:file:text-white cursor-pointer'
+                                            onChange={(e) => { uploadHndler(e) }}
+                                        />
+                                        <div
+                                            onDrop={handleDrop}
+                                            onDragOver={handleDragOver}
+                                            className="w-full h-44 md:h-96 border-2 flex justify-center items-center rounded-md text-sm md:text-lg"
+                                        >
+                                            Drag and drop the image here
+                                        </div>
+                                    </>
+                                ) : grayScaleBgStatus === 'loading' ? (
+                                    <GlobalLoader />
+                                ) : null}
+                            </div>
                         </CardContent>
                         <CardFooter>
                             {getGrayScaleBgStatus === 'succeeded' && (
                                 <div className='flex flex-col w-full space-y-4'>
-                                    <p className='text-center'>Compare</p>
+                                    <p className='text-center text-lg mb-4 font-semibold'>Compare</p>
                                     <div className='w-full h-auto'>
                                         <ImageCompare
                                             leftImg={original}
