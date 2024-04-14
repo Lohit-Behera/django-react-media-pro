@@ -50,6 +50,12 @@ function DownScaleScreen() {
     const [hide, setHide] = useState(false)
     const [scale, setScale] = useState('2')
     const [isDragOver, setIsDragOver] = useState(false);
+    const [loaded, setLoaded] = useState(0);
+
+    const imagesStyle = {
+        opacity: loaded === 1 ? 1 : 0,
+        transition: 'opacity 1s 0.5s ease-in-out'
+    };
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -103,6 +109,7 @@ function DownScaleScreen() {
         dispatch(resetDownScale())
         setHide(false)
         setScale('')
+        setLoaded(0)
     }
 
     return (
@@ -154,12 +161,19 @@ function DownScaleScreen() {
                         {getDownScaleStatus === 'succeeded' && (
                             <CardFooter>
                                 <div className='flex flex-col w-full space-y-4'>
-                                    <p className='text-center'>DownScale Image</p>
-                                    <div className='w-full h-auto flex justify-center '>
-                                        <img src={downScaleImage} alt="downScaleImage" />
+                                    {loaded === 1 &&
+                                        <p className='text-center'>Converted Image</p>
+                                    }
+                                    <div className='w-full h-auto flex justify-center '
+                                        style={imagesStyle}>
+                                        <img className='m-auto' src={downScaleImage} alt="downScaleImage" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
                                     </div>
-                                    <Button className="w-full"><a href={downScaleImage} download="filtered.png">Download</a></Button>
-                                    <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                                    {loaded === 1 && (
+                                        <>
+                                            <Button className="w-full"><a href={downScaleImage} download>Download</a></Button>
+                                            <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                                        </>
+                                    )}
                                 </div>
                             </CardFooter>
                         )}

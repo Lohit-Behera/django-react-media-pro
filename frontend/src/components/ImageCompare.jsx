@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { ReactCompareSlider, ReactCompareSliderImage, ReactCompareSliderHandle } from 'react-compare-slider';
 
 function ImageCompare({ leftImg, rightImg, leftLabel = '', rightLabel = '', disabledLable, transparent = false }) {
-    const [loaded, setLoaded] = React.useState(0);
+    const [loaded, setLoaded] = useState(0);
     const [labelOpacity, setLabelOpacity] = useState(1);
 
     const labelStyle = {
@@ -39,6 +39,8 @@ function ImageCompare({ leftImg, rightImg, leftLabel = '', rightLabel = '', disa
         <div>
             <ReactCompareSlider
                 style={{
+                    width: '100%',
+                    maxHeight: '100%',
                     background: `${loaded === 2 ? 'none' : 'radial-gradient(circle, rgba(109,40,217,0.90) 0%, rgba(109,40,217,0.50) 40%, rgba(109,40,217,0.10) 85%)'}`,
                     animation: `${loaded === 2 ? 'none' : 'pulse 2s infinite'}`
                 }}

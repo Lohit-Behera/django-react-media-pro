@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchConvert, fetchGetConvert, resetConvert } from '@/features/ConvertSlice'
@@ -47,9 +47,14 @@ function ConvertScreen() {
         }
     }, [convertStatus, dispatch, convert])
 
-    const [hide, setHide] = useState(false)
-    const [format, setFormat] = useState('png')
+    const [format, setFormat] = useState('jpeg')
     const [isDragOver, setIsDragOver] = useState(false);
+    const [loaded, setLoaded] = useState(0);
+
+    const imagesStyle = {
+        opacity: loaded === 1 ? 1 : 0,
+        transition: 'opacity 1s 0.5s ease-in-out'
+    };
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -90,49 +95,37 @@ function ConvertScreen() {
 
     const jpegHandler = () => {
         setFormat('jpeg')
-        setHide(true)
     }
 
 
     const pngHandler = () => {
         setFormat('png')
-        setHide(true)
     }
 
     const pdfHandler = () => {
         setFormat('pdf')
-        setHide(true)
     }
 
     const tiffHandler = () => {
         setFormat('tiff')
-        setHide(true)
     }
     const icoHandler = () => {
         setFormat('ico')
-        setHide(true)
     }
 
     const webpHandler = () => {
         setFormat('webp')
-        setHide(true)
     }
 
     const bmpHandler = () => {
         setFormat('bmp')
-        setHide(true)
     }
 
-    const handleDownload = () => {
-        const anchor = document.createElement('a');
-        anchor.href = formatedImage;
-        anchor.download = 'download';
-    };
 
     const resetHandler = () => {
         dispatch(resetConvert())
-        setHide(false)
         setFormat('')
+        setLoaded(0)
     }
 
     return (
@@ -150,56 +143,93 @@ function ConvertScreen() {
                             <CardTitle className="text-lg md:text-2xl text-center">Change Format</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {convertStatus === 'idle' ? (
-                                <div className="h-full flex flex-col space-y-4 my-2 items-center">
-                                    {!hide && (
-                                        <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
-                                            <p>Before uploading the image choose format</p>
-                                            <div className='grid grid-cols-3 md:grid-cols-7 gap-2' >
-                                                <Button variant="outline" onClick={jpegHandler}>jpeg</Button>
-                                                <Button variant="outline" onClick={pngHandler}>png</Button>
-                                                <Button variant="outline" onClick={pdfHandler}>pdf</Button>
-                                                <Button variant="outline" onClick={tiffHandler}>tiff</Button>
-                                                <Button variant="outline" onClick={icoHandler}>ico</Button>
-                                                <Button variant="outline" onClick={webpHandler}>webp</Button>
-                                                <Button variant="outline" onClick={bmpHandler}>bmp</Button>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                    <Input
-                                        name="image"
-                                        type="file"
-                                        accept="image/*"
-                                        className='w-full dark:file:text-white cursor-pointer'
-                                        onChange={(e) => { uploadHndler(e) }}
-                                    />
-                                    <div
-                                        onDrop={handleDrop}
-                                        onDragOver={handleDragOver}
-                                        className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                    >
-                                        Drag and drop image here
+                            <div className="h-full flex flex-col space-y-4 my-2 items-center">
+                                <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
+                                    <p>Before uploading the image choose format pdf and tiff format not supported to show the image</p>
+                                    <div className='grid grid-cols-3 md:grid-cols-7 gap-2' >
+                                        <Button
+                                            variant={format === 'jpeg' ? 'default' : 'outline'}
+                                            onClick={jpegHandler}
+                                            disabled={getConvertStatus === 'succeeded'}>jpeg</Button>
+                                        <Button
+                                            variant={format === 'png' ? 'default' : 'outline'}
+                                            onClick={pngHandler}
+                                            disabled={getConvertStatus === 'succeeded'}>png</Button>
+                                        <Button
+                                            variant={format === 'pdf' ? 'default' : 'outline'}
+                                            onClick={pdfHandler}
+                                            disabled={getConvertStatus === 'succeeded'}>pdf</Button>
+                                        <Button
+                                            variant={format === 'tiff' ? 'default' : 'outline'}
+                                            onClick={tiffHandler}
+                                            disabled={getConvertStatus === 'succeeded'}>tiff</Button>
+                                        <Button
+                                            variant={format === 'ico' ? 'default' : 'outline'}
+                                            onClick={icoHandler}
+                                            disabled={getConvertStatus === 'succeeded'}>ico</Button>
+                                        <Button
+                                            variant={format === 'webp' ? 'default' : 'outline'}
+                                            onClick={webpHandler}
+                                            disabled={getConvertStatus === 'succeeded'}>webp</Button>
+                                        <Button
+                                            variant={format === 'bmp' ? 'default' : 'outline'}
+                                            onClick={bmpHandler}
+                                            disabled={getConvertStatus === 'succeeded'}>bmp</Button>
                                     </div>
                                 </div>
-                            ) : convertStatus === 'loading' ? (
-                                <GlobalLoader />
-                            ) : null}
+                                {convertStatus === 'idle' ? (
+                                    <>
+                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                        <Input
+                                            name="image"
+                                            type="file"
+                                            accept="image/*"
+                                            className='w-full dark:file:text-white cursor-pointer'
+                                            onChange={(e) => { uploadHndler(e) }}
+                                        />
+                                        <div
+                                            onDrop={handleDrop}
+                                            onDragOver={handleDragOver}
+                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
+                                        >
+                                            Drag and drop image here
+                                        </div>
+                                    </>
+                                ) : convertStatus === 'loading' ? (
+                                    <GlobalLoader />
+                                ) : null}
+                            </div>
                         </CardContent>
                         {getConvertStatus === 'succeeded' && (
-                            <CardFooter>
-                                <div className='flex flex-col w-full space-y-4'>
-                                    <p className='text-center'>Converted Image</p>
-                                    {format === 'pdf' || format === 'tiff' ? (
-                                        <h2 className='text-center'>pdf and tiff format not supported to show the image</h2>
-                                    ) : (
-                                        <div className='w-full h-auto'>
-                                            <img src={formatedImage} alt="formatedImage" />
-                                        </div>
-                                    )}
-                                    <Button className="w-full" onClick={handleDownload}><a href={formatedImage} download>Download</a></Button>
-                                    <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                            <CardFooter className='w-full flex flex-col space-y-4'>
+                                <div
+                                    className='w-full '
+                                    style={{
+                                        width: '100%',
+                                        maxHeight: '100%',
+                                        background: `${loaded === 1 ? 'none' : 'radial-gradient(circle, rgba(109,40,217,0.90) 0%, rgba(109,40,217,0.50) 40%, rgba(109,40,217,0.10) 85%)'}`,
+                                        animation: `${loaded === 1 ? 'none' : 'pulse 2s infinite'}`
+                                    }}>
+                                    {loaded === 1 &&
+                                        <p className='text-lg text-center mb-4'>Format Changed</p>
+                                    }
+                                    <div className='w-full h-auto min-h-96'>
+                                        <img className='m-auto' src={formatedImage} alt="formatedImage" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
+                                    </div>
+
+
                                 </div>
+                                {loaded === 1 ? (
+                                    <>
+                                        <Button className="w-full"><Link to={formatedImage} download={`converted.${format}`}>Download</Link></Button>
+                                        <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                                    </>
+                                ) : format === 'pdf' || format === 'tiff' ? (
+                                    <>
+                                        <Button asChild className="w-full"><Link to={formatedImage} download={`converted.${format}`}>Download</Link></Button>
+                                        <Button className="w-full" onClick={resetHandler}>Another Image</Button>
+                                    </>
+                                ) : null}
                             </CardFooter>
                         )}
                     </Card>

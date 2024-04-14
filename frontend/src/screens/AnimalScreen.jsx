@@ -31,6 +31,12 @@ function AnimalScreen() {
     const original = animal ? animal.original : '';
 
     const [isDragOver, setIsDragOver] = useState(false);
+    const [loaded, setLoaded] = useState(0);
+
+    const imagesStyle = {
+        opacity: loaded === 1 ? 1 : 0,
+        transition: 'opacity 1s 0.5s ease-in-out'
+    };
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -77,6 +83,7 @@ function AnimalScreen() {
 
     const resetHandler = () => {
         dispatch(animalReset())
+        setLoaded(0)
     }
 
     return (
@@ -94,38 +101,47 @@ function AnimalScreen() {
                             <CardTitle className="text-lg md:text-2xl text-center">Predict Image of an Animal</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            {animalStatus === 'idle' ? (
-                                <div className="flex flex-col space-y-4 my-2 items-center ">
-                                    <div className="flex flex-col text-center space-y-2 text-sm md:text-base">
-                                        <p>It can only predict 40 types and it has a 90% accuracy and it only predicts one animal per image.
-                                            Names of animals are Bear, Bee, Butterfly, Cat, Cheetah, Chicken, Chimpanzee, Cow, Crocodile, Deer, Dog, Dolphin, Eagle, Elephant, Fox, Goat, Goldfish, Horse, Jellyfish, Kangaroo, Koala, Lion, Octopus, Owl, Panda, Parrot, Penguin, Pig, Pigeon, Rabbit, Raccoon, Rhinoceros, Sheep, Spider, Squirrel, Starfish, Swan, Tiger, Whale and Zebra. </p>
-                                    </div>
-                                    <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                    <Input
-                                        name="image"
-                                        type="file"
-                                        accept="image/*"
-                                        className='w-full dark:file:text-white cursor-pointer'
-                                        onChange={(e) => { uploadHndler(e) }}
-                                    />
-                                    <div
-                                        onDrop={handleDrop}
-                                        onDragOver={handleDragOver}
-                                        className="w-full h-44 md:h-96 border-2 flex justify-center items-center rounded-md text-sm md:text-lg"
-                                    >
-                                        Drag and drop the image here
-                                    </div>
+                            <div className="flex flex-col space-y-4 my-2 items-center ">
+                                <div className="flex flex-col text-center space-y-2 text-sm md:text-base">
+                                    <p>It can only predict 40 types and it has a 90% accuracy and it only predicts one animal per image.
+                                        Names of animals are Bear, Bee, Butterfly, Cat, Cheetah, Chicken, Chimpanzee, Cow, Crocodile, Deer, Dog, Dolphin, Eagle, Elephant, Fox, Goat, Goldfish, Horse, Jellyfish, Kangaroo, Koala, Lion, Octopus, Owl, Panda, Parrot, Penguin, Pig, Pigeon, Rabbit, Raccoon, Rhinoceros, Sheep, Spider, Squirrel, Starfish, Swan, Tiger, Whale and Zebra. </p>
                                 </div>
-                            ) : animalStatus === 'loading' ? (
-                                <GlobalLoader />
-                            ) : null}
+                                {animalStatus === 'idle' ? (
+                                    <>
+                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
+                                        <Input
+                                            name="image"
+                                            type="file"
+                                            accept="image/*"
+                                            className='w-full dark:file:text-white cursor-pointer'
+                                            onChange={(e) => { uploadHndler(e) }}
+                                        />
+                                        <div
+                                            onDrop={handleDrop}
+                                            onDragOver={handleDragOver}
+                                            className="w-full h-44 md:h-96 border-2 flex justify-center items-center rounded-md text-sm md:text-lg"
+                                        >
+                                            Drag and drop the image here
+                                        </div>
+                                    </>
+                                ) : animalStatus === 'loading' ? (
+                                    <GlobalLoader />
+                                ) : null}
+                            </div>
                         </CardContent>
                         <CardFooter>
                             {animalStatus === 'succeeded' && (
                                 <div className='flex flex-col w-full space-y-4'>
                                     <h1 className='text-center text-2xl font-semibold'>it is a {prediction}</h1>
-                                    <div className='w-full h-auto'>
-                                        <img src={original} className="w-full" alt="Animal Image" />
+                                    <div className='w-full h-auto min-h-96'
+                                        style={{
+                                            width: '100%',
+                                            maxHeight: '100%',
+                                            background: `${loaded === 1 ? 'none' : 'radial-gradient(circle, rgba(109,40,217,0.90) 0%, rgba(109,40,217,0.50) 40%, rgba(109,40,217,0.10) 85%)'}`,
+                                            animation: `${loaded === 1 ? 'none' : 'pulse 2s infinite'}`
+                                        }}
+                                    >
+                                        <img src={original} className="w-full" alt="Animal Image" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
                                     </div>
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
