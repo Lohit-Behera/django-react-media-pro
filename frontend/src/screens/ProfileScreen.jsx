@@ -2,8 +2,9 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchUserUpdate, fetchUserDetails } from '@/features/UserSlice'
+import { fetchUserUpdate } from '@/features/UserSlice'
 
+import DragNDrop from '@/components/DragNDrop'
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from "../components/ui/button"
 import {
@@ -46,10 +47,28 @@ function ProfileScreen() {
     const [image, setImage] = useState(profile_image)
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [isDragOver, setIsDragOver] = useState(false);
     const [wrongPassword, setWrongPassword] = useState(false);
+    const [isDragOver, setIsDragOver] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
-    const imageHnandler = (e) => {
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        setIsDragging(false);
+        if (file.type.startsWith('image/')) {
+            dispatch(fetchAnimal({
+                image: file
+            }))
+        } else {
+            setIsDragOver(true);
+            const timer = setTimeout(() => {
+                setIsDragOver(false);
+            }, 3700);
+            return () => clearTimeout(timer);
+        }
+    };
+
+    const uploadHandler = (e) => {
         const file = e.target.files[0]
         if (file.type.startsWith('image/')) {
             setImage(file)
@@ -148,22 +167,8 @@ function ProfileScreen() {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <label htmlFor="profile-image">Profile Image</label>
-                                    <input
-                                        type="file"
-                                        name="image"
-                                        id="image-upload"
-                                        accept="image/*"
-                                        label="Upload Image"
-                                        onChange={(e) => imageHnandler(e)}
-                                        className='block w-full text-white
-                                        file:me-4 file:py-2 file:px-4
-                                        file:rounded-lg file:border-0
-                                        file:text-sm file:font-semibold
-                                        file:bg-[#6d28d9] file:text-white
-                                        hover:file:bg-[#6318d9]
-                                        file:disabled:opacity-50 file:disabled:pointer-events-none cursor-pointer'
-                                    />
+                                    <Label htmlFor="imageInput">Profile Image</Label>
+                                    <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                 </div>
                                 <div className="grid gap-2">
                                     <Label htmlFor="password">Password</Label>

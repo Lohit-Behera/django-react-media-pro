@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState, lazy } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,6 +8,7 @@ import { fetchBlurBg, fetchGetBlurBg, reset } from '@/features/BlurBgSlice'
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert';
+import DragNDrop from '@/components/DragNDrop'
 import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,8 +19,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from '@/components/ui/input'
-import { Label } from "../components/ui/label"
 
 function BlurBgScreen() {
     const navigate = useNavigate()
@@ -52,10 +51,13 @@ function BlurBgScreen() {
     const [model, setModel] = useState('')
     const [blur, setBlur] = useState('')
     const [isDragOver, setIsDragOver] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+
 
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
+        setIsDragging(false);
         if (file.type.startsWith('image/')) {
             dispatch(fetchBlurBg({
                 image: file,
@@ -71,11 +73,7 @@ function BlurBgScreen() {
         }
     };
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
-
-    const uploadHndler = (e) => {
+    const uploadHandler = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
         if (file.type.startsWith('image/')) {
@@ -126,9 +124,9 @@ function BlurBgScreen() {
     return (
         <>
 
-            {blurBgStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" vvariant="success" setOpenProp />}
-            {blurBgStatus === 'failed' && <CustomAlert title="Failed" description="Something went wrong" vvariant="destructive" setOpenProp />}
-            {isDragOver && <CustomAlert title="Failed" description="Please select an image" vvariant="destructive" setOpenProp />}
+            {blurBgStatus === 'succeeded' && <CustomAlert title="Success" description="Image uploaded successfully" variant="success" setOpenProp />}
+            {blurBgStatus === 'failed' && <CustomAlert title="Failed" description="Something went wrong" variant="destructive" setOpenProp />}
+            {isDragOver && <CustomAlert title="Failed" description="Please select an image" variant="destructive" setOpenProp />}
             {blurBgStatus === 'failed' ? (
                 <ServerError />
             ) : (
@@ -188,21 +186,7 @@ function BlurBgScreen() {
                                 </div>
                                 {blurBgStatus === 'idle' ? (
                                     <>
-                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                        <Input
-                                            name="image"
-                                            type="file"
-                                            accept="image/*"
-                                            className='w-full dark:file:text-white cursor-pointer'
-                                            onChange={(e) => { uploadHndler(e) }}
-                                        />
-                                        <div
-                                            onDrop={handleDrop}
-                                            onDragOver={handleDragOver}
-                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                        >
-                                            Drag and drop image here
-                                        </div>
+                                        <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : blurBgStatus === 'loading' ? (
                                     <GlobalLoader />

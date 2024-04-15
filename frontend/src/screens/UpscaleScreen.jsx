@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchUpscale, fetchGetUpscale, resetUpscale } from '@/features/UpscaleSlice'
-
+import DragNDrop from '@/components/DragNDrop'
 import ServerError from '@/components/ServerError'
 import GlobalLoader from '@/components/GlobalLoader'
 import CustomAlert from '@/components/CustomAlert'
@@ -18,9 +18,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from '@/components/ui/input'
-import { Label } from "../components/ui/label"
-
 
 function UpscaleScreen() {
 
@@ -41,6 +38,7 @@ function UpscaleScreen() {
 
     const original = getUpscale ? getUpscale.original : ''
     const upscaleImage = getUpscale ? getUpscale.result : ''
+    const [isDragging, setIsDragging] = useState(false);
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -73,11 +71,8 @@ function UpscaleScreen() {
             return () => clearTimeout(timer);
         }
     };
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
 
-    const uploadHndler = (e) => {
+    const uploadHandler = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
         if (file.type.startsWith('image/')) {
@@ -149,21 +144,7 @@ function UpscaleScreen() {
                                 </div>
                                 {upscaleStatus === 'idle' ? (
                                     <>
-                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                        <Input
-                                            name="image"
-                                            type="file"
-                                            accept="image/*"
-                                            className='w-full dark:file:text-white cursor-pointer'
-                                            onChange={(e) => { uploadHndler(e) }}
-                                        />
-                                        <div
-                                            onDrop={handleDrop}
-                                            onDragOver={handleDragOver}
-                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                        >
-                                            Drag and drop image here
-                                        </div>
+                                        <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : upscaleStatus === 'loading' ? (
                                     <GlobalLoader />

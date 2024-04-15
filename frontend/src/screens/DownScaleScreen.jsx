@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchDownScale, fetchGetDownScale, resetDownScale } from '@/features/DownScaleSlice'
 
+import DragNDrop from '@/components/DragNDrop'
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
@@ -17,8 +18,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from '@/components/ui/input'
-import { Label } from "../components/ui/label"
 
 function DownScaleScreen() {
     const navigate = useNavigate()
@@ -49,6 +48,7 @@ function DownScaleScreen() {
 
     const [scale, setScale] = useState('2')
     const [isDragOver, setIsDragOver] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
     const [loaded, setLoaded] = useState(0);
 
     const imagesStyle = {
@@ -73,11 +73,7 @@ function DownScaleScreen() {
         }
     };
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
-
-    const uploadHndler = (e) => {
+    const uploadHandler = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
         if (file.type.startsWith('image/')) {
@@ -145,21 +141,7 @@ function DownScaleScreen() {
                                 </div>
                                 {downScaleStatus === 'idle' ? (
                                     <>
-                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                        <Input
-                                            name="image"
-                                            type="file"
-                                            accept="image/*"
-                                            className='w-full dark:file:text-white cursor-pointer'
-                                            onChange={(e) => { uploadHndler(e) }}
-                                        />
-                                        <div
-                                            onDrop={handleDrop}
-                                            onDragOver={handleDragOver}
-                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                        >
-                                            Drag and drop image here
-                                        </div>
+                                        <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : downScaleStatus === 'loading' ? (
                                     <GlobalLoader />
@@ -177,7 +159,7 @@ function DownScaleScreen() {
                                         animation: `${loaded === 1 ? 'none' : 'pulse 2s infinite'}`
                                     }}>
                                     {loaded === 1 &&
-                                        <p className='text-center text-lg mb-4 font-semibold'>Converted Image</p>
+                                        <p className='text-center text-lg mb-4 font-semibold'>DownScaled Image</p>
                                     }
                                     <div className='w-full h-auto flex justify-center '
                                         style={imagesStyle}>

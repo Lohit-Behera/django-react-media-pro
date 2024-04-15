@@ -7,7 +7,7 @@ import { fetchRemoveBg, fetchGetRemoveBg, resetRemoveBg } from '@/features/Remov
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
-
+import DragNDrop from '@/components/DragNDrop'
 import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,8 +18,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from '@/components/ui/input'
-import { Label } from "../components/ui/label"
 
 function RemoveBgScreen() {
     const navigate = useNavigate()
@@ -36,6 +34,7 @@ function RemoveBgScreen() {
 
     const [model, setModel] = useState('')
     const [isDragOver, setIsDragOver] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -68,11 +67,8 @@ function RemoveBgScreen() {
             return () => clearTimeout(timer);
         }
     };
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
 
-    const uploadHndler = (e) => {
+    const uploadHandler = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
         if (file.type.startsWith('image/')) {
@@ -150,21 +146,7 @@ function RemoveBgScreen() {
                                 </div>
                                 {removeBgStatus === 'idle' ? (
                                     <>
-                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                        <Input
-                                            name="image"
-                                            type="file"
-                                            accept="image/*"
-                                            className='w-full dark:file:text-white cursor-pointer'
-                                            onChange={(e) => { uploadHndler(e) }}
-                                        />
-                                        <div
-                                            onDrop={handleDrop}
-                                            onDragOver={handleDragOver}
-                                            className="w-full h-44 md:h-96 border-2 flex justify-center items-center rounded-md text-sm md:text-lg"
-                                        >
-                                            Drag and drop the image here
-                                        </div>
+                                        <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : removeBgStatus === 'loading' ? (
                                     <GlobalLoader />

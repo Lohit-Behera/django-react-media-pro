@@ -14,7 +14,7 @@ import GrayScaleCar from '../assets/GrayScaleCar.png'
 import ColorVibranceCar from '../assets/ColorVibranceCar.png'
 import EnhanceCar from '../assets/EnhanceCar.png'
 import filteredCar from '../assets/filteredCar.png'
-
+import DragNDrop from '@/components/DragNDrop'
 import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,8 +25,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from '@/components/ui/input'
-import { Label } from "../components/ui/label"
 
 function FilterScreen() {
     const navigate = useNavigate()
@@ -55,8 +53,9 @@ function FilterScreen() {
         }
     }, [filterStatus, dispatch, filter])
 
-    const [filterName, setFilterName] = useState('')
+    const [filterName, setFilterName] = useState('');
     const [isDragOver, setIsDragOver] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -75,11 +74,7 @@ function FilterScreen() {
         }
     };
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
-
-    const uploadHndler = (e) => {
+    const uploadHandler = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
         if (file.type.startsWith('image/')) {
@@ -170,21 +165,7 @@ function FilterScreen() {
                                     </div>
                                     {filterStatus === 'idle' ? (
                                         <>
-                                            <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                            <Input
-                                                name="image"
-                                                type="file"
-                                                accept="image/*"
-                                                className='w-full dark:file:text-white cursor-pointer'
-                                                onChange={(e) => { uploadHndler(e) }}
-                                            />
-                                            <div
-                                                onDrop={handleDrop}
-                                                onDragOver={handleDragOver}
-                                                className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                            >
-                                                Drag and drop image here
-                                            </div>
+                                            <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                         </>
                                     ) : filterStatus === 'loading' ? (
                                         <GlobalLoader />

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchConvert, fetchGetConvert, resetConvert } from '@/features/ConvertSlice'
 
+import DragNDrop from '@/components/DragNDrop'
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
@@ -17,8 +18,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Input } from '@/components/ui/input'
-import { Label } from "../components/ui/label"
 
 function ConvertScreen() {
     const navigate = useNavigate()
@@ -49,6 +48,7 @@ function ConvertScreen() {
 
     const [format, setFormat] = useState('jpeg')
     const [isDragOver, setIsDragOver] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
     const [loaded, setLoaded] = useState(0);
 
     const imagesStyle = {
@@ -59,6 +59,7 @@ function ConvertScreen() {
     const handleDrop = (e) => {
         e.preventDefault();
         const file = e.dataTransfer.files[0];
+        setIsDragging(false);
         if (file.type.startsWith('image/')) {
             dispatch(fetchConvert({
                 format: format,
@@ -72,11 +73,8 @@ function ConvertScreen() {
             return () => clearTimeout(timer);
         }
     };
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
 
-    const uploadHndler = (e) => {
+    const uploadHandler = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
         if (file.type.startsWith('image/')) {
@@ -200,21 +198,7 @@ function ConvertScreen() {
                                 </div>
                                 {convertStatus === 'idle' ? (
                                     <>
-                                        <Label className="text-base md:text-lg" htmlFor="image">Upload Image</Label>
-                                        <Input
-                                            name="image"
-                                            type="file"
-                                            accept="image/*"
-                                            className='w-full dark:file:text-white cursor-pointer'
-                                            onChange={(e) => { uploadHndler(e) }}
-                                        />
-                                        <div
-                                            onDrop={handleDrop}
-                                            onDragOver={handleDragOver}
-                                            className="w-full h-96 border-2 flex justify-center items-center rounded-md md:text-lg"
-                                        >
-                                            Drag and drop image here
-                                        </div>
+                                        <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : convertStatus === 'loading' ? (
                                     <GlobalLoader />
