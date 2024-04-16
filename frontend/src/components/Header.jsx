@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { logout } from '@/features/UserSlice';
 import { fetchDeleteImages, fetchDeleteRawImages } from '@/features/DeleteImagesSlice';
 
@@ -41,12 +41,10 @@ function Header() {
 
     const userInfo = useSelector((state) => state.user.userInfo)
     const userdetails = useSelector((state) => state.user.userdetails)
-    const userdetailsStatus = useSelector((state) => state.user.userdetailsStatus)
     const deleteStatus = useSelector((state) => state.deleteImages.deleteStatus)
     const deleteRawStatus = useSelector((state) => state.deleteImages.deleteRawStatus)
 
     const profileImage = userdetails ? userdetails.profile_image : ''
-    const id = userInfo ? userInfo.id : ''
     const is_staff = userInfo ? userInfo.is_staff : false
 
     const [alert, setAlert] = useState(false)
@@ -76,7 +74,7 @@ function Header() {
 
             <nav className="z-20 w-full sticky top-0 mb-1 backdrop-blur bg-white/50 dark:bg-[#030712]/50 shadow  ">
                 <div className="justify-between px-4 mx-auto md:items-center md:flex md:px-4 md:font-semibold">
-                    <div className="flex justify-between w-full py-3 md:py-3">
+                    <div className="flex justify-between w-[95%] mx-auto py-3 md:py-3">
                         <div className='hidden md:block'>
                             <div>
                                 <ul className="flex space-x-3">
@@ -89,23 +87,41 @@ function Header() {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
+                                        <NavLink to="/">
+                                            {({ isActive, isPending, isTransitioning }) => (
+                                                <Button
+                                                    variant={isActive ? 'default' : 'ghost'}
+                                                    disabled={isPending || isTransitioning}
+                                                >
+                                                    Home
+                                                </Button>
+                                            )}
+                                        </NavLink>
                                     </li>
                                     {is_staff && (
                                         <>
                                             <li>
-                                                <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
+                                                <NavLink to="/users">
+                                                    {({ isActive, isPending, isTransitioning }) => (
+                                                        <Button
+                                                            variant={isActive ? 'default' : 'ghost'}
+                                                            disabled={isPending || isTransitioning}
+                                                        >
+                                                            Users
+                                                        </Button>
+                                                    )}
+                                                </NavLink>
                                             </li>
                                             <li>
                                                 <AlertDialog>
                                                     <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost">Delete Unuse Images</Button>
+                                                        <Button variant="ghost">Delete unused Images</Button>
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
                                                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                                             <AlertDialogDescription>
-                                                                This action cannot be undone. This will permanently delete unuse Images.
+                                                                This action cannot be undone. This will permanently delete unused Images.
                                                             </AlertDialogDescription>
                                                         </AlertDialogHeader>
                                                         <AlertDialogFooter>
@@ -143,15 +159,33 @@ function Header() {
                                         <SheetDescription>
                                             <ul className="space-y-4">
                                                 <li>
-                                                    <Button variant="ghost" onClick={() => navigate("/")}>Home</Button>
+                                                    <NavLink to="/">
+                                                        {({ isActive, isPending, isTransitioning }) => (
+                                                            <Button
+                                                                variant={isActive ? 'default' : 'ghost'}
+                                                                disabled={isPending || isTransitioning}
+                                                            >
+                                                                Home
+                                                            </Button>
+                                                        )}
+                                                    </NavLink>
                                                 </li>
                                                 {is_staff && (
                                                     <>
                                                         <li>
-                                                            <Button variant="ghost" onClick={() => navigate("/users")}>Users</Button>
+                                                            <NavLink to="/users">
+                                                                {({ isActive, isPending, isTransitioning }) => (
+                                                                    <Button
+                                                                        variant={isActive ? 'default' : 'ghost'}
+                                                                        disabled={isPending || isTransitioning}
+                                                                    >
+                                                                        Users
+                                                                    </Button>
+                                                                )}
+                                                            </NavLink>
                                                         </li>
                                                         <li>
-                                                            <Button variant="ghost" onClick={deleteImageHandler}>Delete Unuse images</Button>
+                                                            <Button variant="ghost" onClick={deleteImageHandler}>Delete unused images</Button>
                                                         </li>
                                                     </>
                                                 )}
