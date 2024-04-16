@@ -32,9 +32,10 @@ function RemoveBgScreen() {
     const removeBgImage = getRemoveBg ? getRemoveBg.result : ''
     const original = getRemoveBg ? getRemoveBg.original : ''
 
-    const [model, setModel] = useState('')
+    const [model, setModel] = useState('general')
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const [disable, setDisable] = useState(false)
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -59,6 +60,7 @@ function RemoveBgScreen() {
                 model: model,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -76,6 +78,7 @@ function RemoveBgScreen() {
                 model: model,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -99,7 +102,9 @@ function RemoveBgScreen() {
 
     const resetHandler = () => {
         dispatch(resetRemoveBg())
-        setModel('')
+        setIsDragging(false)
+        setModel('general')
+        setDisable(false)
     }
 
     return (
@@ -123,21 +128,21 @@ function RemoveBgScreen() {
                                     <div className='grid grid-cols-2 md:grid-cols-3 gap-2' >
                                         <Button
                                             variant={model === 'anime' ? 'default' : 'outline'}
-                                            disabled={getRemoveBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={animeHandler}
                                         >
                                             Anime
                                         </Button>
                                         <Button
                                             variant={model === 'general' ? 'default' : 'outline'}
-                                            disabled={getRemoveBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={generalHandler}
                                         >
                                             General
                                         </Button>
                                         <Button
                                             variant={model === 'last' ? 'default' : 'outline'}
-                                            disabled={getRemoveBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={otherHandler}
                                         >
                                             Other
@@ -167,7 +172,11 @@ function RemoveBgScreen() {
                                             transparent={true}
                                         />
                                     </div>
-                                    <Button className="w-full"><a href={removeBgImage} download="removeBg.png">Download</a></Button>
+                                    <a href={removeBgImage} download={`removeBgImage.png`} className='w-full'>
+                                        <Button className="w-full">
+                                            Download
+                                        </Button>
+                                    </a>
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
                             )}

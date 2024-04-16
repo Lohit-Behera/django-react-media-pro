@@ -74,7 +74,7 @@ def upscale_image(request):
         return Response({"details": "Image is too large"}, status=status.HTTP_400_BAD_REQUEST)
     
     scaling = data['scaling']
-    unique_filename = str(uuid.uuid4()) + '.png'
+    unique_filename = str(uuid.uuid4()) + '.jpeg'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'upscale', unique_filename)
 
     if scaling == '2':
@@ -86,7 +86,7 @@ def upscale_image(request):
             raw_image = cv2.cvtColor(np.array(image_pil), cv2.COLOR_RGB2BGR)
             result = sr.upsample(raw_image)
             result_pil = Image.fromarray(cv2.cvtColor(result, cv2.COLOR_BGR2RGB))
-            result_pil.save(processed_image_path, format='PNG')
+            result_pil.save(processed_image_path, format='JPEG')
         else:
             return Response({"message": "Model file not found"}, status=status.HTTP_404_NOT_FOUND)
     else:
@@ -98,7 +98,7 @@ def upscale_image(request):
             raw_image = cv2.cvtColor(np.array(image_pil), cv2.COLOR_RGB2BGR)
             result = sr.upsample(raw_image)
             result_pil = Image.fromarray(cv2.cvtColor(result, cv2.COLOR_BGR2RGB))
-            result_pil.save(processed_image_path, format='PNG')
+            result_pil.save(processed_image_path, format='JPEG')
         else:
             return Response({"message": "Model file not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -143,10 +143,10 @@ def blur_bg(request):
     removedbg = remove(raw_image, session=session)
     result_image.paste(blur_image)
     result_image.paste(removedbg, mask=removedbg)
-
-    unique_filename = str(uuid.uuid4()) + '.png'
+    result_image_RGB = result_image.convert("RGB")
+    unique_filename = str(uuid.uuid4()) + '.jpeg'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'blurbg', unique_filename)
-    result_image.save(processed_image_path, format='PNG')
+    result_image_RGB.save(processed_image_path, format='JPEG', quality=70)
 
 
     upscale_instance = BlurBg.objects.create(user=user, original=image, result=os.path.join('blurbg', unique_filename))
@@ -188,9 +188,10 @@ def filtered_image(request):
         detailed_image = colored.filter(ImageFilter.DETAIL)
         result_image = detailed_image.filter(ImageFilter.UnsharpMask(radius=25, percent=40, threshold=3))
     
-    unique_filename = str(uuid.uuid4()) + '.png'
+    result_image_RGB = result_image.convert("RGB")
+    unique_filename = str(uuid.uuid4()) + '.jpeg'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'filtered', unique_filename)
-    result_image.save(processed_image_path, format='PNG')
+    result_image_RGB.save(processed_image_path, format='JPEG', quality=70)
 
 
     upscale_instance = FilteredImage.objects.create(user=user, original=image, result=os.path.join('filtered', unique_filename))
@@ -220,7 +221,7 @@ def convert(request):
 
     unique_filename = str(uuid.uuid4()) + f'.{format}'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'converted', unique_filename)
-    result_image.save(processed_image_path, format=format.upper())
+    result_image.save(processed_image_path, format=format.upper(), quality=70)
 
 
     upscale_instance = Convert.objects.create(user=user, result=os.path.join('converted', unique_filename))
@@ -354,10 +355,10 @@ def gray_scale_bg(request):
     removedbg = remove(raw_image, session=session)
     result_image.paste(grayscale)
     result_image.paste(removedbg, mask=removedbg)
-
-    unique_filename = str(uuid.uuid4()) + '.png'
+    result_image_RGB = result_image.convert("RGB")
+    unique_filename = str(uuid.uuid4()) + '.jpeg'
     processed_image_path = os.path.join(settings.MEDIA_ROOT, 'grayscale', unique_filename)
-    result_image.save(processed_image_path, format='PNG')
+    result_image_RGB.save(processed_image_path, format='JPEG',quality=70)
 
 
     grayscale_instance = GrayScaleBg.objects.create(user=user, original=image, result=os.path.join('grayscale', unique_filename))

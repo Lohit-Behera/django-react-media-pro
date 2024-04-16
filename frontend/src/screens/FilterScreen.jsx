@@ -9,11 +9,12 @@ import GlobalLoader from '@/components/GlobalLoader'
 import CustomAlert from '@/components/CustomAlert'
 import ServerError from '@/components/ServerError'
 
-import car from '../assets/car.jpg'
-import GrayScaleCar from '../assets/GrayScaleCar.png'
-import ColorVibranceCar from '../assets/ColorVibranceCar.png'
-import EnhanceCar from '../assets/EnhanceCar.png'
-import filteredCar from '../assets/filteredCar.png'
+import landscapeone from '../assets/landscapeone.jpg'
+import grayScaled from '../assets/grayScaled.jpeg'
+import colorVibrance from '../assets/colorVibrance.jpeg'
+import enhance from '../assets/enhance.jpeg'
+import filtered from '../assets/filtered.jpeg'
+
 import DragNDrop from '@/components/DragNDrop'
 import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
@@ -53,9 +54,10 @@ function FilterScreen() {
         }
     }, [filterStatus, dispatch, filter])
 
-    const [filterName, setFilterName] = useState('');
+    const [filterName, setFilterName] = useState('mix');
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const [disable, setDisable] = useState(false)
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -65,6 +67,7 @@ function FilterScreen() {
                 filter_name: filterName,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -82,6 +85,7 @@ function FilterScreen() {
                 filter_name: filterName,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -109,7 +113,9 @@ function FilterScreen() {
 
     const resetHandler = () => {
         dispatch(resetFilter())
-        setFilterName('')
+        setIsDragging(false)
+        setFilterName('mix')
+        setDisable(false)
     }
 
 
@@ -135,28 +141,28 @@ function FilterScreen() {
                                         <div className='grid grid-cols-2 md:grid-cols-4 gap-2' >
                                             <Button
                                                 variant={filterName === 'grayscale' ? 'default' : 'outline'}
-                                                disabled={getfilterStatus === 'succeeded'}
+                                                disabled={disable}
                                                 onClick={grayscaleHandler}
                                             >
                                                 GrayScale
                                             </Button>
                                             <Button
                                                 variant={filterName === 'color' ? 'default' : 'outline'}
-                                                disabled={getfilterStatus === 'succeeded'}
+                                                disabled={disable}
                                                 onClick={colorlHandler}
                                             >
                                                 Color vibrance
                                             </Button>
                                             <Button
                                                 variant={filterName === 'detail' ? 'default' : 'outline'}
-                                                disabled={getfilterStatus === 'succeeded'}
+                                                disabled={disable}
                                                 onClick={enhanceHandler}
                                             >
                                                 Enhance
                                             </Button>
                                             <Button
                                                 variant={filterName === 'mix' ? 'default' : 'outline'}
-                                                disabled={getfilterStatus === 'succeeded'}
+                                                disabled={disable}
                                                 onClick={mixHandler}
                                             >
                                                 Mixed
@@ -185,7 +191,11 @@ function FilterScreen() {
                                                 disabledLable={false}
                                             />
                                         </div>
-                                        <Button className="w-full"><a href={filteredImage} download="filtered.png">Download</a></Button>
+                                        <a href={filteredImage} download={`formatChanged.png`} className='w-full'>
+                                            <Button className="w-full">
+                                                Download
+                                            </Button>
+                                        </a>
                                         <Button className="w-full" onClick={resetHandler}>Another Image</Button>
 
                                     </div>
@@ -208,8 +218,8 @@ function FilterScreen() {
                             <CardContent>
                                 <div className='w-full h-auto'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={GrayScaleCar}
+                                        leftImg={landscapeone}
+                                        rightImg={grayScaled}
                                         leftLabel='Original'
                                         rightLabel='Filtered'
                                         disabledLable={false}
@@ -232,8 +242,8 @@ function FilterScreen() {
                             <CardContent>
                                 <div className='w-full h-auto'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={ColorVibranceCar}
+                                        leftImg={landscapeone}
+                                        rightImg={colorVibrance}
                                         leftLabel='Original'
                                         rightLabel='Color vibrance'
                                         disabledLable={false}
@@ -256,8 +266,8 @@ function FilterScreen() {
                             <CardContent>
                                 <div className='w-full h-auto'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={EnhanceCar}
+                                        leftImg={landscapeone}
+                                        rightImg={enhance}
                                         leftLabel='Original'
                                         rightLabel='Enhance'
                                         disabledLable={false}
@@ -280,8 +290,8 @@ function FilterScreen() {
                             <CardContent>
                                 <div className='w-full h-auto'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={filteredCar}
+                                        leftImg={landscapeone}
+                                        rightImg={filtered}
                                         leftLabel='Original'
                                         rightLabel='Mixed'
                                         disabledLable={false}

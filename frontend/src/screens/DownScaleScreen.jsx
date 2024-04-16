@@ -50,6 +50,7 @@ function DownScaleScreen() {
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [loaded, setLoaded] = useState(0);
+    const [disable, setDisable] = useState(false)
 
     const imagesStyle = {
         opacity: loaded === 1 ? 1 : 0,
@@ -64,6 +65,7 @@ function DownScaleScreen() {
                 scale: scale,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -81,6 +83,7 @@ function DownScaleScreen() {
                 scale: scale,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -100,8 +103,10 @@ function DownScaleScreen() {
 
     const resetHandler = () => {
         dispatch(resetDownScale())
-        setScale('')
+        setIsDragging(false)
+        setScale('2')
         setLoaded(0)
+        setDisable(false)
     }
 
     return (
@@ -125,14 +130,14 @@ function DownScaleScreen() {
                                     <div className='grid grid-cols-2 gap-2' >
                                         <Button
                                             variant={scale === '2' ? 'default' : 'outline'}
-                                            disabled={getDownScaleStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={downScale2x}
                                         >
                                             DownScale 2X
                                         </Button>
                                         <Button
                                             variant={scale === '4' ? 'default' : 'outline'}
-                                            disabled={getDownScaleStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={downScale4x}
                                         >
                                             DownScale 4X
@@ -167,7 +172,11 @@ function DownScaleScreen() {
                                     </div>
                                     {loaded === 1 && (
                                         <>
-                                            <Button className="w-full"><a href={downScaleImage} download>Download</a></Button>
+                                            <a href={downScaleImage} download={`downScaleImage.jpeg`} className='w-full'>
+                                                <Button className="w-full">
+                                                    Download
+                                                </Button>
+                                            </a>
                                             <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                         </>
                                     )}

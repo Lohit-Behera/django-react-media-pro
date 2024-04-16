@@ -24,7 +24,7 @@ function UpscaleScreen() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const [scale, setScale] = useState(2)
+    const [scale, setScale] = useState('2')
     const [isDragOver, setIsDragOver] = useState(false);
 
     const userInfo = useSelector(state => state.user.userInfo)
@@ -39,6 +39,7 @@ function UpscaleScreen() {
     const original = getUpscale ? getUpscale.original : ''
     const upscaleImage = getUpscale ? getUpscale.result : ''
     const [isDragging, setIsDragging] = useState(false);
+    const [disable, setDisable] = useState(false)
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -63,6 +64,7 @@ function UpscaleScreen() {
                 scaling: scale,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -80,6 +82,7 @@ function UpscaleScreen() {
                 scaling: scale,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -90,16 +93,18 @@ function UpscaleScreen() {
     }
 
     const scale2xHandler = () => {
-        setScale(2)
+        setScale('2')
     }
 
     const scale4xHandler = () => {
-        setScale(4)
+        setScale('4')
     }
 
     const resetHandler = () => {
         dispatch(resetUpscale())
-        setScale('')
+        setIsDragging(false)
+        setScale('2')
+        setDisable(false)
     }
 
     return (
@@ -127,15 +132,15 @@ function UpscaleScreen() {
                                     <p className='text-center'>Before uploading the image choose scaling and Image should be less than 2560 x 1440</p>
                                     <div className='grid grid-cols-2 gap-2' >
                                         <Button
-                                            variant={scale === 2 ? 'default' : 'outline'}
-                                            disabled={getUpscaleStatus === 'succeeded'}
+                                            variant={scale === '2' ? 'default' : 'outline'}
+                                            disabled={disable}
                                             onClick={scale2xHandler}
                                         >
                                             Scale 2X
                                         </Button>
                                         <Button
-                                            variant={scale === 4 ? 'default' : 'outline'}
-                                            disabled={getUpscaleStatus === 'succeeded'}
+                                            variant={scale === '4' ? 'default' : 'outline'}
+                                            disabled={disable}
                                             onClick={scale4xHandler}
                                         >
                                             Scale 4X
@@ -164,7 +169,11 @@ function UpscaleScreen() {
                                             disabledLable={false}
                                         />
                                     </div>
-                                    <Button className="w-full"><a href={upscaleImage} download="removeBg.png">Download</a></Button>
+                                    <a href={upscaleImage} download className='w-full'>
+                                        <Button className="w-full">
+                                            Download
+                                        </Button>
+                                    </a>
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
                             ) : detailsError === 'Image is too large' ? (

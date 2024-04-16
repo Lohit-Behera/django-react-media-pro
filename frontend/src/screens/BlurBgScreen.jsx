@@ -48,10 +48,11 @@ function BlurBgScreen() {
         }
     }, [blurBgStatus, dispatch, blurBg])
 
-    const [model, setModel] = useState('')
-    const [blur, setBlur] = useState('')
+    const [model, setModel] = useState('general')
+    const [blur, setBlur] = useState('medium')
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
+    const [disable, setDisable] = useState(false)
 
 
     const handleDrop = (e) => {
@@ -64,6 +65,7 @@ function BlurBgScreen() {
                 model: model,
                 blur: blur,
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -82,6 +84,7 @@ function BlurBgScreen() {
                 model: model,
                 blur: blur,
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -117,8 +120,10 @@ function BlurBgScreen() {
 
     const resetHandler = () => {
         dispatch(reset())
-        setModel('')
-        setBlur('')
+        setIsDragging(false)
+        setModel('general')
+        setBlur('medium')
+        setDisable(false)
     }
 
     return (
@@ -142,42 +147,42 @@ function BlurBgScreen() {
                                     <div className='grid grid-cols-3 gap-2' >
                                         <Button
                                             variant={model === 'anime' ? 'default' : 'outline'}
-                                            disabled={getBlurBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={animeHandler}
                                         >
                                             Anime
                                         </Button>
                                         <Button
                                             variant={model === 'general' ? 'default' : 'outline'}
-                                            disabled={getBlurBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={generalHandler}
                                         >
                                             General
                                         </Button>
                                         <Button
                                             variant={model === 'last' ? 'default' : 'outline'}
-                                            disabled={getBlurBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={lastHandler}
                                         >
                                             Other
                                         </Button>
                                         <Button
                                             variant={blur === 'low' ? 'default' : 'outline'}
-                                            disabled={getBlurBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={lowHandler}
                                         >
                                             Low Blur
                                         </Button>
                                         <Button
                                             variant={blur === 'medium' ? 'default' : 'outline'}
-                                            disabled={getBlurBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={mediumlHandler}
                                         >
                                             Medium Blur
                                         </Button>
                                         <Button
                                             variant={blur === 'high' ? 'default' : 'outline'}
-                                            disabled={getBlurBgStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={highHandler}
                                         >
                                             High Blur
@@ -209,7 +214,11 @@ function BlurBgScreen() {
                                         />
 
                                     </div>
-                                    <Button className="w-full"><a href={blurBgImage} download="removeBg.png">Download</a></Button>
+                                    <a href={blurBgImage} download={`blurBgImage.png`} className='w-full'>
+                                        <Button className="w-full">
+                                            Download
+                                        </Button>
+                                    </a>
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
                             </CardFooter>

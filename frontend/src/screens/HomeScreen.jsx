@@ -3,13 +3,21 @@ import { Suspense, lazy } from 'react'
 import { Link } from 'react-router-dom'
 
 import car from '../assets/car.jpg'
-import upscaleCar from '../assets/upscaleCar.png'
-import bgremovedCar from '../assets/bgremovedCar.png'
-import bgblurCar from '../assets/bgblurCar.png'
-import grayscaleCar from '../assets/GrayScakeBgCar.png'
-import filteredCar from '../assets/filteredCar.png'
-import convertCar from '../assets/convertCar.png'
-import downscaledCar from '../assets/downscaledCar.jpeg'
+import upscale from '../assets/upscale.jpeg'
+import lamborghini from '../assets/lamborghini.jpg'
+import removedBg from '../assets/removedBg.png'
+import mercedes from '../assets/mercedes.jpg'
+import bgBlur from '../assets/bgBlur.jpeg'
+import yellowMercedes from '../assets/yellowMercedes.jpg'
+import bgGrayScaled from '../assets/bgGrayScaled.jpeg'
+import landscapeone from '../assets/landscapeone.jpg'
+import filtered from '../assets/filtered.jpeg'
+import landscapeTwo from '../assets/landscapetwo.jpg'
+import changed from '../assets/changed.webp'
+import squirrel from '../assets/squirrel.jpg'
+import DownScaled from '../assets/DownScaled.jpeg'
+
+
 
 const ImageCompare = lazy(() => import('@/components/ImageCompare'))
 import HomeScreenLoader from '@/components/HomeScreenLoader'
@@ -54,7 +62,7 @@ function HomeScreen() {
                                 <div className='rounded-lg'>
                                     <ImageCompare
                                         leftImg={car}
-                                        rightImg={upscaleCar}
+                                        rightImg={upscale}
                                         leftLabel='Before'
                                         rightLabel='After'
                                         disabledLable={false}
@@ -71,13 +79,13 @@ function HomeScreen() {
                                     <Link
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
                                         to='removebg'>
-                                        Backgroud Remove
+                                        Background Remove
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Broderick Armbrister:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        href="https://www.pexels.com/photo/white-lamborghini-parked-on-the-road-6462662/"
                                         target="_blank">
                                         Link
                                     </a>
@@ -86,8 +94,8 @@ function HomeScreen() {
                             <CardContent>
                                 <div className='rounded-lg'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={bgremovedCar}
+                                        leftImg={lamborghini}
+                                        rightImg={removedBg}
                                         leftLabel='After'
                                         rightLabel='Before'
                                         disabledLable={false}
@@ -108,10 +116,10 @@ function HomeScreen() {
                                         Add Blur to Background
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Mike Bird:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        href="https://www.pexels.com/photo/red-mercedes-benz-convertible-1335077/"
                                         target="_blank">
                                         Link
                                     </a>
@@ -120,8 +128,8 @@ function HomeScreen() {
                             <CardContent>
                                 <div className='rounded-lg'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={bgblurCar}
+                                        leftImg={mercedes}
+                                        rightImg={bgBlur}
                                         leftLabel='Before'
                                         rightLabel='After'
                                         disabledLable={false}
@@ -141,10 +149,10 @@ function HomeScreen() {
                                         Gray Scale Background
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Mike Bird:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        href="https://www.pexels.com/photo/yellow-mercedes-benz-beside-trees-2365572/"
                                         target="_blank">
                                         Link
                                     </a>
@@ -153,8 +161,8 @@ function HomeScreen() {
                             <CardContent>
                                 <div className='rounded-lg'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={grayscaleCar}
+                                        leftImg={yellowMercedes}
+                                        rightImg={bgGrayScaled}
                                         leftLabel='Before'
                                         rightLabel='After'
                                         disabledLable={false}
@@ -186,8 +194,8 @@ function HomeScreen() {
                             <CardContent>
                                 <div className='rounded-lg'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={grayscaleCar}
+                                        leftImg={yellowMercedes}
+                                        rightImg={bgGrayScaled}
                                         leftLabel='Before'
                                         rightLabel='After'
                                         disabledLable={false}
@@ -207,10 +215,10 @@ function HomeScreen() {
                                         Add Filters
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Ian Turnell:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        href="https://www.pexels.com/photo/body-of-water-between-green-leaf-trees-709552/"
                                         target="_blank">
                                         Link
                                     </a>
@@ -219,8 +227,8 @@ function HomeScreen() {
                             <CardContent>
                                 <div className='rounded-lg'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={filteredCar}
+                                        leftImg={landscapeone}
+                                        rightImg={filtered}
                                         leftLabel='Before'
                                         rightLabel='After'
                                         disabledLable={false}
@@ -240,10 +248,10 @@ function HomeScreen() {
                                         Change Format of Image
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Pixabay:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        href="https://www.pexels.com/photo/dock-under-cloudy-sky-in-front-of-mountain-206359/"
                                         target="_blank">
                                         Link
                                     </a>
@@ -252,8 +260,8 @@ function HomeScreen() {
                             <CardContent>
                                 <div className='rounded-lg'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={convertCar}
+                                        leftImg={landscapeTwo}
+                                        rightImg={changed}
                                         leftLabel='Before'
                                         rightLabel='After'
                                         disabledLable={false}
@@ -273,10 +281,10 @@ function HomeScreen() {
                                         DownScale Image
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Pixabay:
                                     <a
                                         className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                                        href="https://www.pexels.com/photo/red-squirrel-on-brown-table-top-460775/"
                                         target="_blank">
                                         Link
                                     </a>
@@ -285,8 +293,8 @@ function HomeScreen() {
                             <CardContent>
                                 <div className='rounded-lg'>
                                     <ImageCompare
-                                        leftImg={car}
-                                        rightImg={downscaledCar}
+                                        leftImg={squirrel}
+                                        rightImg={DownScaled}
                                         leftLabel='Before'
                                         rightLabel='After'
                                         disabledLable={false}

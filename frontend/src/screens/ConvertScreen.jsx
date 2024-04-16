@@ -29,7 +29,7 @@ function ConvertScreen() {
     const convertStatus = useSelector((state) => state.convert.convertStatus)
     const getConvertStatus = useSelector((state) => state.convert.getConvertStatus)
 
-    const formatedImage = getConvert ? getConvert.result : ''
+    const changedImage = getConvert ? getConvert.result : ''
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -50,6 +50,7 @@ function ConvertScreen() {
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [loaded, setLoaded] = useState(0);
+    const [disable, setDisable] = useState(false)
 
     const imagesStyle = {
         opacity: loaded === 1 ? 1 : 0,
@@ -65,6 +66,7 @@ function ConvertScreen() {
                 format: format,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -82,6 +84,7 @@ function ConvertScreen() {
                 format: format,
                 image: file
             }))
+            setDisable(true)
         } else {
             setIsDragOver(true);
             const timer = setTimeout(() => {
@@ -122,8 +125,10 @@ function ConvertScreen() {
 
     const resetHandler = () => {
         dispatch(resetConvert())
-        setFormat('')
+        setIsDragging(false)
+        setFormat('jpeg')
         setLoaded(0)
+        setDisable(false)
     }
 
     return (
@@ -147,49 +152,49 @@ function ConvertScreen() {
                                     <div className='grid grid-cols-3 md:grid-cols-7 gap-2' >
                                         <Button
                                             variant={format === 'jpeg' ? 'default' : 'outline'}
-                                            disabled={getConvertStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={jpegHandler}
                                         >
                                             jpeg
                                         </Button>
                                         <Button
                                             variant={format === 'png' ? 'default' : 'outline'}
-                                            disabled={getConvertStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={pngHandler}
                                         >
                                             png
                                         </Button>
                                         <Button
                                             variant={format === 'pdf' ? 'default' : 'outline'}
-                                            disabled={getConvertStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={pdfHandler}
                                         >
                                             pdf
                                         </Button>
                                         <Button
                                             variant={format === 'tiff' ? 'default' : 'outline'}
-                                            disabled={getConvertStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={tiffHandler}
                                         >
                                             tiff
                                         </Button>
                                         <Button
                                             variant={format === 'ico' ? 'default' : 'outline'}
-                                            disabled={getConvertStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={icoHandler}
                                         >
                                             ico
                                         </Button>
                                         <Button
                                             variant={format === 'webp' ? 'default' : 'outline'}
-                                            disabled={getConvertStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={webpHandler}
                                         >
                                             webp
                                         </Button>
                                         <Button
                                             variant={format === 'bmp' ? 'default' : 'outline'}
-                                            disabled={getConvertStatus === 'succeeded'}
+                                            disabled={disable}
                                             onClick={bmpHandler}
                                         >
                                             bmp
@@ -219,19 +224,27 @@ function ConvertScreen() {
                                         <p className='text-lg text-center mb-4'>Format Changed</p>
                                     }
                                     <div className='w-full h-auto min-h-96'>
-                                        <img className='m-auto' src={formatedImage} alt="formatedImage" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
+                                        <img className='m-auto' src={changedImage} alt="changedImage" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
                                     </div>
 
 
                                 </div>
                                 {loaded === 1 ? (
                                     <>
-                                        <Button className="w-full"><a to={formatedImage} download={`converted.${format}`}>Download</a></Button>
+                                        <a href={changedImage} download={`formatChanged.${format}`} className='w-full'>
+                                            <Button className="w-full">
+                                                Download
+                                            </Button>
+                                        </a>
                                         <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                     </>
                                 ) : format === 'pdf' || format === 'tiff' ? (
                                     <>
-                                        <Button asChild className="w-full"><a to={formatedImage} download={`converted.${format}`}>Download</a></Button>
+                                        <a href={changedImage} download>
+                                            <Button>
+                                                Download
+                                            </Button>
+                                        </a>
                                         <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                     </>
                                 ) : null}
