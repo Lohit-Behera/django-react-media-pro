@@ -11,6 +11,7 @@ import bgBlur from '../assets/bgBlur.jpeg'
 import yellowMercedes from '../assets/yellowMercedes.jpg'
 import bgGrayScaled from '../assets/bgGrayScaled.jpeg'
 import landscapeone from '../assets/landscapeone.jpg'
+import parrot from '../assets/parrot.jpg'
 import filtered from '../assets/filtered.jpeg'
 import landscapeTwo from '../assets/landscapetwo.jpg'
 import changed from '../assets/changed.webp'
@@ -18,7 +19,7 @@ import squirrel from '../assets/squirrel.jpg'
 import DownScaled from '../assets/DownScaled.jpeg'
 
 
-
+import CustomImage from '@/components/CustomImage'
 const ImageCompare = lazy(() => import('@/components/ImageCompare'))
 import HomeScreenLoader from '@/components/HomeScreenLoader'
 
@@ -49,9 +50,9 @@ function HomeScreen() {
                                         Upscale Image
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
                                         target="_blank">
                                         Link
@@ -82,9 +83,9 @@ function HomeScreen() {
                                         Background Remove
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Broderick Armbrister:
+                                <CardDescription className='text-sm md:text-base'>Photo by Broderick Armbrister:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/white-lamborghini-parked-on-the-road-6462662/"
                                         target="_blank">
                                         Link
@@ -116,9 +117,9 @@ function HomeScreen() {
                                         Add Blur to Background
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Mike Bird:
+                                <CardDescription className='text-sm md:text-base'>Photo by Mike Bird:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/red-mercedes-benz-convertible-1335077/"
                                         target="_blank">
                                         Link
@@ -149,9 +150,9 @@ function HomeScreen() {
                                         Gray Scale Background
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Mike Bird:
+                                <CardDescription className='text-sm md:text-base'>Photo by Mike Bird:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/yellow-mercedes-benz-beside-trees-2365572/"
                                         target="_blank">
                                         Link
@@ -182,9 +183,9 @@ function HomeScreen() {
                                         Predict Image of an Animal
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
                                         target="_blank">
                                         Link
@@ -193,13 +194,7 @@ function HomeScreen() {
                             </CardHeader>
                             <CardContent>
                                 <div className='rounded-lg'>
-                                    <ImageCompare
-                                        leftImg={yellowMercedes}
-                                        rightImg={bgGrayScaled}
-                                        leftLabel='Before'
-                                        rightLabel='After'
-                                        disabledLable={false}
-                                    />
+                                    <CustomImage scr={parrot} alt={'parrot'} height={72} />
                                 </div>
                             </CardContent>
                             <CardFooter className='text-sm md:text-base'>
@@ -215,9 +210,9 @@ function HomeScreen() {
                                         Add Filters
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Ian Turnell:
+                                <CardDescription className='text-sm md:text-base'>Photo by Ian Turnell:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/body-of-water-between-green-leaf-trees-709552/"
                                         target="_blank">
                                         Link
@@ -248,9 +243,9 @@ function HomeScreen() {
                                         Change Format of Image
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Pixabay:
+                                <CardDescription className='text-sm md:text-base'>Photo by Pixabay:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/dock-under-cloudy-sky-in-front-of-mountain-206359/"
                                         target="_blank">
                                         Link
@@ -281,9 +276,9 @@ function HomeScreen() {
                                         DownScale Image
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Pixabay:
+                                <CardDescription className='text-sm md:text-base'>Photo by Pixabay:&nbsp;
                                     <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
+                                        className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
                                         href="https://www.pexels.com/photo/red-squirrel-on-brown-table-top-460775/"
                                         target="_blank">
                                         Link

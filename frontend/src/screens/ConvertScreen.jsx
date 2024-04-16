@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchConvert, fetchGetConvert, resetConvert } from '@/features/ConvertSlice'
 
+import CustomImage from '@/components/CustomImage'
 import DragNDrop from '@/components/DragNDrop'
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
@@ -49,13 +50,7 @@ function ConvertScreen() {
     const [format, setFormat] = useState('jpeg')
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const [loaded, setLoaded] = useState(0);
     const [disable, setDisable] = useState(false)
-
-    const imagesStyle = {
-        opacity: loaded === 1 ? 1 : 0,
-        transition: 'opacity 1s 0.5s ease-in-out'
-    };
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -127,7 +122,6 @@ function ConvertScreen() {
         dispatch(resetConvert())
         setIsDragging(false)
         setFormat('jpeg')
-        setLoaded(0)
         setDisable(false)
     }
 
@@ -211,43 +205,24 @@ function ConvertScreen() {
                             </div>
                         </CardContent>
                         {getConvertStatus === 'succeeded' && (
-                            <CardFooter className='w-full flex flex-col space-y-4'>
-                                <div
-                                    className='w-full '
-                                    style={{
-                                        width: '100%',
-                                        maxHeight: '100%',
-                                        background: `${loaded === 1 ? 'none' : 'radial-gradient(circle, rgba(109,40,217,0.90) 0%, rgba(109,40,217,0.50) 40%, rgba(109,40,217,0.10) 85%)'}`,
-                                        animation: `${loaded === 1 ? 'none' : 'pulse 2s infinite'}`
-                                    }}>
-                                    {loaded === 1 &&
-                                        <p className='text-lg text-center mb-4'>Format Changed</p>
-                                    }
-                                    <div className='w-full h-auto min-h-96'>
-                                        <img className='m-auto' src={changedImage} alt="changedImage" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
-                                    </div>
+                            <CardFooter>
+                                {format === 'pdf' || format === 'tiff' ? (
+                                    <div className='w-full flex flex-col space-y-2'>
+                                        <div className='w-full h-64 md:h-96 border-2 flex flex-col justify-center text-center font-bold text-lg md:text-2xl'>
+                                            <h1>Pdf and tiff image is not supported to show</h1>
+                                            <h1>You can download the file</h1>
 
-
-                                </div>
-                                {loaded === 1 ? (
-                                    <>
-                                        <a href={changedImage} download={`formatChanged.${format}`} className='w-full'>
+                                        </div>
+                                        <a href={changedImage} download>
                                             <Button className="w-full">
                                                 Download
                                             </Button>
                                         </a>
                                         <Button className="w-full" onClick={resetHandler}>Another Image</Button>
-                                    </>
-                                ) : format === 'pdf' || format === 'tiff' ? (
-                                    <>
-                                        <a href={changedImage} download>
-                                            <Button>
-                                                Download
-                                            </Button>
-                                        </a>
-                                        <Button className="w-full" onClick={resetHandler}>Another Image</Button>
-                                    </>
-                                ) : null}
+                                    </div>
+                                ) : (
+                                    <CustomImage scr={changedImage} alt={'Format changed'} btn={true} reset={resetHandler} />
+                                )}
                             </CardFooter>
                         )}
                     </Card>

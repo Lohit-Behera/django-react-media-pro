@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchDownScale, fetchGetDownScale, resetDownScale } from '@/features/DownScaleSlice'
 
+import CustomImage from '@/components/CustomImage'
 import DragNDrop from '@/components/DragNDrop'
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
@@ -49,13 +50,7 @@ function DownScaleScreen() {
     const [scale, setScale] = useState('2')
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const [loaded, setLoaded] = useState(0);
     const [disable, setDisable] = useState(false)
-
-    const imagesStyle = {
-        opacity: loaded === 1 ? 1 : 0,
-        transition: 'opacity 1s 0.5s ease-in-out'
-    };
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -105,7 +100,6 @@ function DownScaleScreen() {
         dispatch(resetDownScale())
         setIsDragging(false)
         setScale('2')
-        setLoaded(0)
         setDisable(false)
     }
 
@@ -155,32 +149,7 @@ function DownScaleScreen() {
                         </CardContent>
                         {getDownScaleStatus === 'succeeded' && (
                             <CardFooter>
-                                <div
-                                    className='flex flex-col w-full space-y-4'
-                                    style={{
-                                        width: '100%',
-                                        maxHeight: '100%',
-                                        background: `${loaded === 1 ? 'none' : 'radial-gradient(circle, rgba(109,40,217,0.90) 0%, rgba(109,40,217,0.50) 40%, rgba(109,40,217,0.10) 85%)'}`,
-                                        animation: `${loaded === 1 ? 'none' : 'pulse 2s infinite'}`
-                                    }}>
-                                    {loaded === 1 &&
-                                        <p className='text-center text-lg mb-4 font-semibold'>DownScaled Image</p>
-                                    }
-                                    <div className='w-full h-auto flex justify-center '
-                                        style={imagesStyle}>
-                                        <img className='m-auto' src={downScaleImage} alt="downScaleImage" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
-                                    </div>
-                                    {loaded === 1 && (
-                                        <>
-                                            <a href={downScaleImage} download={`downScaleImage.jpeg`} className='w-full'>
-                                                <Button className="w-full">
-                                                    Download
-                                                </Button>
-                                            </a>
-                                            <Button className="w-full" onClick={resetHandler}>Another Image</Button>
-                                        </>
-                                    )}
-                                </div>
+                                <CustomImage scr={downScaleImage} alt="downscaled image" btn={true} reset={resetHandler} />
                             </CardFooter>
                         )}
                     </Card>

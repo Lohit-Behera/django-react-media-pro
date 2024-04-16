@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAnimal, animalReset } from '@/features/AnimalSlice'
 
+import CustomImage from '@/components/CustomImage'
 import DragNDrop from '@/components/DragNDrop'
 import GlobalLoader from '@/components/GlobalLoader'
 import ServerError from '@/components/ServerError'
@@ -31,12 +32,6 @@ function AnimalScreen() {
 
     const [isDragOver, setIsDragOver] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
-    const [loaded, setLoaded] = useState(0);
-
-    const imagesStyle = {
-        opacity: loaded === 1 ? 1 : 0,
-        transition: 'opacity 1s 0.5s ease-in-out'
-    };
 
     const is_verified = userInfo ? userInfo.is_verified : false
 
@@ -118,16 +113,7 @@ function AnimalScreen() {
                             {animalStatus === 'succeeded' && (
                                 <div className='flex flex-col w-full space-y-4'>
                                     <h1 className='text-center text-2xl font-semibold'>it is a {prediction}</h1>
-                                    <div className='w-full h-auto min-h-96'
-                                        style={{
-                                            width: '100%',
-                                            maxHeight: '100%',
-                                            background: `${loaded === 1 ? 'none' : 'radial-gradient(circle, rgba(109,40,217,0.90) 0%, rgba(109,40,217,0.50) 40%, rgba(109,40,217,0.10) 85%)'}`,
-                                            animation: `${loaded === 1 ? 'none' : 'pulse 2s infinite'}`
-                                        }}
-                                    >
-                                        <img src={original} className="w-full" alt="Animal Image" style={imagesStyle} onLoad={() => setLoaded(prev => prev + 1)} />
-                                    </div>
+                                    <CustomImage scr={original} alt="image" />
                                     <Button className="w-full" onClick={resetHandler}>Another Image</Button>
                                 </div>
                             )}
