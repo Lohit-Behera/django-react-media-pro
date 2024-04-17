@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchRemoveBg, fetchGetRemoveBg, resetRemoveBg } from '@/features/RemoveBgSlice'
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
 import DragNDrop from '@/components/DragNDrop'
@@ -154,7 +154,7 @@ function RemoveBgScreen() {
                                         <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : removeBgStatus === 'loading' ? (
-                                    <GlobalLoader />
+                                    <Loader />
                                 ) : null}
                             </div>
                         </CardContent>

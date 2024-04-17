@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchUpscale, fetchGetUpscale, resetUpscale } from '@/features/UpscaleSlice'
 import DragNDrop from '@/components/DragNDrop'
 import ServerError from '@/components/ServerError'
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 import CustomAlert from '@/components/CustomAlert'
 import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
@@ -152,7 +152,7 @@ function UpscaleScreen() {
                                         <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : upscaleStatus === 'loading' ? (
-                                    <GlobalLoader />
+                                    <Loader />
                                 ) : null}
                             </div>
                         </CardContent>

@@ -7,7 +7,7 @@ import { fetchConvert, fetchGetConvert, resetConvert } from '@/features/ConvertS
 
 import CustomImage from '@/components/CustomImage'
 import DragNDrop from '@/components/DragNDrop'
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from '@/components/ui/button'
@@ -200,7 +200,7 @@ function ConvertScreen() {
                                         <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : convertStatus === 'loading' ? (
-                                    <GlobalLoader />
+                                    <Loader />
                                 ) : null}
                             </div>
                         </CardContent>

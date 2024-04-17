@@ -7,7 +7,7 @@ import { fetchDownScale, fetchGetDownScale, resetDownScale } from '@/features/Do
 
 import CustomImage from '@/components/CustomImage'
 import DragNDrop from '@/components/DragNDrop'
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from '@/components/ui/button'
@@ -143,7 +143,7 @@ function DownScaleScreen() {
                                         <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : downScaleStatus === 'loading' ? (
-                                    <GlobalLoader />
+                                    <Loader />
                                 ) : null}
                             </div>
                         </CardContent>

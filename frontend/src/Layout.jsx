@@ -9,7 +9,7 @@ import Footer from './components/Footer'
 import FallBack from './components/FallBack';
 
 import ServerError from './components/ServerError'
-import GlobalLoader from './components/GlobalLoader';
+import Loader from '@/components/Loader/Loader'
 
 function Layout() {
 
@@ -37,7 +37,7 @@ function Layout() {
                 ) : (
                     <>
                         {userdetailsStatus === 'loading' ? (
-                            <GlobalLoader />
+                            <Loader />
                         ) : userdetailsStatus === 'failed' ? (
                             <ServerError />
                         ) : (

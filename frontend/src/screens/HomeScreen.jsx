@@ -18,7 +18,6 @@ import changed from '../assets/changed.webp'
 import squirrel from '../assets/squirrel.jpg'
 import DownScaled from '../assets/DownScaled.jpeg'
 
-
 import CustomImage from '@/components/CustomImage'
 const ImageCompare = lazy(() => import('@/components/ImageCompare'))
 import HomeScreenLoader from '@/components/HomeScreenLoader'
@@ -38,7 +37,6 @@ function HomeScreen() {
         <>
             <Suspense fallback={<HomeScreenLoader />}>
                 <div className='w-[95%] mx-auto'>
-
                     <h1 className='text-3xl font-bold text-center'>Media Pro</h1>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-10'>
                         <Card className=''>
@@ -83,10 +81,10 @@ function HomeScreen() {
                                         Background Remove
                                     </Link>
                                 </CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Broderick Armbrister:&nbsp;
+                                <CardDescription className='text-sm md:text-base'>Photo by Alex Qian:&nbsp;
                                     <a
                                         className='font-semibold hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/white-lamborghini-parked-on-the-road-6462662/"
+                                        href="https://www.pexels.com/photo/a-white-sports-car-on-the-road-4914160/"
                                         target="_blank">
                                         Link
                                     </a>

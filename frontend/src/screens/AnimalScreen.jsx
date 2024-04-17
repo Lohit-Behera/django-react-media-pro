@@ -6,7 +6,7 @@ import { fetchAnimal, animalReset } from '@/features/AnimalSlice'
 
 import CustomImage from '@/components/CustomImage'
 import DragNDrop from '@/components/DragNDrop'
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from '@/components/ui/button'
@@ -105,7 +105,7 @@ function AnimalScreen() {
                                         <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : animalStatus === 'loading' ? (
-                                    <GlobalLoader />
+                                    <Loader />
                                 ) : null}
                             </div>
                         </CardContent>

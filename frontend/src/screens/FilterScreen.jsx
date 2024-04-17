@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchFilter, fetchGetFilter, resetFilter } from '@/features/FilterSlice'
 
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 import CustomAlert from '@/components/CustomAlert'
 import ServerError from '@/components/ServerError'
 
@@ -174,7 +174,7 @@ function FilterScreen() {
                                             <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                         </>
                                     ) : filterStatus === 'loading' ? (
-                                        <GlobalLoader />
+                                        <Loader />
                                     ) : null}
                                 </div>
                             </CardContent>

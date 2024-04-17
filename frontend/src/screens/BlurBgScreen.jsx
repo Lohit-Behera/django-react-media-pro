@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchBlurBg, fetchGetBlurBg, reset } from '@/features/BlurBgSlice'
 
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert';
 import DragNDrop from '@/components/DragNDrop'
@@ -194,7 +194,7 @@ function BlurBgScreen() {
                                         <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                     </>
                                 ) : blurBgStatus === 'loading' ? (
-                                    <GlobalLoader />
+                                    <Loader />
                                 ) : (
                                     null
                                 )}
