@@ -67,7 +67,7 @@ function Header() {
             )}
 
             {(deleteStatus === 'failed' || deleteRawStatus === 'failed') && (
-                <CustomAlert title="Error" description="Something went wrong" variant="distructive" setOpenProp />
+                <CustomAlert title="Error" description="Something went wrong" variant="destructive" setOpenProp />
             )}
 
             {alert && <CustomAlert title="Success" description="Logged out successfully" variant="success" setOpenProp />}
@@ -139,7 +139,16 @@ function Header() {
                                         </li>
                                     ) : (
                                         <li>
-                                            <Button variant="ghost" onClick={() => navigate("/login")}>Login</Button>
+                                            <NavLink to="/login">
+                                                {({ isActive, isPending, isTransitioning }) => (
+                                                    <Button
+                                                        variant={isActive ? 'default' : 'ghost'}
+                                                        disabled={isPending || isTransitioning}
+                                                    >
+                                                        Login
+                                                    </Button>
+                                                )}
+                                            </NavLink>
                                         </li>
                                     )}
                                 </ul>

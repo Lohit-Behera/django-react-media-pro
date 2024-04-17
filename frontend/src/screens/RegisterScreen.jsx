@@ -7,7 +7,7 @@ import GlobalLoader from '@/components/GlobalLoader'
 
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
-import { Eye, EyeOff } from 'lucide-react';
+import CustomPassword from '@/components/CustomPassword'
 import { Button } from "../components/ui/button"
 import {
     Card,
@@ -112,44 +112,8 @@ function RegisterScreen() {
                                             onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </div>
-                                    <div className="grid gap-2">
-                                        <Label className='md:text-base' htmlFor="password">Password</Label>
-                                        <div className='flex'>
-                                            <Input
-                                                className='md:text-base'
-                                                id="password"
-                                                type={showPassword ? 'text' : 'password'}
-                                                placeholder="Password"
-                                                required
-                                                onChange={(e) => setPassword(e.target.value)}
-                                            />
-                                            <span
-                                                onClick={() => setShowPassword(!showPassword)}
-                                                className='mt-1.5 ml-2'
-                                            >
-                                                {showPassword ? <EyeOff /> : <Eye />}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="grid gap-2">
-                                        <Label className='md:text-base' htmlFor="confirm-password">Confirm Password</Label>
-                                        <div className='flex'>
-                                            <Input
-                                                className='md:text-base'
-                                                id="confirm-password"
-                                                type={showConfirmPassword ? 'text' : 'password'}
-                                                placeholder="Confirm Password"
-                                                required
-                                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                            />
-                                            <span
-                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                                className='mt-1.5 ml-2'
-                                            >
-                                                {showConfirmPassword ? <EyeOff /> : <Eye />}
-                                            </span>
-                                        </div>
-                                    </div>
+                                    <CustomPassword id="password" placeholder={'Password'} label={'Password'} change={(e) => setPassword(e.target.value)} />
+                                    <CustomPassword id="confirm-password" placeholder={'Confirm Password'} label={'Confirm Password'} change={(e) => setConfirmPassword(e.target.value)} />
                                     <Button className="w-full md:text-base">
                                         Create an account
                                     </Button>

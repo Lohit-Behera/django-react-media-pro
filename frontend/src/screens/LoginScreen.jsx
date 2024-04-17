@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { fetchLogin } from '@/features/UserSlice'
 
-import { Eye, EyeOff } from 'lucide-react';
+import CustomPassword from '@/components/CustomPassword'
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from "../components/ui/button"
 import {
@@ -66,24 +66,7 @@ function LoginScreen() {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
-                            <div className="grid gap-2">
-                                <Label className='md:text-base' htmlFor="password">Password</Label>
-                                <div className='flex'>
-                                    <Input
-                                        id="password"
-                                        type={showPassword ? 'text' : 'password'}
-                                        placeholder="Password"
-                                        required
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                    <span
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className='mt-1.5 ml-2'
-                                    >
-                                        {showPassword ? <EyeOff /> : <Eye />}
-                                    </span>
-                                </div>
-                            </div>
+                            <CustomPassword id="password" label="Password" placeholder="Password" change={(e) => setPassword(e.target.value)} />
                             <Button onClick={loginHandler} className="w-full md:text-base'">
                                 Login
                             </Button>

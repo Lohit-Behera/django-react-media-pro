@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserUpdate } from '@/features/UserSlice'
-
+import CustomPassword from '@/components/CustomPassword'
 import DragNDrop from '@/components/DragNDrop'
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from "../components/ui/button"
@@ -170,24 +170,8 @@ function ProfileScreen() {
                                     <Label htmlFor="imageInput">Profile Image</Label>
                                     <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
                                 </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password">Password</Label>
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        placeholder="Password"
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </div>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="confirm-password">Confirm Password</Label>
-                                    <Input
-                                        id="confirm-password"
-                                        type="password"
-                                        placeholder="Confirm Password"
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                    />
-                                </div>
+                                <CustomPassword id="password" label="Password" placeholder="Password" change={(e) => setPassword(e.target.value)} />
+                                <CustomPassword id="confirm-password" label="Confirm Password" placeholder="Confirm Password" change={(e) => setConfirmPassword(e.target.value)} />
                                 <Button
                                     onClick={submitHandler}
                                     className="w-full">
