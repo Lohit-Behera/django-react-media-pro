@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button'
 
 function CustomImage({ scr, alt, btn = false, reset, height = 96 }) {
-    console.log(scr);
     const [loaded, setLoaded] = useState(0);
 
     const imagesStyle = {

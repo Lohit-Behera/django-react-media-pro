@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { fetchRegister } from '@/features/UserSlice'
-import GlobalLoader from '@/components/GlobalLoader'
+import Loader from '@/components/Loader/Loader'
 
 import ServerError from '@/components/ServerError'
 import CustomAlert from '@/components/CustomAlert'
@@ -39,8 +39,6 @@ function RegisterScreen() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [wrongPassword, setWrongPassword] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -65,7 +63,7 @@ function RegisterScreen() {
             {wrongPassword && <CustomAlert title="Failed" description="Password does not match" variant="destructive" setOpenProp />}
 
             {regisrerStatus === 'loading' ? (
-                <GlobalLoader />
+                <Loader />
             ) : regisrerStatus === 'failed' ? (
                 <ServerError />
             ) : (

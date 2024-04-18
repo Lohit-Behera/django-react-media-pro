@@ -2,6 +2,14 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+const Glow = React.forwardRef(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("rounded-xl bg-gradient-to-b  from-[#27f5f1] to-[#6d28d9] dark:from-[#6d28d9] dark:to-[#27f5f1] hover:scale-101 hover:drop-shadow-[0_15px_15px_rgba(123,63,217,0.8)]  dark:hover:drop-shadow-[0_15px_15px_rgba(0,255,187,0.8)] duration-300 ", className)}
+    {...props} />
+))
+Glow.displayName = "Glow"
+
 const Card = React.forwardRef(({ className, ...props }, ref) => (
   <div
     ref={ref}
@@ -47,4 +55,4 @@ const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Glow, Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

@@ -2,12 +2,10 @@ import React from 'react'
 import './Loader.css'
 
 // this loader is from here https://uiverse.io/Nawsome/tender-swan-29
-
 function Loader() {
     return (
-        <div className='flex justify-center items-center h-screen min-h-screen z-50'>
-
-            <div className="socket">
+        <div className='min-h-96 w-full flex justify-center items-center'>
+            <div className="socket drop-shadow-[0_15px_15px_rgba(0,255,187,0.4)]]">
                 <div className="gel center-gel">
                     <div className="hex-brick h1"></div>
                     <div className="hex-brick h2"></div>
@@ -195,9 +193,7 @@ function Loader() {
                     <div className="hex-brick h2"></div>
                     <div className="hex-brick h3"></div>
                 </div>
-
             </div>
-
         </div>
     )
 }

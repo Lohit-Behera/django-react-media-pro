@@ -81,6 +81,10 @@ module.exports = {
         'slide-in-from-top': 'slide-in-from-top 0.3s ease-out',
         'slide-out-to-top': 'slide-out-to-top 0.3s ease-out',
       },
+      scale: {
+        '101': '1.01',
+        '99': '0.99',
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

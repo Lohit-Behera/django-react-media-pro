@@ -19,6 +19,7 @@ import DragNDrop from '@/components/DragNDrop'
 import ImageCompare from '@/components/ImageCompare'
 import { Button } from '@/components/ui/button'
 import {
+    Glow,
     Card,
     CardContent,
     CardDescription,
@@ -204,103 +205,110 @@ function FilterScreen() {
                         </Card>
                     </div>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-[98%] mx-auto'>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-base md:text-lg text-center">GrayScale</CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                    <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                        Link
-                                    </a>
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className='w-full h-auto'>
-                                    <ImageCompare
-                                        leftImg={landscapeone}
-                                        rightImg={grayScaled}
-                                        leftLabel='Original'
-                                        rightLabel='Filtered'
-                                        disabledLable={false}
-                                    />
-                                </div>
-                            </CardContent>
+                        <Glow>
+                            <Card className='h-full hover:scale-99 duration-300'>
+                                <CardHeader>
+                                    <CardTitle className="text-base md:text-lg text-center">GrayScale</CardTitle>
+                                    <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                        <a
+                                            className='hover:underline hover:text-[#6d28d9] duration-200'
+                                            href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                            Link
+                                        </a>
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className='w-full h-auto'>
+                                        <ImageCompare
+                                            leftImg={landscapeone}
+                                            rightImg={grayScaled}
+                                            leftLabel='Original'
+                                            rightLabel='Filtered'
+                                            disabledLable={false}
+                                        />
+                                    </div>
+                                </CardContent>
 
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-base md:text-lg text-center">Color vibrance</CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                    <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                        Link
-                                    </a>
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className='w-full h-auto'>
-                                    <ImageCompare
-                                        leftImg={landscapeone}
-                                        rightImg={colorVibrance}
-                                        leftLabel='Original'
-                                        rightLabel='Color vibrance'
-                                        disabledLable={false}
-                                    />
-                                </div>
-                            </CardContent>
+                            </Card>
+                        </Glow>
+                        <Glow>
+                            <Card className='h-full hover:scale-99 duration-300'>
+                                <CardHeader>
+                                    <CardTitle className="text-base md:text-lg text-center">Color vibrance</CardTitle>
+                                    <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                        <a
+                                            className='hover:underline hover:text-[#6d28d9] duration-200'
+                                            href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                            Link
+                                        </a>
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className='w-full h-auto'>
+                                        <ImageCompare
+                                            leftImg={landscapeone}
+                                            rightImg={colorVibrance}
+                                            leftLabel='Original'
+                                            rightLabel='Color vibrance'
+                                            disabledLable={false}
+                                        />
+                                    </div>
+                                </CardContent>
 
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-base md:text-lg text-center">Enhance</CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                    <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                        Link
-                                    </a>
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className='w-full h-auto'>
-                                    <ImageCompare
-                                        leftImg={landscapeone}
-                                        rightImg={enhance}
-                                        leftLabel='Original'
-                                        rightLabel='Enhance'
-                                        disabledLable={false}
-                                    />
-                                </div>
-                            </CardContent>
+                            </Card>
+                        </Glow>
+                        <Glow>
+                            <Card className='h-full hover:scale-99 duration-300'>
+                                <CardHeader>
+                                    <CardTitle className="text-base md:text-lg text-center">Enhance</CardTitle>
+                                    <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                        <a
+                                            className='hover:underline hover:text-[#6d28d9] duration-200'
+                                            href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                            Link
+                                        </a>
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className='w-full h-auto'>
+                                        <ImageCompare
+                                            leftImg={landscapeone}
+                                            rightImg={enhance}
+                                            leftLabel='Original'
+                                            rightLabel='Enhance'
+                                            disabledLable={false}
+                                        />
+                                    </div>
+                                </CardContent>
 
-                        </Card>
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-base md:text-lg text-center">Mixed</CardTitle>
-                                <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
-                                    <a
-                                        className='hover:underline hover:text-[#6d28d9] duration-200'
-                                        href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
-                                        Link
-                                    </a>
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className='w-full h-auto'>
-                                    <ImageCompare
-                                        leftImg={landscapeone}
-                                        rightImg={filtered}
-                                        leftLabel='Original'
-                                        rightLabel='Mixed'
-                                        disabledLable={false}
-                                    />
-                                </div>
-                            </CardContent>
+                            </Card>
+                        </Glow>
+                        <Glow>
+                            <Card className='h-full hover:scale-99 duration-300'>
+                                <CardHeader>
+                                    <CardTitle className="text-base md:text-lg text-center">Mixed</CardTitle>
+                                    <CardDescription className='text-sm md:text-base'>Photo by Alex Amorales:
+                                        <a
+                                            className='hover:underline hover:text-[#6d28d9] duration-200'
+                                            href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/">
+                                            Link
+                                        </a>
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className='w-full h-auto'>
+                                        <ImageCompare
+                                            leftImg={landscapeone}
+                                            rightImg={filtered}
+                                            leftLabel='Original'
+                                            rightLabel='Mixed'
+                                            disabledLable={false}
+                                        />
+                                    </div>
+                                </CardContent>
 
-                        </Card>
-
+                            </Card>
+                        </Glow>
                     </div>
                 </div>
             )}

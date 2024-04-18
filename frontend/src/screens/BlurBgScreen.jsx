@@ -141,7 +141,7 @@ function BlurBgScreen() {
                             <CardTitle className="text-lg md:text-2xl text-center">Blur Background</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="h-full flex flex-col space-y-4 my-2 items-center">
+                            <div className="h-full flex flex-col my-2 space-y-4">
                                 <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
                                     <p className='text-center'>Before uploading the image choose image type if both not work use other and select blur amount</p>
                                     <div className='grid grid-cols-3 gap-2' >
