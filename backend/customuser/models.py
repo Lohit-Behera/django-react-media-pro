@@ -66,3 +66,10 @@ class EmailVerificationToken(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     token = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+class ContactUs(models.Model):
+    name = models.CharField(max_length=255, null=False, blank=False)
+    email = models.EmailField(null=False, blank=False)
+    subject = models.CharField(max_length=255 , null=False, blank=False)
+    message = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)

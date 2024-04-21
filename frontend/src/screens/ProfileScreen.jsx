@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserUpdate } from '@/features/UserSlice'
 import CustomPassword from '@/components/CustomPassword'
-//TODO fix database
-
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from "../components/ui/button"
 import {
@@ -50,26 +48,8 @@ function ProfileScreen() {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [wrongPassword, setWrongPassword] = useState(false);
     const [isDragOver, setIsDragOver] = useState(false);
-    const [isDragging, setIsDragging] = useState(false);
 
-    const handleDrop = (e) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        setIsDragging(false);
-        if (file.type.startsWith('image/')) {
-            dispatch(fetchAnimal({
-                image: file
-            }))
-        } else {
-            setIsDragOver(true);
-            const timer = setTimeout(() => {
-                setIsDragOver(false);
-            }, 3700);
-            return () => clearTimeout(timer);
-        }
-    };
-
-    const uploadHandler = (e) => {
+    const imageHandler = (e) => {
         const file = e.target.files[0]
         if (file.type.startsWith('image/')) {
             setImage(file)
@@ -175,7 +155,7 @@ function ProfileScreen() {
                                         id="image-upload"
                                         accept="image/*"
                                         label="Upload Image"
-                                        onChange={(e) => imageHnandler(e)}
+                                        onChange={(e) => imageHandler(e)}
                                         className='block w-full text-white
                                         file:me-4 file:py-2 file:px-4
                                         file:rounded-lg file:border-0

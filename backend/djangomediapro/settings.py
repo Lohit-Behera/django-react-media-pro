@@ -168,12 +168,9 @@ ASSETS_URL = '/assets/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    'http://localhost',
-    'http://127.0.0.1',
-    'http://0.0.0.0',
-]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_URLS_REGEX = r'^/api/contactus/$'
+
 
 AUTH_USER_MODEL = 'customuser.CustomUser'
 

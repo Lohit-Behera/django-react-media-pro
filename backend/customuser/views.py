@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.views.decorators.csrf import csrf_exempt
 from djangomediapro.settings import EMAIL_HOST_USER, MEDIA_ROOT, RAW_IMAGES, BASE_DIR
 
 from rest_framework import status
@@ -18,9 +19,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 import os
 
-from .serializers import UserSerializerWithToken, UserSerializer
+from .serializers import UserSerializerWithToken, UserSerializer, ContactUsSerializer
 
-from .models import CustomUser, EmailVerificationToken
+from .models import CustomUser, EmailVerificationToken, ContactUs
 
 # Create your views here.
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -123,7 +124,7 @@ def get_user_details(request,pk):
     user = CustomUser.objects.get(id=pk)
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
-    
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_user(request, pk):
@@ -146,6 +147,44 @@ def update_user(request, pk):
     user.save()
     return Response({'detail': 'User updated successfully'})
 
+@api_view(['PUT'])
+def create_contact_us(request):
+    try:
+        name = request.data.get('name')
+        email = request.data.get('email')
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+        contact = ContactUs.objects.create(
+            name = name,
+            email = email,
+            subject = subject,
+            message = message,
+        )
+        
+        template_name = os.path.join(BASE_DIR, 'customuser/templates/customuser/contact_email.html')
+        email_context = {
+            'id': contact.id,
+            'name': name,
+            'email' : email,
+            'subject' : subject,
+            'message' : message
+                         }
+        
+        html_message = render_to_string(
+            template_name=template_name,
+            context=email_context
+            )
+        plain_message = strip_tags(html_message)
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[email],
+            html_message=html_message
+            )
+        return Response({'detail': 'Contact created successfully'})
+    except:
+        return Response({'detail': 'An error occurred while processing your request'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
 @permission_classes([IsAdminUser])

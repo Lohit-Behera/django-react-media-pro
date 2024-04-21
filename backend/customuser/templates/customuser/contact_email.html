@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us Reply</title>
+  <style>
+    body {
+      font-size: 16px;
+      line-height: 1.5;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 33.33%;
+      margin: 0 auto;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .message {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .details {
+      margin-left: 30px;
+      font-weight: bold;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="title">Media Pro</h2>
+    <p class="subtitle">Dear {{ name }},</p>
+    <p class="message">Thank you for contacting us. Your message has been received.</p>
+    <p>Here are the details of your inquiry:</p>
+    <ul class="details">
+      <li>Name: {{ name }}</li>
+      <li>Email: {{ email }}</li>
+      <li>Ticket ID: {{ id }}</li>
+    </ul>
+    <p>Our team is currently reviewing your request and will get back to you as soon as possible.</p>
+    <p>If you have any further questions or concerns, feel free to reply to this email or contact us directly.</p>
+    <p class="footer subtitle">Best regards,<br>Media Pro</p>
+  </div>
+</body>
+</html>
