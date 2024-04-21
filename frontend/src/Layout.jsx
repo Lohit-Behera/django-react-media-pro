@@ -37,7 +37,7 @@ function Layout() {
                 ) : (
                     <>
                         {userdetailsStatus === 'loading' ? (
-                            <Loader />
+                            <Loader hightfull />
                         ) : userdetailsStatus === 'failed' ? (
                             <ServerError />
                         ) : (

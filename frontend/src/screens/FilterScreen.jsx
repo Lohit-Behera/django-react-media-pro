@@ -139,7 +139,7 @@ function FilterScreen() {
                                 <div className="h-full flex flex-col space-y-4 my-2 items-center">
                                     <div className="flex flex-col items-center space-y-2 text-sm md:text-base">
                                         <p className='text-center'>Before uploading the image choose filter examples are shown below</p>
-                                        <div className='grid grid-cols-2 md:grid-cols-4 gap-2' >
+                                        <div className='grid grid-cols-2 md:grid-cols-4 gap-' >
                                             <Button
                                                 variant={filterName === 'grayscale' ? 'default' : 'outline'}
                                                 disabled={disable}
@@ -204,7 +204,7 @@ function FilterScreen() {
                             )}
                         </Card>
                     </div>
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-[98%] mx-auto'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-[90%] mx-auto'>
                         <Glow>
                             <Card className='h-full hover:scale-99 duration-300'>
                                 <CardHeader>

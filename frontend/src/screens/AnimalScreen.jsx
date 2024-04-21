@@ -77,7 +77,6 @@ function AnimalScreen() {
     const resetHandler = () => {
         dispatch(animalReset())
         setIsDragging(false)
-        setLoaded(0)
     }
 
     return (

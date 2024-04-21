@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserUpdate } from '@/features/UserSlice'
 import CustomPassword from '@/components/CustomPassword'
-import DragNDrop from '@/components/DragNDrop'
+//TODO fix database
+
 import CustomAlert from '@/components/CustomAlert'
 import { Button } from "../components/ui/button"
 import {
@@ -167,8 +168,22 @@ function ProfileScreen() {
                                     />
                                 </div>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="imageInput">Profile Image</Label>
-                                    <DragNDrop handleDrop={handleDrop} uploadHandler={uploadHandler} isDragging={isDragging} setIsDragging={setIsDragging} />
+                                <Label htmlFor="profile-image">Profile Image</Label>
+                                    <input
+                                        type="file"
+                                        name="image"
+                                        id="image-upload"
+                                        accept="image/*"
+                                        label="Upload Image"
+                                        onChange={(e) => imageHnandler(e)}
+                                        className='block w-full text-white
+                                        file:me-4 file:py-2 file:px-4
+                                        file:rounded-lg file:border-0
+                                        file:text-sm file:font-semibold
+                                        file:bg-[#6d28d9] file:text-white
+                                        hover:file:bg-[#6318d9]
+                                        file:disabled:opacity-50 file:disabled:pointer-events-none cursor-pointer'
+                                    />
                                 </div>
                                 <CustomPassword id="password" label="Password" placeholder="Password" change={(e) => setPassword(e.target.value)} />
                                 <CustomPassword id="confirm-password" label="Confirm Password" placeholder="Confirm Password" change={(e) => setConfirmPassword(e.target.value)} />

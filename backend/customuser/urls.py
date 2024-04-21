@@ -7,7 +7,6 @@ urlpatterns = [
     path('delete/', views.delete_all_images, name='delete_all_images'),
     path('deleteraw/', views.delete_raw_images, name='delete_raw_images'),
     path('allusers/', views.get_users, name='get_users'),
-    path('email/', views.send_email, name='send_email'),
 
 
     path('verify/<str:token>/', views.verify_email, name='verify_email'),

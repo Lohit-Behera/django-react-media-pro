@@ -18,7 +18,7 @@ import changed from '../assets/changed.webp'
 import squirrel from '../assets/squirrel.jpg'
 import DownScaled from '../assets/DownScaled.jpeg'
 
-import CustomImage from '@/components/CustomImage'
+const CustomImage = lazy(() => import('@/components/CustomImage'))
 const ImageCompare = lazy(() => import('@/components/ImageCompare'))
 import HomeScreenLoader from '@/components/HomeScreenLoader'
 

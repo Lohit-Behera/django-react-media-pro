@@ -90,36 +90,12 @@ def send_verification_email(request, user):
             subject=subject,
             message=plain_message,
             from_email=EMAIL_HOST_USER,
-            recipient_list=['immortalityyt2020@gmail.com'],
+            recipient_list=[user.email],
             html_message=html_message
             )
     except:
         return Response({'detail': 'An error occurred while sending verification email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-@api_view(['POST'])
-def send_email(request):
-    try:
-        template_name = os.path.join(BASE_DIR, 'customuser/templates/customuser/verification_email.html')
-        email_context = {'user': 'Lohit'}
-        # Load the HTML template and render it with dynamic content
-        html_message = render_to_string(
-            template_name=template_name,
-            context=email_context
-            )
-        plain_message = strip_tags(html_message)
-
-        # Send the email with HTML content
-        send_mail(subject="Receiver information from a form",
-            message=plain_message,
-            from_email=EMAIL_HOST_USER,
-            recipient_list=['immortalityyt2020@gmail.com'],
-            html_message=html_message)
-        
-        return Response({'detail': 'Email sent successfully'}, status=status.HTTP_200_OK)
-    except Exception as e:
-        print(e)
-        return Response({'detail': 'An error occurred while sending verification email'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 def generate_verification_token(user):
     token = default_token_generator.make_token(user)

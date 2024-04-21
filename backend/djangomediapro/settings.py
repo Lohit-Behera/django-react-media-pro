@@ -80,7 +80,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'frontend/dist')
+            os.path.join(BASE_DIR,'..', 'frontend', 'dist'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -99,7 +99,6 @@ WSGI_APPLICATION = 'djangomediapro.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -145,9 +144,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    BASE_DIR / 'frontend/dist/assets',
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR,'..', 'frontend', 'dist', 'assets'),
 ]
+
 
 MEDIA_URL = '/images/'
 
@@ -159,7 +159,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
-ASSETS_ROOT = os.path.join(BASE_DIR, 'frontend/dist/assets')
+ASSETS_ROOT = os.path.join(BASE_DIR,'..', 'frontend', 'dist', 'assets')
 
 ASSETS_URL = '/assets/'
 
@@ -170,6 +170,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://0.0.0.0',
 ]
 
 AUTH_USER_MODEL = 'customuser.CustomUser'
