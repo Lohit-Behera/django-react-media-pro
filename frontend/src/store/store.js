@@ -11,10 +11,12 @@ import DeleteImagesSlice from "@/features/DeleteImagesSlice";
 import AdminUsers from "@/features/AdminUsers";
 import GrayScaleBgSlice from "@/features/GrayScaleBgSlice";
 import AnimalSlice from "@/features/AnimalSlice";
+import ContactUsSlice from "@/features/ContactUsSlice";
 
 const store = configureStore({
     reducer: {
         user: UserSlice,
+        contactus: ContactUsSlice,
         upscale: upscaleSlice,
         removeBg: removeBgSlice,
         blurBg: BlurBgSlice,

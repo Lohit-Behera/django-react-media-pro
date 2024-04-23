@@ -9,7 +9,7 @@ export const fetchContactUs = createAsyncThunk('contactus', async (user, { rejec
             },
         };
         const { data } = await axios.put(
-            '/api/contactus/',
+            '/api/user/contactus/',
             user,
             config
         );
@@ -32,7 +32,13 @@ const contactUsSlice = createSlice({
         contactusStatus: 'idle',
         contactusError: null
     },
-    reducers: {},
+    reducers: {
+        resetContactUs: (state) => {
+            state.contactus = null;
+            state.contactusStatus = 'idle';
+            state.contactusError = null
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchContactUs.pending, (state) => {
@@ -48,4 +54,6 @@ const contactUsSlice = createSlice({
             })
     }
 })
+
+export const { resetContactUs } = contactUsSlice.actions
 export default contactUsSlice.reducer

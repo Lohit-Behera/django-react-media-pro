@@ -18,21 +18,21 @@ function AuroraBackground() {
 
   useEffect(() => {
     const generateRandomShape = () => {
-      const shapeType = Math.floor(Math.random() * 3); // Randomly choose shape type: 0 for circle, 1 for square, 2 for triangle
+      const shapeType = Math.floor(Math.random() * 3);
       const position = getRandomPosition();
       const shape = {
-        id: Date.now(), // Unique identifier for the shape
+        id: Date.now(),
         type: shapeType,
-        top: position.top, // Random top position
-        left: position.left, // Random left position
-        rotation: Math.random() * 360, // Random rotation angle
-        color: getRandomColor(), // Random color
-        originPosition: position, // Original position
-        targetPosition: getRandomPosition(), // Random target position
+        top: position.top,
+        left: position.left,
+        rotation: Math.random() * 360,
+        color: getRandomColor(),
+        originPosition: position,
+        targetPosition: getRandomPosition(),
       };
       setShapes((prevShapes) => [...prevShapes, shape]);
-      const moveTimeoutId = setTimeout(() => moveShape(shape.id), 100); // Start moving the shape after a short delay
-      const removeTimeoutId = setTimeout(() => removeShape(shape.id), 30000); // Remove the shape after 30 seconds
+      const moveTimeoutId = setTimeout(() => moveShape(shape.id), 100);
+      const removeTimeoutId = setTimeout(() => removeShape(shape.id), 30000);
       return () => {
         clearTimeout(moveTimeoutId);
         clearTimeout(removeTimeoutId);
@@ -57,7 +57,7 @@ function AuroraBackground() {
       setShapes((prevShapes) => prevShapes.filter((shape) => shape.id !== id));
     };
 
-    const intervalId = setInterval(generateRandomShape, 1000); // Generate a new shape every 5 seconds
+    const intervalId = setInterval(generateRandomShape, 1000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -79,7 +79,7 @@ function AuroraBackground() {
             left: shape.left,
             transform: `rotate(${shape.rotation}deg)`,
             backgroundColor: shape.color,
-            transition: "all 10s", // Set animation duration to 10 seconds
+            transition: "all 10s",
           }}
         />
       ))}
