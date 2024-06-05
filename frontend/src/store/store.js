@@ -12,9 +12,11 @@ import AdminUsers from "@/features/AdminUsers";
 import GrayScaleBgSlice from "@/features/GrayScaleBgSlice";
 import AnimalSlice from "@/features/AnimalSlice";
 import ContactUsSlice from "@/features/ContactUsSlice";
+import ModeSlice from "@/features/ModeSlice";
 
 const store = configureStore({
     reducer: {
+        mode: ModeSlice,
         user: UserSlice,
         contactus: ContactUsSlice,
         upscale: upscaleSlice,

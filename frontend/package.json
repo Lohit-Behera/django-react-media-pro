@@ -21,7 +21,8 @@
     "@reduxjs/toolkit": "^2.2.2",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.2.10",
     "lucide-react": "^0.363.0",
     "react": "^18.2.0",
     "react-compare-slider": "^3.0.1",
@@ -29,6 +30,7 @@
     "react-error-boundary": "^4.0.13",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.3",
+    "simplex-noise": "^4.0.1",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
   },
