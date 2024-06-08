@@ -209,7 +209,8 @@ def delete_all_images(request):
                     os.remove(os.path.join(root, file))
                         
         return Response({'detail': 'All images deleted successfully'}, status=200)
-    except:
+    except Exception as e:
+        print(e)
         return Response({'detail': 'An error occurred while deleting images'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -222,6 +223,7 @@ def delete_raw_images(request):
                 os.remove(os.path.join(root, file))
         return Response({'detail': 'All images deleted successfully'}, status=200)
     except Exception as e:
+        print(e)
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])

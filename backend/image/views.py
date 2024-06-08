@@ -18,9 +18,9 @@ from django.conf import settings
 import uuid
 import os
 
-from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer,DownScaleSerializer, GrayScaleBgSerializer, AnimalSerializer
+from .serializers import RemovedBgSerializer, UpscaleSerializer, BlurBgSerializer, FilteredImageSerializer, ConvertSerializer,DownScaleSerializer, GrayScaleBgSerializer, AnimalSerializer, FoodSerializer
 
-from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert, DownScale, Animal, GrayScaleBg
+from .models import RemovedBg, Upscale, BlurBg, FilteredImage, Convert, DownScale, Animal, GrayScaleBg, Food
 
 
 @api_view(['POST'])
@@ -373,3 +373,64 @@ def get_gray_scale_bg(request,pk):
     grayscalebg = GrayScaleBg.objects.get(id=pk)
     serializer = GrayScaleBgSerializer(grayscalebg, many=False)
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def food(request):
+    user = request.user
+    try:
+        if 'image' not in request.FILES:
+            return Response({'detail': 'No image file provided'}, status=status.HTTP_400_BAD_REQUEST)
+                             
+        image_file = request.FILES['image']
+        image = Image.open(image_file)
+
+        class_names = [
+            'Apple pie', 'Baby back ribs', 'Baklava', 'Beef carpaccio', 'Beef tartare', 'Beet salad', 'Beignets', 'Bibimbap', 'Bread pudding',
+            'Breakfast burrito', 'Bruschetta', 'Caesar salad', 'Cannoli', 'Caprese salad', 'Carrot cake', 'Ceviche', 'Cheese plate', 'Cheesecake', 
+            'Chicken curry','Chicken quesadilla', 'Chicken wings', 'Chocolate cake', 'Chocolate mousse', 'Churros', 'Clam chowder', 'Club sandwich', 
+            'Crab cakes', 'Creme brulee', 'Croque madame', 'Cup cakes', 'Deviled eggs', 'Donuts', 'Dumplings', 'Edamame', 'Eggs benedict', 'Escargots', 'Falafel', 'Filet mignon', 'Fish and chips', 'Foie gras', 'French fries', 'French onion soup', 'French toast', 'Fried calamari',
+            'Fried rice', 'Frozen yogurt', 'Garlic bread', 'Gnocchi', 'Greek salad', 'Grilled cheese sandwich', 'Grilled salmon', 'Guacamole', 'Gyoza', 
+            'Hamburger', 'Hot and sour soup', 'Hot dog', 'Huevos rancheros', 'Hummus', 'Ice cream', 'Lasagna', 'Lobster bisque', 'Lobster roll sandwich', 'Macaroni and cheese', 'Macarons', 'Miso soup', 'Mussels', 'Nachos', 'Omelette', 'Onion rings', 'Oysters', 'Pad thai', 'Paella',
+            'Pancakes', 'Panna cotta', 'Peking duck', 'Pho', 'Pizza', 'Pork chop', 'Poutine', 'Prime rib', 'Pulled pork sandwich', 'Ramen', 'Ravioli',
+            'Red velvet cake', 'Risotto', 'Samosa', 'Sashimi', 'Scallops', 'Seaweed salad', 'Shrimp and grits', 'Spaghetti bolognese',
+            'Spaghetti carbonara', 'Spring rolls', 'Steak', 'Strawberry shortcake', 'Sushi', 'Tacos', 'Takoyaki', 'Tiramisu', 'Tuna tartare','Waffles'
+            ]
+        
+        state_dict_path = os.path.join(settings.BASE_DIR, 'static/models/food_model.pth')
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model = models.resnet50(weights=None)
+        num_classes = len(class_names)
+        model.fc = nn.Linear(model.fc.in_features, num_classes)
+        model.eval()
+        
+        state_dict = torch.load(state_dict_path, map_location=device)
+        new_state_dict = {k.replace('resnet50.', ''): v for k, v in state_dict.items()}
+        model.load_state_dict(new_state_dict)
+
+        preprocess = transforms.Compose([
+            transforms.Resize(224),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+
+        input_tensor = preprocess(image)
+        input_batch = input_tensor.unsqueeze(0) 
+        input_batch = input_batch.to(device)
+        model.to(device)
+
+        with torch.no_grad():
+            output = model(input_batch)
+
+        _, predicted_class = output.max(1)
+
+        predicted_label = class_names[predicted_class.item()].capitalize()
+
+        animal_instance = Food.objects.create(user=user, original=image_file, prediction=predicted_label)
+        serializer = FoodSerializer(animal_instance, many=False)
+        return Response(serializer.data)
+
+    except Exception as e:
+        print(e)
+        return Response({'detail': 'something went wrong'}, status=status.HTTP_400_BAD_REQUEST)

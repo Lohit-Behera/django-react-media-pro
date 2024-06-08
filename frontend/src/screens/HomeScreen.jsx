@@ -17,6 +17,7 @@ import landscapeTwo from "../assets/landscapetwo.jpg";
 import changed from "../assets/changed.webp";
 import squirrel from "../assets/squirrel.jpg";
 import DownScaled from "../assets/DownScaled.jpeg";
+import pizza from "../assets/pizza.jpg";
 
 const CustomImage = lazy(() => import("@/components/CustomImage"));
 const ImageCompare = lazy(() => import("@/components/ImageCompare"));
@@ -220,14 +221,14 @@ function HomeScreen() {
                       className="hover:underline hover:text-[#6d28d9] duration-200"
                       to="animal"
                     >
-                      Predict Image of an Animal
+                      Predict Name of an Animal By Image
                     </Link>
                   </CardTitle>
                   <CardDescription className="text-sm md:text-base">
-                    Photo by Alex Amorales:&nbsp;
+                    Photo by Sivakumar B:&nbsp;
                     <a
                       className="font-semibold hover:underline hover:text-[#6d28d9] duration-200"
-                      href="https://www.pexels.com/photo/black-audi-a-series-parked-near-brown-brick-house-909907/"
+                      href="https://www.pexels.com/photo/green-and-red-beak-bird-on-grey-branch-97533/"
                       target="_blank"
                     >
                       Link
@@ -243,6 +244,41 @@ function HomeScreen() {
                   <p>
                     Upload the image and it will Predict the image of an animal
                     but it can Predict only 40 animals
+                  </p>
+                </CardFooter>
+              </Card>
+            </Glow>
+            <Glow>
+              <Card className="h-full hover:scale-99 duration-300">
+                <CardHeader>
+                  <CardTitle className="text-center text-lg md:text-xl lg:text-2xl">
+                    <Link
+                      className="hover:underline hover:text-[#6d28d9] duration-200"
+                      to="food"
+                    >
+                      Predict Name of an Food By Image
+                    </Link>
+                  </CardTitle>
+                  <CardDescription className="text-sm md:text-base">
+                    Photo by Eneida Nieves:&nbsp;
+                    <a
+                      className="font-semibold hover:underline hover:text-[#6d28d9] duration-200"
+                      href="https://www.pexels.com/photo/baked-pizza-on-pizza-peel-in-oven-905847/"
+                      target="_blank"
+                    >
+                      Link
+                    </a>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="rounded-lg">
+                    <CustomImage scr={pizza} alt={"pizza"} height={72} />
+                  </div>
+                </CardContent>
+                <CardFooter className="text-sm md:text-base">
+                  <p>
+                    Upload the image and it will Predict name of food by image
+                    but it can Predict only 101 Food items
                   </p>
                 </CardFooter>
               </Card>

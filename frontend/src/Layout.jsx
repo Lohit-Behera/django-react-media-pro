@@ -58,15 +58,7 @@ function Layout() {
               className="flex items-center flex-col justify-center px-2 md:px-10  py-4 w-full h-full"
             ></Vortex>
           ) : (
-            <BackgroundGradientAnimation
-              firstColor="#a889d9"
-              secondColor="#6d28d9"
-              thirdColor="#2ed9bc"
-              fourthColor="#ce23e8"
-              gradientBackgroundStart="#ce23e8"
-              gradientBackgroundEnd="#2ed9bc"
-              className="w-full h-full"
-            ></BackgroundGradientAnimation>
+            <BackgroundGradientAnimation></BackgroundGradientAnimation>
           )}
         </div>
       </div>

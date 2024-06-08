@@ -10,6 +10,7 @@ urlpatterns = [
     path('downscale/', views.down_scale, name='down_scale'),
     path('grayscalebg/', views.gray_scale_bg, name='gray_scale_bg'),
     path('animal/', views.animal, name='animal'),
+    path('food/', views.food, name='food'),
 
     path('removebg/<str:pk>/', views.get_remove_bg, name='get_remove_bg'),
     path('upscale/<str:pk>/', views.get_upscale, name='get_upscale'),

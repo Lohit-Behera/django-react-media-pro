@@ -26,6 +26,7 @@ import VerifyExpiredScreen from "./screens/VerifyExpiredScreen";
 import GrayScaleBgScreen from "./screens/GrayScaleBgScreen";
 import AnimalScreen from "./screens/AnimalScreen";
 import ContactUs from "./screens/ContactUs";
+import FoodScreen from "./screens/FoodScreen";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,6 +48,7 @@ const router = createBrowserRouter(
       <Route path="users" element={<AdminUsers />} />
       <Route path="verify-expired" element={<VerifyExpiredScreen />} />
       <Route path="contactus" element={<ContactUs />} />
+      <Route path="food" element={<FoodScreen />} />
     </Route>
   )
 );

@@ -13,6 +13,7 @@ import GrayScaleBgSlice from "@/features/GrayScaleBgSlice";
 import AnimalSlice from "@/features/AnimalSlice";
 import ContactUsSlice from "@/features/ContactUsSlice";
 import ModeSlice from "@/features/ModeSlice";
+import FoodSlice from "@/features/FoodSlice";
 
 const store = configureStore({
     reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
         blurBg: BlurBgSlice,
         grayScaleBg: GrayScaleBgSlice,
         animal: AnimalSlice,
+        food: FoodSlice,
         filter: FilterSlice,
         convert: ConvertSlice,
         downScale: DownScaleSlice,
